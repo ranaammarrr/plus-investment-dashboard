@@ -1,0 +1,59 @@
+import React from "react";
+import { Button as AntButton, Spin } from "antd";
+import { ButtonProps as AntButtonProps } from "antd/lib/button";
+import { theme } from "../../Theme/theme";
+
+interface ButtonProps extends AntButtonProps {
+  textStyle?: React.CSSProperties;
+  text?: string;
+  preset?: "primary" | "secondary";
+  disabled?: boolean;
+  error?: boolean;
+  onClick?: () => void;
+  loading?: boolean;
+  size?: "small" | "middle" | "large";
+  bgColor?: string;
+  borderColor?: string;
+}
+
+const AppButton: React.FC<ButtonProps> = ({
+  textStyle: textStyleOverride,
+  preset = "primary",
+  text,
+  children,
+  disabled,
+  error,
+  onClick,
+  loading,
+  size = "middle",
+  bgColor = theme.palette.primary.main,
+  borderColor = theme.palette.secondary.main,
+  ...rest
+}) => {
+  const buttonStyle: React.CSSProperties = {
+    backgroundColor: bgColor,
+    borderColor: borderColor,
+    color: "#fff",
+    ...textStyleOverride,
+  };
+
+  return (
+    <AntButton
+      type="primary"
+      size={size}
+      disabled={disabled}
+      loading={loading}
+      style={buttonStyle}
+      onClick={onClick}
+      {...rest}
+    >
+      {loading ? (
+        <Spin size="small" />
+      ) : (
+        children || text || "Button Text" // Provide a default text if neither children nor text prop is provided
+      )}
+    </AntButton>
+  );
+};
+
+export default AppButton;
