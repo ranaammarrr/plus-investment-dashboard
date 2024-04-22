@@ -1,1 +1,6 @@
 export const logo = require("./logo.png")
+export const profile = require("./profile.jpg")
+export const userIcon = require("./userIcon.png")
+export const transactionIcon = require("./transctionIcon.png")
+export const lastTransactionIcon = require("./transaction.png")
+export const listingIcon = require("./listingIcon.png")

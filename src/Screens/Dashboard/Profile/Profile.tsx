@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Grid, Avatar, Box } from "@mui/material";
 import { Button, Select } from "antd";
-import InputField from "../Components/InputFeild/InputFeild";
-import { profile } from "../Assets/assets";
+import { profile } from "../../../Assets/assets";
+import InputField from "../../../Components/InputFeild/InputFeild";
 
 const { Option } = Select;
 
@@ -41,25 +41,23 @@ const Profile: React.FC = () => {
             <Avatar alt="" src={profile} sx={{ width: 120, height: 120 }} />
           </Box>
           <Grid container spacing={2} sx={{ marginTop: "10px" }}>
-            <Grid item xs={12} sm={6} >
-
+            <Grid item xs={12} sm={6}>
               <InputField
                 placeholder="Full Name"
                 size="large"
                 value={profileData.fullName}
                 onChangeText={(value) => handleChange("fullName", value)}
                 style={{ marginBottom: "20px" }}
-                />
+              />
               <Select
                 placeholder="Select Gender"
                 style={{ width: "100%", marginBottom: "20px" }}
                 size="large"
                 value={profileData.gender}
                 onChange={(value: string | undefined) =>
-                    handleChange("gender", value ? value.toString() : "")
-
+                  handleChange("gender", value ? value.toString() : "")
                 }
-                >
+              >
                 <Option value="male">Male</Option>
                 <Option value="female">Female</Option>
               </Select>
@@ -85,7 +83,7 @@ const Profile: React.FC = () => {
             style={{
               display: "flex",
               justifyContent: "flex-end",
-            //   marginTop: 24,
+              //   marginTop: 24,
             }}
           >
             <Button
