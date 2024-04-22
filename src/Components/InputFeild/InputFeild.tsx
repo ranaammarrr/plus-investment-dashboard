@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Input, Button } from "antd";
 
 export interface ErrorProps {
@@ -8,6 +8,7 @@ export interface ErrorProps {
 
 interface IProps {
   leftIcon?: string;
+  suffix?: ReactNode;
   onFocus?: () => void;
   rightIcon?: string;
   onRightIconPress?: () => void;
@@ -16,6 +17,7 @@ interface IProps {
   placeholder: string;
   onBlur?: () => void;
   style?: React.CSSProperties;
+  inpuStyles?: React.CSSProperties;
   onLeftIconPress?: () => void;
   isFocused?: boolean;
   countryCode?: string;
@@ -30,6 +32,8 @@ interface IProps {
 const InputField: React.FC<IProps> = ({
   inputType,
   leftIcon,
+  suffix,
+  inpuStyles,
   onFocus,
   rightIcon,
   onRightIconPress,
@@ -108,8 +112,9 @@ const InputField: React.FC<IProps> = ({
             onChange={handleChange}
             value={value}
             placeholder={placeholder}
-            className="customInput"
+            style={inpuStyles}
             size={size}
+            suffix={suffix}
           />
         )}
         {rightIcon && (

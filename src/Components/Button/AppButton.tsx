@@ -47,11 +47,7 @@ const AppButton: React.FC<ButtonProps> = ({
       onClick={onClick}
       {...rest}
     >
-      {loading ? (
-        <Spin size="small" />
-      ) : (
-        children || text || "Button Text" // Provide a default text if neither children nor text prop is provided
-      )}
+      {loading ? <Spin size="small" /> : children || text || "Button Text"}
     </AntButton>
   );
 };

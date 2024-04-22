@@ -34,7 +34,9 @@ export const loginUser = createAsyncThunk<User, LoginCredentials, { rejectValue:
       
           return rejectWithValue({ message: 'Login failed. Email or password not correct' });
         }
+        console.log(apiResponse.data)
         localStorage.setItem("token", apiResponse.data.token)
+        localStorage.setItem("user", JSON.stringify(apiResponse.data))
         toastMessage({
           type: 'success', 
           content: 'Login successfull!', 

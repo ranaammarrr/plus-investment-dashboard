@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid, Card, CardContent, Typography, Box } from "@mui/material";
 import { theme } from "../../Theme/theme";
 import { logo } from "../../Assets/assets";
@@ -8,10 +8,13 @@ import { useFormik } from "formik";
 import InputField from "../../Components/InputFeild/InputFeild";
 import { loginValidationSchema } from "../../Utils/validators";
 import AppButton from "../../Components/Button/AppButton";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
+  useEffect(() => {});
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -19,7 +22,11 @@ const Login: React.FC = () => {
     },
     validationSchema: loginValidationSchema,
     onSubmit: (values) => {
-      dispatch(loginUser(values));
+      dispatch(loginUser(values)).then((res) => {
+        if (!res.payload!.message) {
+          navigate("/");
+        }
+      });
     },
   });
 

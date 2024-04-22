@@ -19,3 +19,14 @@ interface ToastMessageParams {
       duration,
     });
   };
+  export const getToken = ()=>{
+    const token = localStorage.getItem("token")
+    console.log(token)
+    return token
+  }
+
+  export const getUserData = ()=>{
+    const user = localStorage.getItem("user")
+    const userData = user !== null && JSON.parse(user)
+    return userData
+  }

@@ -1,7 +1,41 @@
 import React from "react";
-import Login from "./Screens/Auth/Login";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import routes, { CustomRoute } from "./Routes/routes";
+import { getToken } from "./Utils/helperFunctions";
+import AdminLayout from "./Layouts/AdminLayout";
 
 function App() {
-  return <Login />;
+  const location = useLocation();
+  console.log(location.state?.from);
+  const token = getToken();
+
+  return (
+    <Routes>
+      {routes.map((route: CustomRoute, index: number) =>
+        route.isPrivate ? (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={
+              token ? (
+                <AdminLayout>
+                  <route.element />{" "}
+                </AdminLayout>
+              ) : (
+                <Navigate to="login" />
+              )
+            }
+          />
+        ) : (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={token ? <Navigate to="/" /> : <route.element />}
+          />
+        )
+      )}
+    </Routes>
+  );
 }
+
 export default App;
