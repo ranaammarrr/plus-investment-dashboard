@@ -23,7 +23,6 @@ const AppCard: React.FC<CardProps> = ({
       title={null}
       style={{
         display: "flex",
-        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         lineHeight: "1rem",

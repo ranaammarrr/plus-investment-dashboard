@@ -18,7 +18,7 @@ function App() {
             path={route.path}
             element={
               token ? (
-                <AdminLayout>
+                <AdminLayout screenName={route.name}>
                   <route.element />{" "}
                 </AdminLayout>
               ) : (
