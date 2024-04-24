@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { Suspense, useEffect, useState } from "react";
-import { Space, Spin } from "antd";
+import { Space, Spin, Typography } from "antd";
 import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
 import { getAllUsers } from "../../../Redux/User/userAction";
 import InputField from "../../../Components/InputFeild/InputFeild";
+import { Link } from "react-router-dom";
 
 const columns = [
   {
@@ -13,8 +14,31 @@ const columns = [
     dataIndex: "firstName",
     key: "firstName",
     width: "15%",
+    render: (text: string, record: DataType) => {
+      return (
+        // <Link to={`/profile/${record.key}`}>{text}</Link>
+        <Link to={`/profile/edit`}>
+          {" "}
+          <Typography.Text>{text}</Typography.Text>
+        </Link>
+      );
+    },
   },
-  { title: "Last Name", dataIndex: "lastName", key: "lastName", width: "15%" },
+  {
+    title: "Last Name",
+    dataIndex: "lastName",
+    key: "lastName",
+    width: "15%",
+    render: (text: string, record: DataType) => {
+      return (
+        // <Link to={`/profile/${record.key}`}>{text}</Link>
+        <Link to={`/profile/edit`}>
+          {" "}
+          <Typography.Text>{text}</Typography.Text>
+        </Link>
+      );
+    },
+  },
   { title: "Email", dataIndex: "email", key: "email", width: "15%" },
   { title: "Address", dataIndex: "address", key: "address", width: "20%" },
   { title: "Role", dataIndex: "role", key: "role", width: "15%" },
@@ -24,11 +48,14 @@ const columns = [
     key: "action",
     render: (_: any, record: DataType) => {
       function handleDelete(record: DataType): void {
-        throw new Error("Function not implemented.");
+        console.log("delete");
       }
       return (
         <Space size="middle">
-          <DeleteOutlined onClick={() => handleDelete(record)} />
+          <DeleteOutlined
+            style={{ fontSize: 22, marginLeft: 6 }}
+            onClick={() => handleDelete(record)}
+          />
         </Space>
       );
     },

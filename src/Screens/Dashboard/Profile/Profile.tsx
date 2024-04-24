@@ -3,6 +3,7 @@ import { Grid, Avatar, Box } from "@mui/material";
 import { Button, Select } from "antd";
 import { profile } from "../../../Assets/assets";
 import InputField from "../../../Components/InputFeild/InputFeild";
+import { theme } from "../../../Theme/theme";
 
 const { Option } = Select;
 
@@ -25,7 +26,12 @@ const Profile: React.FC = () => {
 
   return (
     <div
-      style={{ background: "#f0f0f0", minHeight: "100vh", padding: "40px 0" }}
+      style={{
+        background: theme.palette.secondary.main,
+        minHeight: "50%",
+        padding: "40px 0",
+        borderRadius: "15px",
+      }}
     >
       <Grid container justifyContent="center" alignItems="center" spacing={4}>
         <Grid item xs={12} md={6}>
