@@ -4,6 +4,7 @@ import {
   UsergroupAddOutlined,
   UserOutlined,
   LogoutOutlined,
+  PropertySafetyOutlined 
 } from "@ant-design/icons";
 
 import {
@@ -49,6 +50,12 @@ const AdminLayout: React.FC<{
       icon: <UsergroupAddOutlined style={{ fontSize: 24 }} />,
       label: "Customers",
       path: "/users",
+    },
+    {
+      key: "3",
+      icon: <PropertySafetyOutlined  style={{ fontSize: 24 }} />,
+      label: "Property Listing",
+      path: "/propertyListing",
     },
   ];
   const handleLogout = () => {
