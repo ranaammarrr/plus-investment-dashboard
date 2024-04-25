@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
 import { getAllUsers } from "../../../Redux/User/userAction";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import { Link } from "react-router-dom";
+import { getAllProperties } from "../../../Redux/PropertyListing/listingAction";
 
 const columns = [
   {
