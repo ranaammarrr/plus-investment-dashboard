@@ -4,7 +4,6 @@ import {
   UsergroupAddOutlined,
   UserOutlined,
   LogoutOutlined,
-  PropertySafetyOutlined 
 } from "@ant-design/icons";
 
 import {
@@ -17,6 +16,7 @@ import {
   Typography,
   theme,
 } from "antd";
+import { theme as customTheme } from "../Theme/theme";
 import { logo } from "../Assets/assets";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getUserData } from "../Utils/helperFunctions";
@@ -48,14 +48,8 @@ const AdminLayout: React.FC<{
     {
       key: "2",
       icon: <UsergroupAddOutlined style={{ fontSize: 24 }} />,
-      label: "Customers",
+      label: "Users",
       path: "/users",
-    },
-    {
-      key: "3",
-      icon: <PropertySafetyOutlined  style={{ fontSize: 24 }} />,
-      label: "Property Listing",
-      path: "/propertyListing",
     },
   ];
   const handleLogout = () => {
@@ -130,33 +124,45 @@ const AdminLayout: React.FC<{
   )?.key;
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider width={250} collapsedWidth={150} collapsed={true}>
-        <div className="demo-logo-vertical" />
+      <Sider
+        style={{
+          backgroundColor: customTheme.palette.primary.main,
+          // border: "1px solid #ccc",
+        }}
+        width={220}
+        collapsedWidth={100}
+        collapsed={false}
+      >
+        <div
+          style={{ display: "flex", justifyContent: "space-around" }}
+          className="demo-logo-vertical"
+        />
         <img
           src={logo}
           alt="logo"
           style={{
             objectFit: "contain",
-            marginLeft: "25px",
+            marginLeft: "27px",
             marginTop: 12,
             marginBottom: 50,
           }}
-          width={100}
-          height={100}
+          width={160}
+          height={160}
         />
         <Menu
-          theme="dark"
+          theme="light"
           defaultSelectedKeys={[defaultSelectedKey || "1"]}
           mode="inline"
+          style={{ backgroundColor: customTheme.palette.primary.main }}
         >
           {menuItems.map((item) => (
             <Menu.Item
-              style={{ marginBottom: "40px" }}
+              style={{ marginBottom: "40px", color: "black" }}
               onClick={() => handleNavigate(item.path)}
               key={item.key}
             >
               {item.icon}
-              <span style={{ color: "white", fontSize: 16 }}>{item.label}</span>
+              <span style={{ fontSize: 16 }}>{item.label}</span>
             </Menu.Item>
           ))}
         </Menu>

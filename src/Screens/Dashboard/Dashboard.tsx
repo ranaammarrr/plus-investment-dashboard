@@ -11,7 +11,8 @@ const Dashboard: React.FC = () => {
   const cardData: CardProps[] = [
     {
       title: "Listing",
-      gradient: "linear-gradient(to bottom right, #F0F0F0, #D4D4D4)",
+      gradient:
+        "linear-gradient(335deg, rgba(195,139,34,1) 0%, rgba(125,45,253,1) 100%)",
       content: "101",
       icon: (
         <img
@@ -23,7 +24,8 @@ const Dashboard: React.FC = () => {
     },
     {
       title: "Users",
-      gradient: "linear-gradient(to bottom right, #EFF7FF, #C2E2FF)",
+      gradient:
+        "linear-gradient(76deg, rgba(173,222,117,1) 18%, rgba(193,153,97,1) 60%, rgba(78,150,109,1) 100%)",
       content: "201",
       icon: (
         <img src={userIcon} alt="User Icon" style={{ width: 30, height: 30 }} />
@@ -31,7 +33,8 @@ const Dashboard: React.FC = () => {
     },
     {
       title: "Transaction",
-      gradient: "linear-gradient(to bottom right, #FFE6E6, #FFCCCC)",
+      gradient:
+        "linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%)",
       content: "$160",
       icon: (
         <img
@@ -43,7 +46,8 @@ const Dashboard: React.FC = () => {
     },
     {
       title: "Last Transaction",
-      gradient: "linear-gradient(to bottom right, #FF9999, #FF6666)",
+      gradient:
+        "radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%)",
       content: "$304",
       icon: (
         <img
