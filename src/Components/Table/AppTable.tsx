@@ -41,7 +41,6 @@ const AppTable: React.FC<AppTableProps> = ({
       dataSource={dataSource}
       columns={tableColumns}
       pagination={paginationConfig}
-      showSorterTooltip={{ target: "sorter-icon" }}
     />
   );
 };

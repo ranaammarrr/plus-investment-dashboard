@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Grid, Box } from "@mui/material";
-import { Select, Avatar } from "antd";
+import { Grid, Avatar, Box } from "@mui/material";
+import { Button, Select } from "antd";
+import { profile } from "../../../Assets/assets";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import { theme } from "../../../Theme/theme";
-import { UserOutlined } from "@ant-design/icons";
-import AppButton from "../../../Components/Button/AppButton";
 
 const { Option } = Select;
 
@@ -28,11 +27,10 @@ const Profile: React.FC = () => {
   return (
     <div
       style={{
-        background: theme.palette.secondary.light,
-        minHeight: "70%",
+        background: theme.palette.secondary.main,
+        minHeight: "50%",
         padding: "40px 0",
         borderRadius: "15px",
-        border: "1px solid #ccc",
       }}
     >
       <Grid container justifyContent="center" alignItems="center" spacing={4}>
@@ -46,10 +44,7 @@ const Profile: React.FC = () => {
               padding: "8px",
             }}
           >
-            <Avatar
-              icon={<UserOutlined style={{ fontSize: 110 }} />}
-              style={{ width: 120, height: 120 }}
-            />
+            <Avatar alt="" src={profile} sx={{ width: 120, height: 120 }} />
           </Box>
           <Grid container spacing={2} sx={{ marginTop: "10px" }}>
             <Grid item xs={12} sm={6}>
@@ -94,32 +89,18 @@ const Profile: React.FC = () => {
             style={{
               display: "flex",
               justifyContent: "flex-end",
+              //   marginTop: 24,
             }}
           >
-            <AppButton
-              text="Save"
-              textStyle={{
-                marginRight: "15px",
-                width: 120,
-              }}
-              size="large"
-            />
-            {/* <Button
+            <Button
               type="primary"
               style={{ width: "80px", marginRight: "10px" }}
             >
               Save
-            </Button> */}
-            {/* <Button type="primary" style={{ width: "80px" }}>
+            </Button>
+            <Button type="primary" style={{ width: "80px" }}>
               Cancel
-            </Button> */}
-            <AppButton
-              text="Cancel"
-              textStyle={{
-                width: 120,
-              }}
-              size="large"
-            />
+            </Button>
           </div>
         </Grid>
       </Grid>

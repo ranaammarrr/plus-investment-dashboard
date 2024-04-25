@@ -1,88 +1,78 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { Suspense, useEffect, useState } from "react";
 import { Space, Spin, Typography } from "antd";
-import {
-  DeleteOutlined,
-  SearchOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
 import { getAllUsers } from "../../../Redux/User/userAction";
 import InputField from "../../../Components/InputFeild/InputFeild";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { getAllProperties } from "../../../Redux/PropertyListing/listingAction";
+
+const columns = [
+  {
+    title: "First Name",
+    dataIndex: "firstName",
+    key: "firstName",
+    width: "15%",
+    render: (text: string, record: DataType) => {
+      return (
+        // <Link to={`/profile/${record.key}`}>{text}</Link>
+        <Link to={`/profile/edit`}>
+          {" "}
+          <Typography.Text>{text}</Typography.Text>
+        </Link>
+      );
+    },
+  },
+  {
+    title: "Last Name",
+    dataIndex: "lastName",
+    key: "lastName",
+    width: "15%",
+    render: (text: string, record: DataType) => {
+      return (
+        // <Link to={`/profile/${record.key}`}>{text}</Link>
+        <Link to={`/profile/edit`}>
+          {" "}
+          <Typography.Text>{text}</Typography.Text>
+        </Link>
+      );
+    },
+  },
+  { title: "Email", dataIndex: "email", key: "email", width: "15%" },
+  { title: "Address", dataIndex: "address", key: "address", width: "20%" },
+  { title: "Role", dataIndex: "role", key: "role", width: "15%" },
+  { title: "Company", dataIndex: "company", key: "company", width: "10%" },
+  {
+    title: "Action",
+    key: "action",
+    render: (_: any, record: DataType) => {
+      function handleDelete(record: DataType): void {
+        console.log("delete");
+      }
+      return (
+        <Space size="middle">
+          <DeleteOutlined
+            style={{ fontSize: 22, marginLeft: 6 }}
+            onClick={() => handleDelete(record)}
+          />
+        </Space>
+      );
+    },
+  },
+];
 
 const Users: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { users, isLoading } = useAppSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(getAllUsers());
   }, [dispatch]);
-  const columns = [
-    {
-      title: "First Name",
-      dataIndex: "firstName",
-      key: "firstName",
-      width: "15%",
-      // render: (text: string, record: DataType) => {
-      //   return (
-      //     // <Link to={`/profile/${record.key}`}>{text}</Link>
-      //     <Link to={`/profile/edit`}>
-      //       {" "}
-      //       <Typography.Text>{text}</Typography.Text>
-      //     </Link>
-      //   );
-      // },
-    },
-    {
-      title: "Last Name",
-      dataIndex: "lastName",
-      key: "lastName",
-      width: "15%",
-      // render: (text: string, record: DataType) => {
-      //   return (
-      //     // <Link to={`/profile/${record.key}`}>{text}</Link>
-      //     <Link to={`/profile/edit`}>
-      //       {" "}
-      //       <Typography.Text>{text}</Typography.Text>
-      //     </Link>
-      //   );
-      // },
-    },
-    { title: "Email", dataIndex: "email", key: "email", width: "15%" },
-    { title: "Address", dataIndex: "address", key: "address", width: "20%" },
-    { title: "Role", dataIndex: "role", key: "role", width: "15%" },
-    { title: "Company", dataIndex: "company", key: "company", width: "10%" },
-    {
-      title: "Action",
-      key: "action",
-      render: (_: any, record: DataType) => {
-        function handleDelete(record: DataType): void {
-          console.log("delete");
-        }
-        const handleEdit = (record: DataType) => {
-          console.log(record);
-          navigate("/profile/edit");
-        };
-        return (
-          <Space size="middle">
-            <EditOutlined
-              style={{ fontSize: 22, marginLeft: 6 }}
-              onClick={() => handleEdit(record)}
-            />
-            <DeleteOutlined
-              style={{ fontSize: 22, marginLeft: 6 }}
-              onClick={() => handleDelete(record)}
-            />
-          </Space>
-        );
-      },
-    },
-  ];
+
   const userData =
     searchValue !== ""
       ? users

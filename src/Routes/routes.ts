@@ -34,6 +34,20 @@ const routes: CustomRoute[] = [
     name: 'User Profile'
 
   },
+  {
+    path: "/propertyListing",
+    element: lazy(()=> import('../Screens/Dashboard/PropertyListing/PropertyListing')),
+    isPrivate: true, 
+    name: 'Property Listing'
+
+  },
+  {
+    path: "/propertyForm/editProperty",
+    element: lazy(()=> import('../Screens/Dashboard/PropertyForm/PropertyForm')),
+    isPrivate: true, 
+    name: 'Property Form'
+
+  },
 ];
 
 export default routes;
