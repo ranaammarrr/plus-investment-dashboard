@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import routes, { CustomRoute } from "./Routes/routes";
 import { getToken } from "./Utils/helperFunctions";
 import AdminLayout from "./Layouts/AdminLayout";
+import "./index.css";
 
 function App() {
   const location = useLocation();

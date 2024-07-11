@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "antd";
 export interface CardProps {
-  title: string;
+  title:  React.ReactNode;
   icon?: React.ReactNode;
   extra?: React.ReactNode;
   gradient?: string;

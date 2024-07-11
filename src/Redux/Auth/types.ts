@@ -3,13 +3,15 @@ export interface User {
     username: string;
     email: string;
     token: string;
-    message: string
+    message: string;
+    role:string
   }
   
   export interface AuthState {
     user: User | null;
     isLoading: boolean;
     error: string | null;
+
   }
   
   export interface LoginCredentials {
@@ -19,4 +21,5 @@ export interface User {
   
   export interface ApiError {
     message: string;
+    role:string
   }

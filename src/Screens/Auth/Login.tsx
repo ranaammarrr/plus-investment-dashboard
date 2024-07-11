@@ -24,7 +24,8 @@ const Login: React.FC = () => {
     validationSchema: loginValidationSchema,
     onSubmit: (values) => {
       dispatch(loginUser(values)).then((res) => {
-        if (!res.payload!.message) {
+        
+        if (!res.payload!.message && res?.payload?.role === "Admin") {
           navigate("/");
         }
       });

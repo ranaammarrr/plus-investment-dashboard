@@ -1,9 +1,43 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { deleteProperty, getAllProperties } from './listingAction';
-import { PropertiesState } from './types';
+import { deleteProperty, getAllProperties, getPropertyDetail } from './listingAction';
+import { PropertiesDetailState, PropertiesState } from './types';
 
 const initialState: PropertiesState = {
   properties: [],
+  isLoading: false,
+  error: null,
+};
+
+const initialDetailState: PropertiesDetailState = {
+  propertiesDetail: {
+    succcess: false,
+    details: "",
+    _id: "",
+    name: "",
+    title: "", // Add the 'type' field to reflect the type of property
+    detail: "", // Add the 'detail' field to reflect additional details
+    address: "",
+    postalCode: "",
+    type:"",
+    // roomNo: "",
+    // bathNo: "",
+    // price: "",
+    // image: "",
+    approved: true,
+    // location: {
+    //   lat: "", // Adjust data type according to your usage, here assuming string
+    //   lng: "",// Adjust data type according to your usage, here assuming string
+    // };
+    // counterOffers: any[]; // Adjust data type according to your usage, here assuming any[]
+    // __v: "",
+    user: {
+      name: "",
+      company: "",
+      role: "",
+    },
+    company: ''
+  },
+  detailedProperty:null,
   isLoading: false,
   error: null,
 };
@@ -20,7 +54,6 @@ const propertySlice = createSlice({
       })
       .addCase(getAllProperties.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log('action.payload',action.payload)
         state.properties = action.payload;
       })
       .addCase(getAllProperties.rejected, (state, action) => {
@@ -38,7 +71,41 @@ const propertySlice = createSlice({
         state.isLoading = false;
         state.error = 'An error occurred while deleting the property.';
       });
+     
   },
 });
 
+const propertyDetailSlice = createSlice({
+  name: 'propertyDetail',
+  initialState: initialDetailState,
+  reducers: {
+    addPropertyDetail: (state, action) => {
+      // If detailedProperty is null, initialize it as an empty array
+      if (state.detailedProperty === null) {
+        state.detailedProperty = null;
+      }
+      state.detailedProperty = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getPropertyDetail.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getPropertyDetail.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.propertiesDetail =action.payload;
+        
+      })
+      .addCase(getPropertyDetail.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = 'An error occurred while fetching the property detail.';
+      });
+  },
+});
+
+export const { addPropertyDetail } = propertyDetailSlice.actions;
+
 export const propertyReducer = propertySlice.reducer;
+export const propertyDetailReducer = propertyDetailSlice.reducer;

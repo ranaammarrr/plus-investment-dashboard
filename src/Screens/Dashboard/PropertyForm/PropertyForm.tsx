@@ -1,135 +1,320 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import AppButton from "../../../Components/Button/AppButton";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Divider, Typography, Select, Input } from "antd";
 import { Grid } from "@mui/material";
 import InputField from "../../../Components/InputFeild/InputFeild";
-import { Card, Radio, Typography } from 'antd'; // Import Radio component from Ant Design
-import { HomeOutlined, DollarOutlined, ShoppingOutlined , CameraOutlined } from '@ant-design/icons'; // Import icons
-import AppButton from "../../../Components/Button/AppButton";
-import { Link } from "react-router-dom";
-
+import { DataType } from "../../../Components/Table/AppTable";
+import { useAppDispatch } from "../../../Hooks/reduxHook";
+import {
+  addProperty,
+  editProperty,
+} from "../../../Redux/EditProperty/EditPropertyAction";
+import { getAllUsers } from "../../../Redux/User/userAction";
+import { useFormik } from "formik";
+import SelectUserBar from "../PropertyForm/SelectUserBar";
+import { addPropertyValidationSchema } from "../../../Utils/validators";
+import { UploadFile } from "antd/lib";
+import UploadImage from "../PropertyListing/UploadImage";
 
 const PropertyForm: React.FC = () => {
-
-    const { Title } = Typography;
-
-  const [propertyFormData, setPropertyFormData] = useState({
-    name: "",
-    bathNo: "",
-    roomNo: "",
-    address: "",
-    postalCode: "",
-    price: "",
-    type: "" 
+  const location = useLocation();
+  const property: DataType = location.state?.property || {};
+  const { Title } = Typography;
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const formatPrices = (value: any) => {
+    if (!value) return "";
+    return value.replace(/[$,]/g, "");
+  };
+  const formik = useFormik({
+    initialValues: {
+      id: property.key || "",
+      name: property.name || "",
+      bathNo: property.bathNo || "",
+      roomNo: property.roomNo || "",
+      address: property.address || "",
+      postalCode: property.postalCode || "",
+      price: property.price || 0,
+      type: property.type || "",
+      image: property.image || "",
+      detail: property.detail || "",
+    },
+    validationSchema: addPropertyValidationSchema,
+    onSubmit: async (values) => {
+      try {
+        await addPropertyValidationSchema.validate(values, {
+          abortEarly: false,
+        });
+        dispatch(
+          editProperty({
+            property_id: property.key,
+            type: values.type,
+            name: values.name,
+            address: values.address,
+            postalCode: values.postalCode,
+            roomNo: values.roomNo,
+            bathNo: values.bathNo,
+            price: values.price,
+            detail: values.detail,
+          })
+        ).then((res) => {
+          if (res.type !== "editProperty/all/rejected") {
+            navigate("/propertyListing");
+          }
+        });
+      } catch (error: any) {
+        console.error("Validation Error:", error.errors);
+        // error.errors.forEach((errorMessage: any) => {
+        //   message.error(errorMessage);
+        // });
+      }
+    },
   });
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, [dispatch]);
 
-  const handleChange = (name: string, value: string) => {
-    setPropertyFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+  const handleFileChange = (info: { fileList: any }) => {
+    const files = info.fileList
+      .map((file: { originFileObj: any }) => file.originFileObj)
+      .filter(Boolean);
+
+    // Update Formik's state with the array of files
+    formik.setFieldValue("image", files);
   };
 
-  const handleRadioChange = (e: any) => {
-    setPropertyFormData({ ...propertyFormData, type: e.target.value });
+  const handleFilePreview = async (file: UploadFile) => {
+    let src = file.url;
+    if (!src) {
+      // Check that file.originFileObj is not undefined before using it
+      if (file.originFileObj) {
+        src = URL.createObjectURL(file.originFileObj);
+      } else {
+        console.error(
+          "File is missing originFileObj, cannot generate preview."
+        );
+        return; // Exit the function if there's no file to process
+      }
+    }
+
+    const previewWindow = window.open();
+    if (previewWindow) {
+      previewWindow.document.write(`<img src="${src}" width="100%">`);
+      previewWindow.document.close(); // Ensure the document stream is properly closed
+    }
   };
+
+  const formatPrice = (value:any) => {
+    if (!value) return "";
+    return `$${Number(value).toLocaleString()}`;
+  };
+  
 
   return (
-    <div style={{ padding: "20px" }}>
-      <Card style={{ backgroundColor: "white", borderRadius: "5px", padding: "20px", boxShadow:"2px" }}>
-        {/* Radio buttons group */}
-        <Radio.Group onChange={handleRadioChange} value={propertyFormData.type}>
-          <Radio.Button value="rent"><HomeOutlined /> Rent</Radio.Button>
-          <Radio.Button value="sale"><DollarOutlined /> Sale</Radio.Button>
-          <Radio.Button value="purchase"><ShoppingOutlined /> Purchase</Radio.Button>
-        </Radio.Group>
-        <Grid container spacing={2} style={{ marginTop: "20px" }}>
-          <Grid item xs={12}>
-            <InputField
-              placeholder="Name"
-              size="large"
-              value={propertyFormData.name}
-              onChangeText={(value) => handleChange("name", value)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <InputField
-              placeholder="Bath No"
-              size="large"
-              value={propertyFormData.bathNo}
-              onChangeText={(value) => handleChange("bathNo", value)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <InputField
-              placeholder="Room No"
-              size="large"
-              value={propertyFormData.roomNo}
-              onChangeText={(value) => handleChange("roomNo", value)}
-            />
-          </Grid>
-        </Grid>
-      </Card>
+    <>
+      <div style={{ padding: "20px" }}>
+        <Typography.Title level={3}>Property Details</Typography.Title>
+        <div
+          style={{
+            backgroundColor: "white",
+            padding: "10px",
+            marginBottom: "10px",
+          }}
+        >
+          <form onSubmit={formik.handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography.Title level={5}>Title</Typography.Title>
+                <InputField
+                  placeholder="Name"
+                  size="large"
+                  value={formik.values.name}
+                  onChangeText={(value) => formik.setFieldValue("name", value)}
+                  error={
+                    formik.touched.name && formik.errors.name
+                      ? {
+                          isError: true,
+                          message: formik.errors.name as string,
+                        }
+                      : undefined
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography.Title level={5}>No of Bathrooms</Typography.Title>
+                <InputField
+                  placeholder="No of Bathrooms"
+                  size="large"
+                  value={formik.values.bathNo}
+                  onChangeText={(value) =>
+                    formik.setFieldValue("bathNo", value)
+                  }
+                  error={
+                    formik.touched.bathNo && formik.errors.bathNo
+                      ? {
+                          isError: true,
+                          message: formik.errors.bathNo as string,
+                        }
+                      : undefined
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography.Title level={5}>Number of Rooms</Typography.Title>
+                <InputField
+                  placeholder="No of Rooms"
+                  size="large"
+                  value={formik.values.roomNo}
+                  onChangeText={(value) =>
+                    formik.setFieldValue("roomNo", value)
+                  }
+                  error={
+                    formik.touched.roomNo && formik.errors.roomNo
+                      ? {
+                          isError: true,
+                          message: formik.errors.roomNo as string,
+                        }
+                      : undefined
+                  }
+                />
+              </Grid>
+            </Grid>
+            {/* Address Card */}
+            <Title level={5}>Address</Title>
+            <Grid container spacing={2}>
+              <Grid item xs={8}>
+                <InputField
+                  placeholder="Address"
+                  size="large"
+                  value={formik.values.address}
+                  onChangeText={(value) =>
+                    formik.setFieldValue("address", value)
+                  }
+                  error={
+                    formik.touched.address && formik.errors.address
+                      ? {
+                          isError: true,
+                          message: formik.errors.address as string,
+                        }
+                      : undefined
+                  }
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <InputField
+                  placeholder="Postal Code"
+                  size="large"
+                  value={formik.values.postalCode}
+                  onChangeText={(value) =>
+                    formik.setFieldValue("postalCode", value)
+                  }
+                  error={
+                    formik.touched.postalCode && formik.errors.postalCode
+                      ? {
+                          isError: true,
+                          message: formik.errors.postalCode as string,
+                        }
+                      : undefined
+                  }
+                />
+              </Grid>
+            </Grid>
+            {/* Price  */}
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Typography.Title level={5}>Price</Typography.Title>
+                <InputField
+                  placeholder="Price"
+                  size="large"
+                  value={formatPrices(formik.values.price)}
+                  onChangeText={(value) => { // Remove non-digit characters
+                    formik.setFieldValue("price", value);
+                  }}
+                  error={
+                    formik.touched.price && formik.errors.price
+                      ? {
+                          isError: true,
+                          message: formik.errors.price as string,
+                        }
+                      : undefined
+                  }
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Typography.Title level={5}>Type</Typography.Title>
+                <Select
+                  placeholder="Select type"
+                  size="large"
+                  style={{ width: "100%" }}
+                  defaultValue={formik.values.type || undefined}
+                  onChange={(value) => formik.setFieldValue("type", value)}
+                >
+                  <Select.Option value="commercial">Commercial</Select.Option>
+                  <Select.Option value="residential">Residential</Select.Option>
+                  <Select.Option value="plot">Plot</Select.Option>
+                </Select>
+              </Grid>
 
-      {/* Address Card */}
-      <Title level={5}>Address Details</Title>
-       
-      <Card style={{ backgroundColor: "white", borderRadius: "5px", padding: "20px" }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <InputField
-              placeholder="Address"
-              size="large"
-              value={propertyFormData.address}
-              onChangeText={(value) => handleChange("address", value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <InputField
-              placeholder="Postal Code"
-              size="large"
-              value={propertyFormData.postalCode}
-              onChangeText={(value) => handleChange("postalCode", value)}
-            />
-          </Grid>
-        </Grid>
-      </Card>
-
-      {/* Price and Image Card */}
-      <Title level={5}>Price and Image</Title>
-      
-      <Card style={{ backgroundColor: "white", borderRadius: "5px", padding: "20px", marginBottom: "20px" }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <InputField
-              placeholder="Price"
-              size="large"
-              value={propertyFormData.price}
-              onChangeText={(value) => handleChange("price", value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <InputField
-              placeholder="Type"
-              size="large"
-              value={propertyFormData.type}
-              onChangeText={(value) => handleChange("type", value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <div style={{ width: "100%", height: "200px", borderRadius: "15px", backgroundColor: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <CameraOutlined style={{ fontSize: "50px", color: "#aaaaaa" }} />
+              <Grid item xs={6} sm={12}>
+                <Typography.Title level={5}>Description</Typography.Title>
+                <Input.TextArea
+                  placeholder="Description"
+                  autoSize={{ minRows: 3, maxRows: 6 }}
+                  value={formik.values.detail}
+                  onChange={(e) =>
+                    formik.setFieldValue("detail", e.target.value)
+                  }
+                  onBlur={formik.handleBlur("detail")}
+                />
+                {formik.touched.detail && formik.errors.detail === "string" && (
+                  <div style={{ color: "red" }}>{formik.errors.detail}</div>
+                )}
+              </Grid>
+              <Grid item xs={12}>
+                <Title level={5}>Image</Title>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "200px",
+                    borderRadius: "15px",
+                    border: "dashed 1px",
+                    borderColor: "#A8A8A8",
+                    backgroundColor: "#FFFFFF",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                  }}
+                >
+                  <UploadImage
+                    maxFiles={5}
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    onPreview={handleFilePreview}
+                  />
+                  <div style={{ marginTop: 8, textAlign: "center" }}>
+                    Accepted format .jpg .png only
+                  </div>
+                </div>
+              </Grid>
+            </Grid>
+            {/* Submit Button */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "20px",
+              }}
+            >
+              <AppButton size="large" htmlType="submit">
+                Submit
+              </AppButton>
             </div>
-          </Grid>
-        </Grid>
-      </Card>
-
-
-         {/* Submit Button */}
-         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <AppButton size="middle" >Submitted</AppButton>
-        </Link>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

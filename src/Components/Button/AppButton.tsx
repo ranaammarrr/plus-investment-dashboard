@@ -27,13 +27,13 @@ const AppButton: React.FC<ButtonProps> = ({
   loading,
   size = "middle",
   bgColor = theme.palette.primary.main,
-  borderColor = theme.palette.secondary.main,
+  borderColor = "none",
   ...rest
 }) => {
   const buttonStyle: React.CSSProperties = {
     backgroundColor: bgColor,
-    borderColor: borderColor,
     color: "#fff",
+    boxShadow: "none",
     ...textStyleOverride,
   };
 

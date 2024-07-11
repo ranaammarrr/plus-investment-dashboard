@@ -10,20 +10,28 @@ interface AppTableProps {
   dataSource: DataType[];
   columns: ColumnProps<DataType>[];
   pagination?: boolean | { defaultPageSize?: number };
+  onChange? :any
 }
 
 const AppTable: React.FC<AppTableProps> = ({
   dataSource,
   columns,
   pagination,
+  onChange
 }) => {
-  console.log("Pagination prop:", pagination);
 
-  const tableColumns = columns.map((column, index) => ({
+  const tableColumns = columns.map((column) => ({
     ...column,
+    onCell: () => ({
+      style: {
+        padding: "4px 16px", 
+      },
+    }),
   }));
 
-  console.log("Table columns:", tableColumns);
+
+  
+
 
   const paginationConfig = pagination
     ? pagination === true
@@ -31,18 +39,18 @@ const AppTable: React.FC<AppTableProps> = ({
       : pagination
     : false;
 
-  console.log("Pagination config:", paginationConfig);
 
   return (
-    <Table
-      style={{
-        minHeight: 600,
-      }}
-      dataSource={dataSource}
-      columns={tableColumns}
-      pagination={paginationConfig}
-      showSorterTooltip={{ target: "sorter-icon" }}
-    />
+      <Table
+        style={{
+          minHeight: 600,
+        }}
+        dataSource={dataSource}
+        columns={tableColumns}
+        pagination={paginationConfig}
+        onChange={onChange}
+      />
+  
   );
 };
 

@@ -4,6 +4,14 @@ import {
   UsergroupAddOutlined,
   UserOutlined,
   LogoutOutlined,
+  PropertySafetyOutlined,
+  DollarOutlined,
+  WechatWorkOutlined,
+  FieldTimeOutlined,
+  ProductOutlined,
+  SlidersOutlined,
+  FileDoneOutlined ,
+  WalletOutlined 
 } from "@ant-design/icons";
 
 import {
@@ -28,6 +36,7 @@ interface MenuItem {
   icon: JSX.Element;
   label: string;
   path: string;
+  subMenu?: MenuItem[];
 }
 const AdminLayout: React.FC<{
   children: React.ReactNode;
@@ -41,19 +50,113 @@ const AdminLayout: React.FC<{
   const menuItems: MenuItem[] = [
     {
       key: "1",
-      icon: <HomeOutlined style={{ fontSize: 24 }} />,
+      icon: <HomeOutlined style={{ fontSize: 22 }} />,
       label: "Home",
       path: "/",
     },
     {
       key: "2",
-      icon: <UsergroupAddOutlined style={{ fontSize: 24 }} />,
+      icon: <UsergroupAddOutlined style={{ fontSize: 22 }} />,
       label: "Users",
       path: "/users",
     },
+    {
+      key: "3",
+      icon: <PropertySafetyOutlined style={{ fontSize: 22 }} />,
+      label: "Property Listing",
+      path: "/propertyListing",
+    },
+    {
+      key: "7",
+      icon: <SlidersOutlined style={{ fontSize: 22 }} />,
+      label: "Property Type",
+      path: "/propertyType",
+    },
+    // {
+    //   key: "9",
+    //   icon: <PropertySafetyOutlined style={{ fontSize: 22 }} />,
+    //   label: "Property Details",
+    //   path: "/propertyDetails",
+    // },
+
+    {
+      key: "5",
+      icon: <WechatWorkOutlined style={{ fontSize: 22 }} />,
+      label: "Chat",
+      path: "/chat",
+    },
+    {
+      key: "6",
+      icon: <FieldTimeOutlined style={{ fontSize: 22 }} />,
+      label: "Timeline",
+      path: "/timeline",
+    },
+    // {
+    //   key: "7",
+    //   icon: <ProjectOutlined    style={{ fontSize: 22 }} />,
+    //   label: "Timeline Feeds",
+    //   path: "/feeds",
+    // },
+    {
+      key: "8",
+      icon: <ProductOutlined style={{ fontSize: 22 }} />,
+      label: "Category",
+      path: "/category",
+    },
+   
+    {
+        key: "10",
+        icon: <DollarOutlined style={{ fontSize: 22 }} />,
+        label: "Counter Offers",
+        path: "/counter-offers",
+     },
+    //  {
+    //   key: "4",
+    //   icon: <TransactionOutlined  style={{ fontSize: 22 }} />,
+    //   label: "Transactions",
+    //   path: "/transactions",
+    // },
+     {
+      key: "11",
+      icon: <FileDoneOutlined   style={{ fontSize: 22 }} />,
+      label: "Invoices",
+      path: "/invoices",
+    },
+     {
+      key: "12",
+      icon: <WalletOutlined    style={{ fontSize: 22 }} />,
+      label: "Tickets",
+      path: "/tickets",
+    },
+    // {
+    //   key: "4",
+    //   icon: <SnippetsOutlined style={{ fontSize: 22 }} />,
+    //   label: "Pages",
+    //   path: "#",
+    //   // component:"Pages",
+    //   subMenu: [
+    //     {
+    //       key: "4-1",
+    //       label: "FAQ",
+    //       icon: <QuestionCircleOutlined />,
+    //       path: "/pages/faq",
+    //     },
+    //     {
+    //       key: "4-2",
+    //       label: "Privacy Policy",
+    //       icon: <QuestionCircleOutlined />,
+    //       path: "/pages/privacy",
+    //     },
+    //     {
+    //       key: "4-3",
+    //       label: "Terms And Conditions",
+    //       icon: <QuestionCircleOutlined />,
+    //       path: "/pages/terms",
+    //     },
+    //   ],
+    // },
   ];
   const handleLogout = () => {
-    console.log("logout");
     localStorage.clear();
     navigate("/login");
   };
@@ -113,7 +216,6 @@ const AdminLayout: React.FC<{
   );
 
   const handleNavigate = (path: string) => {
-    console.log("path", path);
     navigate(path);
   };
   const {
@@ -127,54 +229,100 @@ const AdminLayout: React.FC<{
       <Sider
         style={{
           backgroundColor: customTheme.palette.primary.main,
-          // border: "1px solid #ccc",
         }}
-        width={220}
+        width={200}
         collapsedWidth={100}
         collapsed={false}
       >
         <div
-          style={{ display: "flex", justifyContent: "space-around" }}
-          className="demo-logo-vertical"
-        />
-        <img
-          src={logo}
-          alt="logo"
           style={{
-            objectFit: "contain",
-            marginLeft: "27px",
-            marginTop: 12,
-            marginBottom: 50,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            // overflow: "hidden",
+            // position: "fixed",
           }}
-          width={160}
-          height={160}
-        />
-        <Menu
-          theme="light"
-          defaultSelectedKeys={[defaultSelectedKey || "1"]}
-          mode="inline"
-          style={{ backgroundColor: customTheme.palette.primary.main }}
         >
-          {menuItems.map((item) => (
-            <Menu.Item
-              style={{ marginBottom: "40px", color: "black" }}
-              onClick={() => handleNavigate(item.path)}
-              key={item.key}
-            >
-              {item.icon}
-              <span style={{ fontSize: 16 }}>{item.label}</span>
-            </Menu.Item>
-          ))}
-        </Menu>
+          {/* <div
+          style={{ display: "flex", justifyContent: "space-around", backgroundColor: "white", marginBottom: "2em", border: "2px solid", boxShadow:"", borderRadius:"20px"}}
+          className="demo-logo-vertical"
+        > */}
+          {/* <div
+          // style={{ display: "flex", justifyContent: "space-around" }}
+          className="demo-logo-vertical"
+        /> */}
+          <img
+            src={logo}
+            alt="logo"
+            style={{
+              objectFit: "contain",
+              marginTop: 12,
+              marginBottom: 22,
+            }}
+            width={100}
+            height={100}
+          />
+          {/* </div> */}
+          <Menu
+            theme="dark"
+            defaultSelectedKeys={[defaultSelectedKey || "1"]}
+            mode="inline"
+            style={{
+              backgroundColor: customTheme.palette.primary.main,
+              width: 200,
+            }}
+            // items={menuItems}
+          >
+            {menuItems.map((item) => {
+              if (item.subMenu) {
+                const subMenuItems = item.subMenu.map((subMenuItem) => (
+                  <Menu.Item
+                    style={{ color: "white" }}
+                    onClick={() => handleNavigate(subMenuItem.path)}
+                    key={subMenuItem.key}
+                  >
+                    <span style={{ fontSize: 14 }}>{subMenuItem.label}</span>
+                  </Menu.Item>
+                ));
+
+                return (
+                  <Menu.SubMenu
+                    style={{ color: "white" }}
+                    icon={item.icon}
+                    title={item.label}
+                    key={item.key}
+                  >
+                    {subMenuItems}
+                  </Menu.SubMenu>
+                );
+              } else {
+                return (
+                  <Menu.Item
+                    style={{ marginBottom: "10px", color: "white" }}
+                    onClick={() => handleNavigate(item.path)}
+                    key={item.key}
+                  >
+                    {item.icon}
+                    <span style={{ fontSize: 14 }}>{item.label}</span>
+                  </Menu.Item>
+                );
+              }
+            })}
+          </Menu>
+        </div>
       </Sider>
       <Layout>
         <Header
           style={{
-            padding: 0,
+            padding: "10px 0px",
             background: colorBgContainer,
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            // overflow:"hidden",
+            // position:"fixed",
+            // zIndex:1000,
+            // width:"86%"
           }}
         >
           <Typography.Title
@@ -191,10 +339,10 @@ const AdminLayout: React.FC<{
             </div>
           </Dropdown>
         </Header>
-        <Content style={{ margin: "20px 20px" }}>
+        <Content style={{ margin: "30px 30px" }}>
           <div
             style={{
-              padding: 24,
+              padding: 8,
               height: "100%",
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
