@@ -10,8 +10,8 @@ import {
   FieldTimeOutlined,
   ProductOutlined,
   SlidersOutlined,
-  FileDoneOutlined ,
-  WalletOutlined 
+  TransactionOutlined ,
+  FileDoneOutlined 
 } from "@ant-design/icons";
 
 import {
@@ -121,12 +121,6 @@ const AdminLayout: React.FC<{
       icon: <FileDoneOutlined   style={{ fontSize: 22 }} />,
       label: "Invoices",
       path: "/invoices",
-    },
-     {
-      key: "12",
-      icon: <WalletOutlined    style={{ fontSize: 22 }} />,
-      label: "Tickets",
-      path: "/tickets",
     },
     // {
     //   key: "4",
