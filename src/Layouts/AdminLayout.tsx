@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import {
   HomeOutlined,
   UsergroupAddOutlined,
@@ -10,10 +10,9 @@ import {
   FieldTimeOutlined,
   ProductOutlined,
   SlidersOutlined,
-  FileDoneOutlined ,
-  WalletOutlined 
+  FileDoneOutlined,
+  WalletOutlined,
 } from "@ant-design/icons";
-
 import {
   Avatar,
   Button,
@@ -38,6 +37,7 @@ interface MenuItem {
   path: string;
   subMenu?: MenuItem[];
 }
+
 const AdminLayout: React.FC<{
   children: React.ReactNode;
   screenName: string;
@@ -46,6 +46,8 @@ const AdminLayout: React.FC<{
   const location = useLocation();
 
   const user = getUserData();
+
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
 
   const menuItems: MenuItem[] = [
     {
@@ -65,20 +67,29 @@ const AdminLayout: React.FC<{
       icon: <PropertySafetyOutlined style={{ fontSize: 22 }} />,
       label: "Property Listing",
       path: "/propertyListing",
+      subMenu: [
+        {
+          key: "3-1",
+          icon: <SlidersOutlined style={{ fontSize: 22 }} />,
+          label: "Property Type",
+          path: "/propertyType",
+        },
+      ],
     },
     {
-      key: "7",
-      icon: <SlidersOutlined style={{ fontSize: 22 }} />,
-      label: "Property Type",
-      path: "/propertyType",
+      key: "6",
+      icon: <FieldTimeOutlined style={{ fontSize: 22 }} />,
+      label: "Timeline",
+      path: "/timeline",
+      subMenu: [
+        {
+          key: "6-1",
+          icon: <ProductOutlined style={{ fontSize: 22 }} />,
+          label: "Category",
+          path: "/category",
+        },
+      ],
     },
-    // {
-    //   key: "9",
-    //   icon: <PropertySafetyOutlined style={{ fontSize: 22 }} />,
-    //   label: "Property Details",
-    //   path: "/propertyDetails",
-    // },
-
     {
       key: "5",
       icon: <WechatWorkOutlined style={{ fontSize: 22 }} />,
@@ -86,76 +97,25 @@ const AdminLayout: React.FC<{
       path: "/chat",
     },
     {
-      key: "6",
-      icon: <FieldTimeOutlined style={{ fontSize: 22 }} />,
-      label: "Timeline",
-      path: "/timeline",
+      key: "10",
+      icon: <DollarOutlined style={{ fontSize: 22 }} />,
+      label: "Counter Offers",
+      path: "/counter-offers",
     },
-    // {
-    //   key: "7",
-    //   icon: <ProjectOutlined    style={{ fontSize: 22 }} />,
-    //   label: "Timeline Feeds",
-    //   path: "/feeds",
-    // },
     {
-      key: "8",
-      icon: <ProductOutlined style={{ fontSize: 22 }} />,
-      label: "Category",
-      path: "/category",
-    },
-   
-    {
-        key: "10",
-        icon: <DollarOutlined style={{ fontSize: 22 }} />,
-        label: "Counter Offers",
-        path: "/counter-offers",
-     },
-    //  {
-    //   key: "4",
-    //   icon: <TransactionOutlined  style={{ fontSize: 22 }} />,
-    //   label: "Transactions",
-    //   path: "/transactions",
-    // },
-     {
       key: "11",
-      icon: <FileDoneOutlined   style={{ fontSize: 22 }} />,
+      icon: <FileDoneOutlined style={{ fontSize: 22 }} />,
       label: "Invoices",
       path: "/invoices",
     },
-     {
+    {
       key: "12",
-      icon: <WalletOutlined    style={{ fontSize: 22 }} />,
+      icon: <WalletOutlined style={{ fontSize: 22 }} />,
       label: "Tickets",
       path: "/tickets",
     },
-    // {
-    //   key: "4",
-    //   icon: <SnippetsOutlined style={{ fontSize: 22 }} />,
-    //   label: "Pages",
-    //   path: "#",
-    //   // component:"Pages",
-    //   subMenu: [
-    //     {
-    //       key: "4-1",
-    //       label: "FAQ",
-    //       icon: <QuestionCircleOutlined />,
-    //       path: "/pages/faq",
-    //     },
-    //     {
-    //       key: "4-2",
-    //       label: "Privacy Policy",
-    //       icon: <QuestionCircleOutlined />,
-    //       path: "/pages/privacy",
-    //     },
-    //     {
-    //       key: "4-3",
-    //       label: "Terms And Conditions",
-    //       icon: <QuestionCircleOutlined />,
-    //       path: "/pages/terms",
-    //     },
-    //   ],
-    // },
   ];
+
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
@@ -163,15 +123,12 @@ const AdminLayout: React.FC<{
 
   const userMenu = (
     <Menu style={{ padding: 8 }}>
-      {/* <Menu.Item key="profile"> */}
       <div
         style={{
           display: "flex",
           flexDirection: "row",
-          // justifyContent: "space-between",
           alignItems: "center",
           width: 200,
-          // minHeight: 130,
           padding: 8,
         }}
       >
@@ -188,13 +145,11 @@ const AdminLayout: React.FC<{
           }}
         >
           {user.name}
-          {/* John doe */}
           <Typography.Text style={{ color: "#ccc" }}>
             {user.email}
-          </Typography.Text>{" "}
+          </Typography.Text>
         </Typography.Title>
       </div>
-      {/* </Menu.Item> */}
       <Menu.Divider />
       <Button
         type="text"
@@ -207,7 +162,7 @@ const AdminLayout: React.FC<{
         key="logout"
         onClick={handleLogout}
       >
-        <LogoutOutlined />{" "}
+        <LogoutOutlined />
         <Typography.Title style={{ width: "50%", margin: 0 }} level={5}>
           Logout
         </Typography.Title>
@@ -218,12 +173,23 @@ const AdminLayout: React.FC<{
   const handleNavigate = (path: string) => {
     navigate(path);
   };
+
+  const handleClickMenuItem = (item: MenuItem) => {
+    handleNavigate(item.path);
+    if (item.subMenu) {
+      setOpenKeys([item.key]);
+    } else {
+      setOpenKeys([]);
+    }
+  };
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const defaultSelectedKey = menuItems.find(
     (item) => item.path === location.pathname
   )?.key;
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
@@ -239,18 +205,8 @@ const AdminLayout: React.FC<{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            // overflow: "hidden",
-            // position: "fixed",
           }}
         >
-          {/* <div
-          style={{ display: "flex", justifyContent: "space-around", backgroundColor: "white", marginBottom: "2em", border: "2px solid", boxShadow:"", borderRadius:"20px"}}
-          className="demo-logo-vertical"
-        > */}
-          {/* <div
-          // style={{ display: "flex", justifyContent: "space-around" }}
-          className="demo-logo-vertical"
-        /> */}
           <img
             src={logo}
             alt="logo"
@@ -262,7 +218,6 @@ const AdminLayout: React.FC<{
             width={100}
             height={100}
           />
-          {/* </div> */}
           <Menu
             theme="dark"
             defaultSelectedKeys={[defaultSelectedKey || "1"]}
@@ -271,7 +226,8 @@ const AdminLayout: React.FC<{
               backgroundColor: customTheme.palette.primary.main,
               width: 200,
             }}
-            // items={menuItems}
+            openKeys={openKeys}
+            onOpenChange={(keys) => setOpenKeys(keys as string[])}
           >
             {menuItems.map((item) => {
               if (item.subMenu) {
@@ -291,6 +247,7 @@ const AdminLayout: React.FC<{
                     icon={item.icon}
                     title={item.label}
                     key={item.key}
+                    onTitleClick={() => handleClickMenuItem(item)}
                   >
                     {subMenuItems}
                   </Menu.SubMenu>
@@ -298,8 +255,8 @@ const AdminLayout: React.FC<{
               } else {
                 return (
                   <Menu.Item
-                    style={{ marginBottom: "10px", color: "white" }}
-                    onClick={() => handleNavigate(item.path)}
+                    style={{ marginBottom: "6px", color: "white" }}
+                    onClick={() => handleClickMenuItem(item)}
                     key={item.key}
                   >
                     {item.icon}
@@ -319,10 +276,6 @@ const AdminLayout: React.FC<{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            // overflow:"hidden",
-            // position:"fixed",
-            // zIndex:1000,
-            // width:"86%"
           }}
         >
           <Typography.Title
