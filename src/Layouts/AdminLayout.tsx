@@ -27,6 +27,7 @@ import { theme as customTheme } from "../Theme/theme";
 import { logo } from "../Assets/assets";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getUserData } from "../Utils/helperFunctions";
+import "../Style/style.css";
 
 const { Header, Content, Sider } = Layout;
 
@@ -65,11 +66,17 @@ const AdminLayout: React.FC<{
     {
       key: "3",
       icon: <PropertySafetyOutlined style={{ fontSize: 22 }} />,
-      label: "Property Listing",
+      label: "Property",
       path: "/propertyListing",
       subMenu: [
         {
           key: "3-1",
+          icon: <SlidersOutlined style={{ fontSize: 22 }} />,
+          label: "Property Listing",
+          path: "/propertyListing",
+        },
+        {
+          key: "3-2",
           icon: <SlidersOutlined style={{ fontSize: 22 }} />,
           label: "Property Type",
           path: "/propertyType",
@@ -84,6 +91,12 @@ const AdminLayout: React.FC<{
       subMenu: [
         {
           key: "6-1",
+          icon: <ProductOutlined style={{ fontSize: 22 }} />,
+          label: "Timeline",
+          path: "/timeline",
+        },
+        {
+          key: "6-2",
           icon: <ProductOutlined style={{ fontSize: 22 }} />,
           label: "Category",
           path: "/category",
@@ -171,14 +184,16 @@ const AdminLayout: React.FC<{
   );
 
   const handleNavigate = (path: string) => {
-    navigate(path);
+    if (path) {
+      navigate(path);
+    }
   };
 
   const handleClickMenuItem = (item: MenuItem) => {
-    handleNavigate(item.path);
     if (item.subMenu) {
       setOpenKeys([item.key]);
     } else {
+      handleNavigate(item.path);
       setOpenKeys([]);
     }
   };
@@ -233,11 +248,19 @@ const AdminLayout: React.FC<{
               if (item.subMenu) {
                 const subMenuItems = item.subMenu.map((subMenuItem) => (
                   <Menu.Item
-                    style={{ color: "white" }}
+                    className="ant-menu-submenu-title"
                     onClick={() => handleNavigate(subMenuItem.path)}
+                    style={{
+                      color: "red !important",
+
+                      // backgroundColor: customTheme.palette.primary.main,
+                      // width: 100,
+                    }}
                     key={subMenuItem.key}
                   >
-                    <span style={{ fontSize: 14 }}>{subMenuItem.label}</span>
+                    <span style={{ fontSize: 14, color: "white" }}>
+                      {subMenuItem.label}
+                    </span>
                   </Menu.Item>
                 ));
 

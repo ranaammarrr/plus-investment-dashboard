@@ -3,13 +3,17 @@ import { Select, Space, Tag, Typography } from "antd";
 import {
   DeleteOutlined,
   SearchOutlined,
-  ExclamationCircleOutlined
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
 import { Button, Modal } from "antd";
-import { getAllCategories, createCategories, deleteCategory } from "../../../Redux/Category/categoryAction";
+import {
+  getAllCategories,
+  createCategories,
+  deleteCategory,
+} from "../../../Redux/Category/categoryAction";
 import { getInvoicesById } from "../../../Redux/Invoices/invoicesActions";
 import { useLocation } from "react-router-dom";
 import { formattedDate, getUserData } from "../../../Utils/helperFunctions";
@@ -28,14 +32,10 @@ const Invoices: React.FC = () => {
   const location = useLocation();
 
   const user = getUserData();
-  
-//   const { invoices } = useAppSelector((state) => state.invoice);
+
+  //   const { invoices } = useAppSelector((state) => state.invoice);
   const { transaction } = useAppSelector((state) => state.transaction);
-    let invoices = transaction
-
-
- 
-
+  let invoices = transaction;
 
   // Modal Handlers Ended ....
 
@@ -50,8 +50,6 @@ const Invoices: React.FC = () => {
   const handleLabelChange = (value: string) => {
     setLabelValue(value);
   };
-
- 
 
   const columns = [
     // {
@@ -72,7 +70,7 @@ const Invoices: React.FC = () => {
       key: "price",
       width: "10%",
     },
-   
+
     {
       title: "Description",
       dataIndex: "description",
@@ -84,6 +82,8 @@ const Invoices: React.FC = () => {
       dataIndex: "invoiceDate",
       key: "invoiceDate",
       width: "10%",
+      sorter: (a: DataType, b: DataType) =>
+        new Date(a.invoiceDate).getTime() - new Date(b.invoiceDate).getTime(),
     },
     {
       title: "Status",
@@ -92,25 +92,25 @@ const Invoices: React.FC = () => {
       width: "10%",
       render: (status: string) => (
         <Tag
-        color={
-          status == "completed"
-          ? "#386641"
-          : status == "pending"
-          ? "#ccc"
-          : status == "rejected"
-          ? "#9d0208"
-          : "#f4d35e"
-        }
-        style={{
-          width: "100%",
-          textAlign: "center",
-          fontSize: 12,
-          color: "white",
-          padding: "2px 4px",
-        }}
-      >
-        {status && status}
-      </Tag>
+          color={
+            status == "completed"
+              ? "#386641"
+              : status == "pending"
+              ? "#ccc"
+              : status == "rejected"
+              ? "#9d0208"
+              : "#f4d35e"
+          }
+          style={{
+            width: "100%",
+            textAlign: "center",
+            fontSize: 12,
+            color: "white",
+            padding: "2px 4px",
+          }}
+        >
+          {status && status}
+        </Tag>
       ),
     },
 
@@ -151,72 +151,75 @@ const Invoices: React.FC = () => {
   useEffect(() => {
     dispatch(getAllInvoices());
   }, [dispatch]);
-  const inoicesData = invoices ? 
-    searchValue !== ""
-      ? invoices && invoices.filter((invoice:any) =>
-            invoice.senderId.name.toLowerCase().includes(searchValue.toLowerCase())
+
+  const sortedInvoices = [...invoices].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
+  const inoicesData = invoices
+    ? searchValue !== ""
+      ? sortedInvoices &&
+        sortedInvoices
+          .filter((invoice: any) =>
+            invoice.senderId.name
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())
           )
-          .map((invoice:any) => ({
-            id:invoice._id,
-        // item: invoice.propertyId?.name,
+          .map((invoice: any) => ({
+            id: invoice._id,
+            // item: invoice.propertyId?.name,
             invoiceDate: formattedDate(invoice.invoiceDate),
-            price: parseFloat(invoice.price).toLocaleString('en-US', {
-            style: "currency",
-            currency: "USD",
-            currencyDisplay: "symbol",
-            minimumFractionDigits: 0
-          }),
-            quantity:invoice.quantity,
-            sellerName:invoice.senderId.name,
-            description:invoice.description,
-            status: invoice.status
+            price: parseFloat(invoice.price).toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+              currencyDisplay: "symbol",
+              minimumFractionDigits: 0,
+            }),
+            quantity: invoice.quantity,
+            sellerName: invoice.senderId.name,
+            description: invoice.description,
+            status: invoice.status,
           }))
-          .reverse()
-      : invoices && invoices.map((invoice:any) => ({
-        id:invoice._id,
-        // item: invoice.propertyId?.name,
-        invoiceDate: formattedDate(invoice.invoiceDate),
-        price: parseFloat(invoice.price).toLocaleString('en-US', {
+      : sortedInvoices &&
+        sortedInvoices.map((invoice: any) => ({
+          id: invoice._id,
+          // item: invoice.propertyId?.name,
+          invoiceDate: formattedDate(invoice.invoiceDate),
+          price: parseFloat(invoice.price).toLocaleString("en-US", {
             style: "currency",
             currency: "USD",
             currencyDisplay: "symbol",
-            minimumFractionDigits: 0
+            minimumFractionDigits: 0,
           }),
-        quantity:invoice.quantity,
-        sellerName:invoice.senderId.name,
-        description:invoice.description,
-        status: invoice.status
-      })) : []
-      .reverse();
-
-
-
+          quantity: invoice.quantity,
+          sellerName: invoice.senderId.name,
+          description: invoice.description,
+          status: invoice.status,
+        }))
+    : [];
 
   return (
     <>
-
-
       {/* End Modal COde.....  */}
 
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        marginBottom: "8px",
-        // marginTop: "20px",
-      }}>
-
-      <InputField
-        value={searchValue}
-        onChangeText={(val) => handleChange(val)}
-        placeholder={"Search invoice"}
-        size="large"
-        // inpuStyles={{ width: "20%", marginBottom: 20 }}
-        inpuStyles={{ width: "90%" }}
-        suffix={<SearchOutlined />}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "8px",
+          // marginTop: "20px",
+        }}
+      >
+        <InputField
+          value={searchValue}
+          onChangeText={(val) => handleChange(val)}
+          placeholder={"Search invoice"}
+          size="large"
+          // inpuStyles={{ width: "20%", marginBottom: 20 }}
+          inpuStyles={{ width: "90%" }}
+          suffix={<SearchOutlined />}
         />
-        
-
-          </div>
+      </div>
       <div style={{ minWidth: "50%" }}>
         <AppTable
           dataSource={inoicesData}

@@ -69,29 +69,35 @@ const Chat: React.FC = () => {
 
     setSelectedContact(item);
   };
-  
 
   const filteredChats =
     (chats &&
-      chats.map((chat: any) => {
-        const filteredUser = chat?.users?.find(
-          (item: any) => item?.senderId !== user._id
-        );
+      chats
+        .map((chat: any) => {
+          const filteredUser = chat?.users?.find(
+            (item: any) => item?.senderId !== user._id
+          );
 
-        if (filteredUser) {
-          const updatedUser = {
-            ...filteredUser,
-            lastMessage: counterOfferMessage(
-              chat.messages[chat.messages.length - 1]
-            ),
-            chatId: chat._id,
-          };
+          if (filteredUser) {
+            const updatedUser = {
+              ...filteredUser,
+              lastMessage: counterOfferMessage(
+                chat?.messages[chat.messages.length - 1]
+              ),
+              chatId: chat._id,
+              createdAt: chat?.messages[chat.messages.length - 1].createdAt,
+            };
 
-          return updatedUser;
-        }
+            return updatedUser;
+          }
 
-        return null;
-      })) ||
+          return null;
+        })
+        .filter((chat: any) => chat !== null)
+        .sort(
+          (a: any, b: any) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        )) ||
     [];
 
   return (
@@ -193,7 +199,6 @@ const Chat: React.FC = () => {
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "space-between",
-                                // flex: 1,
                                 width: "100%",
                               }}
                             >
@@ -242,7 +247,6 @@ const Chat: React.FC = () => {
           ref={chatContentRef}
           style={{
             padding: "0px",
-            // background: "#F0F2F5",
             maxHeight: "400px",
             minHeight: "400px",
             overflowY: selectedContact ? "scroll" : "hidden",
@@ -253,7 +257,6 @@ const Chat: React.FC = () => {
           {selectedContact ? (
             <div
               style={{
-                // width: "100vw",
                 backgroundColor: theme.palette.primary.main,
                 padding: "6px 20px",
                 display: "flex",
@@ -273,7 +276,6 @@ const Chat: React.FC = () => {
                 }}
               >
                 {selectedContact.name}
-                {/* {findSenderName(selectedContact.senderId).name} */}
               </Typography.Text>
             </div>
           ) : (
@@ -288,15 +290,7 @@ const Chat: React.FC = () => {
               <img style={{ height: "30%", width: "30%" }} src={logo} alt="" />
             </div>
           )}
-          <div
-            style={
-              {
-                // padding: "50px 0px",
-                // height: "150px",
-                // borderRadius: 8,
-              }
-            }
-          >
+          <div>
             {selectedContact && (
               <List
                 itemLayout="vertical"
@@ -374,7 +368,6 @@ const Chat: React.FC = () => {
                   />
                   <AppButton
                     size="middle"
-                    // onClick={handleSendMessage}
                   >
                     Send
                   </AppButton>

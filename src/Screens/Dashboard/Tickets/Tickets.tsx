@@ -29,6 +29,7 @@ const { confirm } = Modal;
 const Tickets: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [responseText, setResponseText] = useState<string>("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [selectedTickets, setSelectedTickets] = useState<string | undefined>(
@@ -72,8 +73,10 @@ const Tickets: React.FC = () => {
       }
       return true;
     });
-  const handleResponseOpen = (status: string) => {
-    if (status === "closed") {
+  const handleResponseOpen = (id: string) => {
+    const ticket = tickets.find((item: any) => item._id === id);
+    if (ticket && ticket.status === "closed") {
+      setResponseText(ticket.response?.text || "No response available");
       setIsModalOpen(true);
     }
   };
@@ -90,6 +93,7 @@ const Tickets: React.FC = () => {
   const handleMenuClick = (recordId: string) => {
     setDropdownVisible(dropdownVisible === recordId ? null : recordId);
   };
+
   const columns = [
     {
       title: "Ticket ID",
@@ -97,18 +101,18 @@ const Tickets: React.FC = () => {
       key: "ticketId",
       width: "10%",
     },
-    // {
-    //   title: "Message",
-    //   dataIndex: "message",
-    //   key: "message",
-    //   width: "20%",
-    // },
 
     {
       title: "Subject",
       dataIndex: "subject",
       key: "subject",
-      width: "25%",
+      width: "20%",
+    },
+    {
+      title: "Message",
+      dataIndex: "message",
+      key: "message",
+      width: "15%",
     },
 
     {
@@ -151,78 +155,6 @@ const Tickets: React.FC = () => {
       key: "name",
       width: "10%",
       sorter: (a: DataType, b: DataType) => a.name.localeCompare(b.name),
-      render: (name: string, record: DataType) => {
-        const menu = (
-          <Menu
-            style={{
-              width: "600px",
-              height: "100px",
-              backgroundColor: "grey",
-            }}
-          >
-            <div style={{ display: "flex" }}>
-              <Menu.Item>
-                <div>
-                  <Typography.Title style={{ padding: "0" }} level={5}>
-                    User Name
-                  </Typography.Title>
-                </div>
-              </Menu.Item>
-              <Menu.Item>
-                <div>
-                  <Typography.Text>{record.name}</Typography.Text>
-                </div>
-              </Menu.Item>
-              <Menu.Item>
-                <div>
-                  <Typography.Title
-                    style={{
-                      backgroundColor: "transparent",
-                      alignItems: "center",
-                    }}
-                    level={5}
-                  >
-                    Message
-                  </Typography.Title>
-                </div>
-              </Menu.Item>
-              <Menu.Item>
-                <div>
-                  <Typography.Text>{record.message}</Typography.Text>
-                </div>
-              </Menu.Item>
-            </div>
-            {/* <Menu.Item>
-              <Input
-                placeholder="Enter response"
-                value={inputValue}
-                onChange={handleInputChange}
-              />
-            </Menu.Item> */}
-          </Menu>
-        );
-
-        return (
-          <Dropdown
-            overlay={menu}
-            trigger={["click"]}
-            visible={dropdownVisible === record.id}
-            onVisibleChange={() => handleMenuClick(record.id)}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              <span>{name && name}</span>
-              <DownOutlined style={{ marginLeft: "8px" }} />
-            </div>
-          </Dropdown>
-        );
-      },
     },
     {
       title: "Action",
@@ -233,42 +165,35 @@ const Tickets: React.FC = () => {
           <>
             {record.status === "closed" ? (
               <AppButton
-                text="Respond"
+                text="View Reponse"
                 size="small"
-                // textStyle={{ backgroundColor: "grey", color: "white" }}
-                disabled
-                // onClick={() => handleResponse()}
+                textStyle={{ color: "white" }}
+                onClick={() => handleResponseOpen(record.id)}
               />
             ) : (
               <AppButton
                 text="Respond"
                 size="small"
+                textStyle={{ width: "115px" }}
                 onClick={() => openModal(record.id)}
               />
             )}
-            <Modal
-              // style={{ marginTop: "100px" }}
-              title="Response from Support"
-              open={isModalOpen}
-              onOk={handleOk}
-              onCancel={handleCancel}
-            >
-              <Typography.Text>{record && record.response}</Typography.Text>
-            </Modal>
           </>
         );
       },
     },
   ];
 
-  // const sortedTimeline = [...filteredTickets].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  const sortedTickets = [...filteredTickets].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   const data: any =
     searchValue !== ""
-      ? filteredTickets &&
-        filteredTickets
+      ? sortedTickets &&
+        sortedTickets
           .filter((item: any) =>
-            item?.user?.name.toLowerCase().includes(searchValue.toLowerCase())
+            item?.subject.toLowerCase().includes(searchValue.toLowerCase())
           )
           .map((item: any) => ({
             id: item._id,
@@ -280,8 +205,8 @@ const Tickets: React.FC = () => {
             response: item?.response?.text,
             ticketId: item.ticketID,
           }))
-      : filteredTickets &&
-        filteredTickets.map((item: any) => ({
+      : sortedTickets &&
+        sortedTickets.map((item: any) => ({
           id: item._id,
           name: item?.user?.name,
           subject: item?.subject,
@@ -325,8 +250,18 @@ const Tickets: React.FC = () => {
           defaultValue={textValue}
           onChange={handleLocalInputChange}
           placeholder="Enter your response"
-          rows={4} // Setting the rows to give it a long text area appearance
+          rows={4}
         />
+      </Modal>
+      <Modal
+        // style={{ marginTop: "100px" }}
+        title="Response from Support"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        {/* <Typography.Title level={5}>Response</Typography.Title> */}
+        <Typography.Text>{responseText}</Typography.Text>
       </Modal>
       <div
         style={{

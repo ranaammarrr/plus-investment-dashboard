@@ -1,0 +1,9 @@
+.ant-menu-submenu-title {
+  color: white !important;
+  /* background-color: red !important; */
+  /* border-right: 0 !important; */
+}
+
+.ant-menu.ant-menu-sub.ant-menu-inline {
+  background-color: transparent !important; /* Change this to your desired color */
+}
