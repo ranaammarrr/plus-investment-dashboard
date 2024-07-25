@@ -11,6 +11,8 @@ interface AppTableProps {
   columns: ColumnProps<DataType>[];
   pagination?: boolean | { defaultPageSize?: number };
   onChange?: any;
+  expandableRows?: any;
+  showHeader?: any;
 }
 
 const AppTable: React.FC<AppTableProps> = ({
@@ -18,6 +20,8 @@ const AppTable: React.FC<AppTableProps> = ({
   columns,
   pagination,
   onChange,
+  expandableRows,
+  showHeader,
 }) => {
   const tableColumns = columns.map((column) => ({
     ...column,
@@ -37,12 +41,14 @@ const AppTable: React.FC<AppTableProps> = ({
   return (
     <Table
       style={{
-        minHeight: 400,
+        minHeight: 600,
       }}
       dataSource={dataSource}
       columns={tableColumns}
       pagination={paginationConfig}
       onChange={onChange}
+      expandable={expandableRows}
+      showHeader={showHeader}
     />
   );
 };

@@ -14,7 +14,6 @@ import FilterOption from "../../../Components/FilterOption/FilterOption";
 
 const Timeline: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
-
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { timelines } = useAppSelector((state) => state.timeline);
@@ -175,7 +174,6 @@ const Timeline: React.FC = () => {
             name: timeline?.userData?.name,
             content: truncateText(timeline?.content),
             action: timeline.isVisible,
-
             like:
               timeline.likedbyUsers?.length < 1
                 ? 0
