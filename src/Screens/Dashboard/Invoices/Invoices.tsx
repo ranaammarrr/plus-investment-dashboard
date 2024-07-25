@@ -1,22 +1,54 @@
 import React, { useEffect, useState } from "react";
-import { Tag } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Select, Space, Tag, Typography } from "antd";
+import {
+  DeleteOutlined,
+  SearchOutlined,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
-import { formattedDate } from "../../../Utils/helperFunctions";
+import { Button, Modal } from "antd";
+import {
+  getAllCategories,
+  createCategories,
+  deleteCategory,
+} from "../../../Redux/Category/categoryAction";
+import { getInvoicesById } from "../../../Redux/Invoices/invoicesActions";
+import { useLocation } from "react-router-dom";
+import { formattedDate, getUserData } from "../../../Utils/helperFunctions";
 import { getAllInvoices } from "../../../Redux/Transaction/TransactionAction";
+
+const { confirm } = Modal;
 
 const Invoices: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [labelValue, setLabelValue] = useState<string>("");
+  const [addCategorySearch, setAddCategorySearch] = useState<string>("");
 
   const dispatch = useAppDispatch();
+  const location = useLocation();
 
+  const user = getUserData();
+
+  //   const { invoices } = useAppSelector((state) => state.invoice);
   const { transaction } = useAppSelector((state) => state.transaction);
   let invoices = transaction;
 
+  // Modal Handlers Ended ....
+
   const handleChange = (val: string) => {
     setSearchValue(val);
+  };
+
+  const handleAddSearch = (val: string) => {
+    setAddCategorySearch(val);
+  };
+
+  const handleLabelChange = (value: string) => {
+    setLabelValue(value);
   };
 
   const columns = [
@@ -122,20 +154,23 @@ const Invoices: React.FC = () => {
   useEffect(() => {
     dispatch(getAllInvoices());
   }, [dispatch]);
+
+  const sortedInvoices = [...invoices].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
   const inoicesData = invoices
     ? searchValue !== ""
-      ? invoices &&
-        invoices
-          .filter(
-            (invoice: any) =>
-              invoice.senderId &&
-              invoice.senderId.name
-                .toLowerCase()
-                .includes(searchValue.toLowerCase())
+      ? sortedInvoices &&
+        sortedInvoices
+          .filter((invoice: any) =>
+            invoice.senderId.name
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())
           )
           .map((invoice: any) => ({
             id: invoice._id,
-            item: invoice.propertyId?.name,
+            // item: invoice.propertyId?.name,
             invoiceDate: formattedDate(invoice.invoiceDate),
             price: parseFloat(invoice.price).toLocaleString("en-US", {
               style: "currency",
@@ -148,11 +183,10 @@ const Invoices: React.FC = () => {
             description: invoice.description,
             status: invoice.status,
           }))
-          .reverse()
-      : invoices &&
-        invoices.map((invoice: any) => ({
+      : sortedInvoices &&
+        sortedInvoices.map((invoice: any) => ({
           id: invoice._id,
-          item: invoice.propertyId?.name,
+          // item: invoice.propertyId?.name,
           invoiceDate: formattedDate(invoice.invoiceDate),
           price: parseFloat(invoice.price).toLocaleString("en-US", {
             style: "currency",
@@ -165,10 +199,11 @@ const Invoices: React.FC = () => {
           description: invoice.description,
           status: invoice.status,
         }))
-    : [].reverse();
+    : [];
 
   return (
     <>
+      {/* End Modal COde.....  */}
       <div
         style={{
           display: "flex",

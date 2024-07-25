@@ -10,6 +10,8 @@ import { propertyDetailReducer } from './PropertyListing/listingSlice';
 import { chatReducer } from './Chat/chatSlice';
 import { tagsReducer } from './Tags/tagSlice';
 import { invoicesReducer } from './Invoices/invoicesSlice';
+import { ticketsReducer } from './Tickets/TicketsSlice';
+
 
 const store = configureStore({
   reducer: {
@@ -23,7 +25,8 @@ const store = configureStore({
     detailProperty: propertyDetailReducer,
     chat:  chatReducer,
     tag:tagsReducer,
-    invoice:invoicesReducer
+    invoice:invoicesReducer,
+    ticket:ticketsReducer
   },
 });
 

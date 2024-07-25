@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { BASE_URL, ENDPOINTS } from "../../Utils/constants";
 import { getToken, toastMessage } from "../../Utils/helperFunctions";
 import { ApiError,Timeline, TimelineById,  } from "./types";
+
 const token =  getToken()
 export const getAllTimeline = createAsyncThunk<Timeline[], void,{ rejectValue: ApiError }>(
     'timeline/all',
@@ -14,31 +15,38 @@ export const getAllTimeline = createAsyncThunk<Timeline[], void,{ rejectValue: A
             'Authorization' : `Bearer ${token}`
           },
         });
+
         if (!response.ok) {
           const errorMessage = await response.text();
           toastMessage({
-            type: 'error',
-            content: `Cannot get all timelines' data`,
-            duration: 5,
+            type: 'error', 
+            content: `Cannot get all timelines' data`, 
+            duration: 5, 
           });
           return rejectWithValue({ message: errorMessage });
         }
+
         const apiResponse = await response.json();
+
+
         if (!apiResponse.success) {
           toastMessage({
-            type: 'error',
-            content: `Cannot get all timelines' data`,
-            duration: 5,
+            type: 'error', 
+            content: `Cannot get all timelines' data`, 
+            duration: 5, 
           });
+
           return rejectWithValue({ message: `Cannot get all timelines' data`});
         }
-        return apiResponse.data;
+
+
+        return apiResponse.data; 
       } catch (error) {
         return rejectWithValue({ message: 'An error occurred' });
       }
     }
   );
-  // Feeds Action ...
+
   export const getTimelineById = createAsyncThunk<TimelineById, string, { rejectValue: ApiError }>(
     'timeline/getTimelineByUserId',
     async (timeline_Id, { rejectWithValue }) => {
@@ -50,6 +58,7 @@ export const getAllTimeline = createAsyncThunk<Timeline[], void,{ rejectValue: A
             'Authorization': `Bearer ${token}`, // Ensure `token` is defined and accessible
           },
         });
+
         if (!response.ok) {
           const errorMessage = await response.text();
           toastMessage({
@@ -59,8 +68,9 @@ export const getAllTimeline = createAsyncThunk<Timeline[], void,{ rejectValue: A
           });
           return rejectWithValue({ message: errorMessage });
         }
+
         const apiResponse = await response.json();
-        // console.log(apiResponse, "Property Details");
+
         if (!apiResponse.success) { // Ensure `apiResponse` has a `success` field if applicable
           toastMessage({
             type: 'error',
@@ -69,18 +79,14 @@ export const getAllTimeline = createAsyncThunk<Timeline[], void,{ rejectValue: A
           });
           return rejectWithValue({ message: `Cannot fetch property details` });
         }
-        // toastMessage({
-        //   type: 'success',
-        //   content: `Property details fetched successfully`,
-        //   duration: 5,
-        // });
+
         return apiResponse.timelineData; // Return the property details
       } catch (error) {
         return rejectWithValue({ message: 'An error occurred' });
       }
     }
   );
-  // isVisible TimeLine Actionn ..
+
   export const isVisibleTimeline = createAsyncThunk<void, { _id: string }, { rejectValue: ApiError }>(
     'properties/approved',
     async ({ _id, }, { rejectWithValue }) => {
@@ -108,8 +114,11 @@ export const getAllTimeline = createAsyncThunk<Timeline[], void,{ rejectValue: A
           duration: 5,
         });
         return;
+
       } catch (error) {
         return rejectWithValue({ message: 'An error occurred' });
       }
     }
+
   );
+

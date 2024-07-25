@@ -12,7 +12,7 @@ export interface EditPropertyState {
       postalCode: number;
       roomNo: string;
       bathNo: string;
-      price: string;
+      price: string | any;
       detail: string;
       user_id:string;
       lat: number;

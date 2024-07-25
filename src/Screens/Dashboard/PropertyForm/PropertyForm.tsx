@@ -2,10 +2,6 @@ import React, { useEffect, useState } from "react";
 import AppButton from "../../../Components/Button/AppButton";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Divider, Typography, Select, Input } from "antd";
-import React, { useEffect, useState } from "react";
-import AppButton from "../../../Components/Button/AppButton";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Divider, Typography, Select, Input } from "antd";
 import { Grid } from "@mui/material";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import { DataType } from "../../../Components/Table/AppTable";
@@ -109,10 +105,12 @@ const PropertyForm: React.FC = () => {
     }
   };
 
-  const formatPrice = (value: any) => {
+
+  const formatPrice = (value:any) => {
     if (!value) return "";
     return `$${Number(value).toLocaleString()}`;
   };
+  
 
   return (
     <>
@@ -231,8 +229,7 @@ const PropertyForm: React.FC = () => {
                   placeholder="Price"
                   size="large"
                   value={formatPrices(formik.values.price)}
-                  onChangeText={(value) => {
-                    // Remove non-digit characters
+                  onChangeText={(value) => { // Remove non-digit charactersn
                     formik.setFieldValue("price", value);
                   }}
                   error={
