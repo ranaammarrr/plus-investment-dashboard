@@ -6,7 +6,7 @@ import {
   RadarChartOutlined,
   RiseOutlined,
   BoldOutlined,
-  ExclamationCircleOutlined
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
@@ -18,7 +18,11 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import AppButton from "../../../Components/Button/AppButton";
 import { Button, Modal } from "antd";
-import { getAllCategories, createCategories, deleteCategory } from "../../../Redux/Category/categoryAction";
+import {
+  getAllCategories,
+  createCategories,
+  deleteCategory,
+} from "../../../Redux/Category/categoryAction";
 import { formattedDate } from "../../../Utils/helperFunctions";
 
 const { confirm } = Modal;
@@ -33,7 +37,7 @@ const Category: React.FC = () => {
   const dispatch = useAppDispatch();
   const { categories } = useAppSelector((state) => state.category);
 
-  // Modal handlers Start.... 
+  // Modal handlers Start....
   const showModal = () => {
     setOpen(true);
   };
@@ -44,8 +48,10 @@ const Category: React.FC = () => {
       setLoading(false);
       setOpen(false);
     }, 1000);
-   await dispatch(createCategories({label:labelValue, icon:addCategorySearch}))
-   dispatch(getAllCategories())
+    await dispatch(
+      createCategories({ label: labelValue, icon: addCategorySearch })
+    );
+    dispatch(getAllCategories());
     setLabelValue("");
   };
 
@@ -100,7 +106,7 @@ const Category: React.FC = () => {
     {
       title: "Action",
       key: "action",
-      width:"10%",
+      width: "10%",
       render: (_: any, record: DataType) => {
         const handleDelete = async (id: string) => {
           confirm({
@@ -112,18 +118,18 @@ const Category: React.FC = () => {
               "Deleting a category is irreversible, are you sure you want to proceed?",
             cancelText: "No",
             async onOk() {
-          await dispatch(deleteCategory(id));
-          dispatch(getAllCategories());
-        },
-        onCancel() {},
-      });
+              await dispatch(deleteCategory(id));
+              dispatch(getAllCategories());
+            },
+            onCancel() {},
+          });
         };
 
         return (
           <Space size="middle">
             <DeleteOutlined
               style={{ fontSize: 22, marginLeft: 6 }}
-              onClick={() => handleDelete(record._id)}
+              onClick={() => handleDelete(record.id)}
             />
           </Space>
         );
@@ -146,20 +152,18 @@ const Category: React.FC = () => {
             icon: category.icon,
             value: category.value,
             createdAt: formattedDate(category.createdAt),
-            id:category._id
+            id: category._id,
           }))
           .reverse()
-      : categories .map((category) => ({
-        label: category.label,
-        icon: category.icon,
-        value: category.value,
-        createdAt: formattedDate(category.createdAt),
-        id:category._id
-      }))
-      .reverse();
-
-
-
+      : categories
+          .map((category) => ({
+            label: category.label,
+            icon: category.icon,
+            value: category.value,
+            createdAt: formattedDate(category.createdAt),
+            id: category._id,
+          }))
+          .reverse();
 
   return (
     <>
@@ -204,10 +208,9 @@ const Category: React.FC = () => {
             onChange={(val) => handleAddSearch(val)}
             showSearch
             filterOption={(input, option) =>
-              typeof option?.value === 'string' &&
+              typeof option?.value === "string" &&
               option?.value.toLowerCase().includes(input.toLowerCase())
             }
-            
           >
             <Select.Option value="RealEstate">
               <RadarChartOutlined style={{ fontSize: "18px" }} /> Real Estate
@@ -224,29 +227,29 @@ const Category: React.FC = () => {
 
       {/* End Modal COde.....  */}
 
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        marginBottom: "8px",
-        // marginTop: "20px",
-      }}>
-
-      <InputField
-        value={searchValue}
-        onChangeText={(val) => handleChange(val)}
-        placeholder={"Search category"}
-        size="large"
-        // inpuStyles={{ width: "20%", marginBottom: 20 }}
-        inpuStyles={{ width: "90%" }}
-        suffix={<SearchOutlined />}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "8px",
+          // marginTop: "20px",
+        }}
+      >
+        <InputField
+          value={searchValue}
+          onChangeText={(val) => handleChange(val)}
+          placeholder={"Search category"}
+          size="large"
+          // inpuStyles={{ width: "20%", marginBottom: 20 }}
+          inpuStyles={{ width: "90%" }}
+          suffix={<SearchOutlined />}
         />
         <AppButton
           text="Add category"
           size="large"
           onClick={() => handleAddCategory()}
-          />
-
-          </div>
+        />
+      </div>
       <div style={{ minWidth: "50%" }}>
         <AppTable
           dataSource={categoryData}

@@ -138,7 +138,6 @@ const Timeline: React.FC = () => {
       width: "5%",
       render: (_: any, record: DataType) => {
         const onChange = async (checked: any) => {
-          console.log(record);
           try {
             await dispatch(isVisibleTimeline({ _id: record.id }));
           } catch (error) {

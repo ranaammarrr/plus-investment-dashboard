@@ -282,14 +282,14 @@ const AdminLayout: React.FC<{
             style={{
               objectFit: "contain",
               marginTop: 12,
-              marginBottom: 22,
+              marginBottom: 42,
             }}
             width={100}
             height={100}
           />
 
           <Menu
-            theme="light"
+            theme="dark"
             defaultSelectedKeys={[defaultSelectedKey || "1"]}
             mode="inline"
             style={{
@@ -313,15 +313,13 @@ const AdminLayout: React.FC<{
                     }}
                     key={subMenuItem.key}
                   >
-                    <span style={{ fontSize: 14, color: "#4a9687" }}>
-                      {subMenuItem.label}
-                    </span>
+                    <span style={{ fontSize: 14 }}>{subMenuItem.label}</span>
                   </Menu.Item>
                 ));
 
                 return (
                   <Menu.SubMenu
-                    style={{ color: "#4a9687", fontWeight: 600 }}
+                    style={{ fontWeight: 600 }}
                     icon={item.icon}
                     title={item.label}
                     key={item.key}
@@ -335,7 +333,7 @@ const AdminLayout: React.FC<{
                   <Menu.Item
                     style={{
                       marginBottom: "6px",
-                      color: "#4a9687",
+                      // color: "#4a9687",
                       fontWeight: 600,
                     }}
                     onClick={() => handleClickMenuItem(item)}

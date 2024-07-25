@@ -14,39 +14,37 @@ import { getAllUsers } from "../../../Redux/User/userAction";
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-
 const ViewTransactions: React.FC = () => {
   const location = useLocation();
   const { users } = useAppSelector((state) => state.user);
   const { chatByUserId } = useAppSelector((state) => state.chat);
   const { transaction } = useAppSelector((state) => state.transaction);
 
+  const filteredChats =
+    chatByUserId
+      ?.map((chat: any) => {
+        const updatedChat = chat?.messages?.map((message: any) => {
+          const sender = chat?.users.find(
+            (item: any) => item._id === message.senderId
+          );
+          if (sender) {
+            const updatedMessage = {
+              ...message,
+              senderName: sender.name,
+              senderImg: sender.image,
+              senderDate: sender.createdAt,
+            };
+            return updatedMessage;
+          }
+        });
 
-
-  const filteredChats = chatByUserId?.map((chat: any) => {
-    const updatedChat = chat?.messages?.map((message: any) => {
-      const sender =chat?.users.find(
-        (item: any) => item._id
-        === message.senderId
-        );
-        if (sender) {
-      const updatedMessage = {...message, senderName: sender.name, senderImg: sender.image, senderDate: sender.createdAt};
-      return updatedMessage
-    }
-    })
-
-    return updatedChat;
-  }).flat()
-   ||
-[];
-
-
+        return updatedChat;
+      })
+      .flat() || [];
 
   // const { propertiesDetail } = useAppSelector((state) => state.detailProperty);
   // const property: any = location.state?.property || {};
   const { detailedProperty } = useAppSelector((state) => state.detailProperty);
-// console.log("property", property)
-
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -61,7 +59,6 @@ const ViewTransactions: React.FC = () => {
     dispatch(getAllUsers());
   }, []);
 
-
   useEffect(() => {
     dispatch(
       getChatIdByUsers({
@@ -73,10 +70,7 @@ const ViewTransactions: React.FC = () => {
     );
   }, []);
 
-
-
-  
-// const newFilterChat = (chatByUserId && chatByUserId.messages.map(chat)=> ())
+  // const newFilterChat = (chatByUserId && chatByUserId.messages.map(chat)=> ())
 
   return (
     <>
@@ -124,7 +118,7 @@ const ViewTransactions: React.FC = () => {
               padding: "0px 10px",
               overflowY: "auto",
               border: "1px solid  #F0F0F0",
-              overflowX:"hidden"
+              overflowX: "hidden",
             }}
           >
             <div>
@@ -134,7 +128,6 @@ const ViewTransactions: React.FC = () => {
               {filteredChats.map((chat: any) => {
                 return (
                   <div
-
                     key={chat._id}
                     style={{
                       display: "flex",
@@ -164,14 +157,15 @@ const ViewTransactions: React.FC = () => {
                             ? formatDateTime(chat.senderDate)
                             : "18-05-2024"}
                         </div>
-                        
                       </div>
                       <p style={{ margin: 0 }}>{chat.message}</p>
                       <div>
-                      {chat.isWithAttachment &&  <p style={{ margin: 0, marginLeft:"20px" }}>{chat.fileUrl}</p>}
-
+                        {chat.isWithAttachment && (
+                          <p style={{ margin: 0, marginLeft: "20px" }}>
+                            {chat.fileUrl}
+                          </p>
+                        )}
                       </div>
-                      
                     </div>
                   </div>
                 );

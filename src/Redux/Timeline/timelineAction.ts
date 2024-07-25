@@ -96,7 +96,6 @@ export const isVisibleTimeline = createAsyncThunk<
   { _id: string },
   { rejectValue: ApiError }
 >("properties/approved", async ({ _id }, { rejectWithValue }) => {
-  console.log(_id, "aprovedd Timelineeee");
   try {
     const response = await fetch(
       `${BASE_URL}${ENDPOINTS.IS_VISIBLE_TIMELINE}/${_id}`,

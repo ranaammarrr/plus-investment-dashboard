@@ -136,7 +136,7 @@ const Login: React.FC = () => {
                         htmlType="submit"
                         block
                         size="large"
-                        bgColor={theme.palette.primary.main}
+                        bgColor={theme.palette.secondary.main}
                         onClick={formik.handleSubmit}
                       >
                         Sign In

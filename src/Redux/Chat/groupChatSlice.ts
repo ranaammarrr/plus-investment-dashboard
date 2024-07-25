@@ -23,7 +23,6 @@ const groupChatSlice = createSlice({
       })
       .addCase(getAllGroupChats.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log("group", action.payload);
         state.allGroupChats = action.payload;
       })
       .addCase(getAllGroupChats.rejected, (state, action) => {
