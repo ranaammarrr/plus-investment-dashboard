@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+# Ignore yarn.lock file
+yarn.lock
+
 # production
 /build
 

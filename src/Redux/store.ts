@@ -12,6 +12,7 @@ import { tagsReducer } from "./Tags/tagSlice";
 import { invoicesReducer } from "./Invoices/invoicesSlice";
 import { ticketsReducer } from "./Tickets/TicketsSlice";
 import { groupChatReducer } from "./Chat/groupChatSlice";
+import { verificationsReducer } from './Verifications/verificationsSlice';
 
 const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ const store = configureStore({
     invoice: invoicesReducer,
     ticket: ticketsReducer,
     group: groupChatReducer,
+    verification: verificationsReducer,
   },
 });
 

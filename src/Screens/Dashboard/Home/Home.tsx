@@ -1,7 +1,12 @@
 import React, { useEffect } from "react";
 import { Row, Col } from "antd";
 import AppCard, { CardProps } from "../../../Components/Card/AppCard";
-import { lastTransactionIcon, listingIcon, transactionIcon, userIcon } from "../../../Assets/assets";
+import {
+  lastTransactionIcon,
+  listingIcon,
+  transactionIcon,
+  userIcon,
+} from "../../../Assets/assets";
 import TransactionLineChart from "./Charts/TransactionChart";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
 import { getAllUsers } from "../../../Redux/User/userAction";
@@ -9,19 +14,20 @@ import { getAllProperties } from "../../../Redux/PropertyListing/listingAction";
 import { getAllInvoices } from "../../../Redux/Transaction/TransactionAction";
 // import PropertyMap from "./Charts/PropertyMap";
 const Home: React.FC = () => {
-
-  const dispatch = useAppDispatch()
-  useEffect(()=>{
-    dispatch(getAllUsers())
-    dispatch(getAllProperties())
-    dispatch(getAllInvoices())
-  },[dispatch])
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getAllUsers());
+    dispatch(getAllProperties());
+    dispatch(getAllInvoices());
+  }, [dispatch]);
   const { users } = useAppSelector((state) => state.user);
   const { properties } = useAppSelector((state) => state.property);
   const { transaction } = useAppSelector((state) => state.transaction);
-  const userCount = users && users.length > 0 ? users.length : "101"
-  const propertiesCount = properties && properties.length > 0 ? properties.length : "80"
-  const invoiceCount = transaction && transaction.length > 0 ? transaction.length : "280"
+  const userCount = users && users.length > 0 ? users.length : "101";
+  const propertiesCount =
+    properties && properties.length > 0 ? properties.length : "80";
+  const invoiceCount =
+    transaction && transaction.length > 0 ? transaction.length : "280";
   const cardData: CardProps[] = [
     {
       title: "Users",
@@ -82,13 +88,11 @@ const Home: React.FC = () => {
         ))}
       </Row>
       <Row>
-        <TransactionLineChart/>
-
+        <TransactionLineChart />
       </Row>
       {/* <Row>
         <PropertyMap/>
       </Row> */}
-      
     </>
   );
 };

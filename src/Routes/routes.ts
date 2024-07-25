@@ -164,7 +164,12 @@ const routes: CustomRoute[] = [
     isPrivate: true,
     name: 'Tickets'
   },
-  
+  {
+    path: "/verifications",
+    element: lazy(()=> import('../Screens/Dashboard/Verifications/Verifications')),
+    isPrivate: true,
+    name: 'Verifications'
+  },
 ];
 
 export default routes;

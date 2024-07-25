@@ -12,6 +12,7 @@ import {
   SlidersOutlined,
   FileDoneOutlined,
   WalletOutlined,
+  SafetyCertificateOutlined,
   BellFilled,
 } from "@ant-design/icons";
 import {
@@ -130,6 +131,12 @@ const AdminLayout: React.FC<{
       icon: <WalletOutlined style={{ fontSize: 22 }} />,
       label: "Tickets",
       path: "/tickets",
+    },
+    {
+      key: "13",
+      icon: <SafetyCertificateOutlined style={{ fontSize: 22 }} />,
+      label: "Verifications",
+      path: "/verifications",
     },
   ];
 

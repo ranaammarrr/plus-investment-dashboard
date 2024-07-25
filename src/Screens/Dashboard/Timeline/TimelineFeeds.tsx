@@ -107,7 +107,7 @@ const TimelineFeeds: React.FC = () => {
                   )}
                 </div>
               </Carousel>
-
+              <Typography.Title level={5}>Description</Typography.Title>
               <Typography.Paragraph
                 //   level={5}
                 style={{ textAlign: "left", margin: "10px" }}
@@ -117,11 +117,8 @@ const TimelineFeeds: React.FC = () => {
             </Card>
           </div>
           <div>
-            <Typography.Title level={5}>Posted by:</Typography.Title>
-            <Card
-              style={{ width: 250, marginTop: 16 }}
-              bodyStyle={{ padding: "5px" }}
-            >
+            <Typography.Title level={5}>Posted by</Typography.Title>
+            <Card style={{ width: 250 }} bodyStyle={{ padding: "5px" }}>
               <Meta
                 avatar={
                   <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
@@ -159,7 +156,7 @@ const TimelineFeeds: React.FC = () => {
               {/* <div style={{display: "flex", justifyContent:"end"}}> */}
               <Space direction="vertical" size={16}>
                 <Card
-                  title="New likes"
+                  title="Likes"
                   extra={
                     <a href="">{timeLineById?.likedbyUsers.length || "0"}</a>
                   }

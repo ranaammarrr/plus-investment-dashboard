@@ -31,5 +31,7 @@ export const ENDPOINTS = {
   TOGGLE_FOLLOW: "follow",
   GET_ALL_TICKETS: "ticket",
   PUT_RESPONSE: "ticket",
+  GET_ALL_VERIFICATION_REQUESTS:"verifications",
+  APPROVE_VERIFICATION_REQUESTS:"verifications",
 };
 
