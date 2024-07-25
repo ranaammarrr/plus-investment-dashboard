@@ -57,21 +57,21 @@ const Tickets: React.FC = () => {
     dispatch(getAllTickets());
   }, [dispatch]);
 
-  let uniqueStatus = Array.from(
-    new Set(tickets && tickets.map((item: any) => item.status))
+  const uniqueStatus = Array.from(
+    new Set(tickets?.map((item: any) => item.status) || [])
   );
-  let filters = uniqueStatus.map((item) => ({ type: item }));
+  const filters = uniqueStatus.map((item) => ({ type: item }));
 
   filters.unshift({ type: "All" });
 
   const filteredTickets =
-    tickets &&
-    tickets.filter((item: any) => {
+    tickets?.filter((item: any) => {
       if (selectedTickets && selectedTickets !== "All") {
         return item.status === selectedTickets;
       }
       return true;
-    });
+    }) || [];
+
   const handleResponseOpen = (id: string) => {
     const ticket = tickets.find((item: any) => item._id === id);
     if (ticket && ticket.status === "closed") {
@@ -111,14 +111,14 @@ const Tickets: React.FC = () => {
       title: "Message",
       dataIndex: "message",
       key: "message",
-      width: "15%",
+      width: "20%",
     },
 
     {
       title: "CreatedAt",
       dataIndex: "createdAt",
       key: "createdAt",
-      width: "20%",
+      width: "15%",
       sorter: (a: DataType, b: DataType) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     },
@@ -126,7 +126,7 @@ const Tickets: React.FC = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      width: "10%",
+      width: "5%",
       render: (status: string) => (
         <Tag
           color={
@@ -152,7 +152,7 @@ const Tickets: React.FC = () => {
       title: "Support",
       dataIndex: "name",
       key: "name",
-      width: "10%",
+      width: "15%",
       sorter: (a: DataType, b: DataType) => a.name.localeCompare(b.name),
     },
     {
@@ -183,7 +183,7 @@ const Tickets: React.FC = () => {
     },
   ];
 
-  const sortedTickets = [...filteredTickets].sort(
+  const sortedTickets = [...(filteredTickets && filteredTickets)].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 

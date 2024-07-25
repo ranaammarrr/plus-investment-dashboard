@@ -61,16 +61,9 @@ const TimelineInsights: React.FC = () => {
   const personalInformation = currentUser;
   const followers = currentUser?.followers ?? [];
 
-  
-  console.log("personalInformation", personalInformation);
-
-  console.log("currentUser",currentUser)
-
   useEffect(() => {
     dispatch(getAllUsers());
   }, [dispatch]);
-
-  console.log("userssss1", users);
 
   // personalInformation.forEach((obj: any) => {
   //   const monthYear = (obj.createdAt);
@@ -119,7 +112,6 @@ const TimelineInsights: React.FC = () => {
   const months = Object.keys(monthCounts);
   const weaksForNewFollowers = Object.keys(weekCounts);
 
-  console.log(followersData);
   const data = {
     labels: months,
     datasets: [
@@ -178,47 +170,53 @@ const TimelineInsights: React.FC = () => {
 
   return (
     <>
-      <div style={{backgroundColor:"#E9EAEC",height:"8%",border:"1px",borderRadius:"15px"}}>
-    <Row>
-        
-      <Col span={8}>
-      <div style={{ width: "100%", marginTop: 16,paddingLeft:"15px"}}>
-        <Title level={5} style={{ color: "black", margin: 2 }}>Name: 
-        {personalInformation?.name}
-        </Title>
-        <Text style={{ marginRight: 8, margin: 2 }}>Email:
-        {personalInformation?.email}
+      <div
+        style={{
+          backgroundColor: "#E9EAEC",
+          height: "8%",
+          border: "1px",
+          borderRadius: "15px",
+        }}
+      >
+        <Row>
+          <Col span={8}>
+            <div style={{ width: "100%", marginTop: 16, paddingLeft: "15px" }}>
+              <Title level={5} style={{ color: "black", margin: 2 }}>
+                Name:
+                {personalInformation?.name}
+              </Title>
+              <Text style={{ marginRight: 8, margin: 2 }}>
+                Email:
+                {personalInformation?.email}
+              </Text>
+            </div>
+          </Col>
 
-        </Text>
-      </div>
-
-      </Col>
-
-      <Col span={8}>
-      <div style={{ width: "100%", marginTop: 16,paddingLeft:"15px"}}>
-        <Title level={5} style={{ color: "black", margin: 2 }}>City:
-        {personalInformation?.personalInformation.city}
-
-        </Title>
-        <Text style={{ marginRight: 8, margin: 2 }}>State:
-        {personalInformation?.personalInformation.state}
-
-        </Text>
-      </div>
-      </Col>
-      <Col span={8}>
-      <div style={{ width: "100%", marginTop: 16,paddingLeft:"15px"}}>
-        <Title level={5} style={{ color: "black", margin: 2 }}>Company:
-        {personalInformation?.company}
-        </Title>
-        <Text style={{ marginRight: 8, margin: 2 }}>Role:
-        {personalInformation?.role}
-
-        </Text>
-      </div>
-      </Col>
-
-    </Row>
+          <Col span={8}>
+            <div style={{ width: "100%", marginTop: 16, paddingLeft: "15px" }}>
+              <Title level={5} style={{ color: "black", margin: 2 }}>
+                City:
+                {personalInformation?.personalInformation.city}
+              </Title>
+              <Text style={{ marginRight: 8, margin: 2 }}>
+                State:
+                {personalInformation?.personalInformation.state}
+              </Text>
+            </div>
+          </Col>
+          <Col span={8}>
+            <div style={{ width: "100%", marginTop: 16, paddingLeft: "15px" }}>
+              <Title level={5} style={{ color: "black", margin: 2 }}>
+                Company:
+                {personalInformation?.company}
+              </Title>
+              <Text style={{ marginRight: 8, margin: 2 }}>
+                Role:
+                {personalInformation?.role}
+              </Text>
+            </div>
+          </Col>
+        </Row>
       </div>
 
       <Card
@@ -285,7 +283,7 @@ const TimelineInsights: React.FC = () => {
                 <ArrowUpOutlined
                   style={{ marginLeft: 4, transform: "rotate(45deg)" }}
                 />
-               {followersPercentage}%
+                {followersPercentage}%
               </Text>
             </div>
           </Col>
@@ -364,8 +362,7 @@ const TimelineInsights: React.FC = () => {
                 <ArrowUpOutlined
                   style={{ marginLeft: 4, transform: "rotate(45deg)" }}
                 />
-                                {followersPercentage}%
-
+                {followersPercentage}%
               </Text>
             </div>
           </Col>

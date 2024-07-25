@@ -1,15 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { TicketsState } from './types';
-import { getAllTickets } from './TicketsActions';
+import { createSlice } from "@reduxjs/toolkit";
+import { TicketsState } from "./types";
+import { getAllTickets } from "./TicketsActions";
 
 const initialState: TicketsState = {
-    tickets: null,
+  tickets: null,
   isLoading: false,
   error: null,
 };
 
 const ticketsSlice = createSlice({
-  name: 'tickets',
+  name: "tickets",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -17,13 +17,14 @@ const ticketsSlice = createSlice({
       .addCase(getAllTickets.pending, (state) => {
         state.isLoading = true;
         state.error = null;
-      }).addCase(getAllTickets.fulfilled, (state, action) => {
+      })
+      .addCase(getAllTickets.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log(action.payload)
         state.tickets = action.payload;
-      }).addCase(getAllTickets.rejected, (state, action) => {
+      })
+      .addCase(getAllTickets.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = 'An error occurred.';
+        state.error = "An error occurred.";
       });
   },
 });

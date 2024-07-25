@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AppButton from "../../../Components/Button/AppButton";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Divider, Typography, Select, Input } from "antd";
+import { Divider, Typography, Select, Input, Checkbox } from "antd";
 import { Grid } from "@mui/material";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import { DataType } from "../../../Components/Table/AppTable";
@@ -21,6 +21,10 @@ const AddProperty: React.FC = () => {
   const { Title } = Typography;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const formatPrices = (value: any) => {
+    if (!value) return "";
+    return value.replace(/[$,]/g, "");
+  };
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const { tag } = useAppSelector((state) => state.tag);
   const formik = useFormik({
@@ -39,6 +43,7 @@ const AddProperty: React.FC = () => {
       companyName: "",
       role: "",
       byAdmin: true,
+      isFeatured: property.isFeatured || false,
     },
     validationSchema: addPropertyValidationSchema,
     onSubmit: async (values) => {
@@ -60,6 +65,7 @@ const AddProperty: React.FC = () => {
             lng: -76.92993273480376,
             image: values.image,
             detail: values.detail,
+            isFeatured: values.isFeatured,
             // byAdmin:true,
           })
         ).then((res) => {
@@ -267,7 +273,7 @@ const AddProperty: React.FC = () => {
                 <InputField
                   placeholder="Price"
                   size="large"
-                  value={formik.values.price}
+                  value={formatPrices(formik.values.price)}
                   onChangeText={(value) => formik.setFieldValue("price", value)}
                   error={
                     formik.touched.price && formik.errors.price
@@ -288,12 +294,12 @@ const AddProperty: React.FC = () => {
                   defaultValue={formik.values.type || undefined}
                   onChange={(value) => formik.setFieldValue("type", value)}
                 >
-                  {tag && tag.map((item, index) =>(
-          
-                    <Select.Option key={index} value={item.tagName}>{item.tagName}</Select.Option>
-
-                  ))}
-                 
+                  {tag &&
+                    tag.map((item, index) => (
+                      <Select.Option key={index} value={item.tagName}>
+                        {item.tagName}
+                      </Select.Option>
+                    ))}
                 </Select>
               </Grid>
               <Grid item xs={6} sm={12}>
@@ -307,10 +313,21 @@ const AddProperty: React.FC = () => {
                   }
                   onBlur={formik.handleBlur("detail")}
                 />
-                {formik.touched.detail && formik.errors.detail === 'string' && (
+                {formik.touched.detail && formik.errors.detail === "string" && (
                   <div style={{ color: "red" }}>{formik.errors.detail}</div>
                 )}
               </Grid>
+              {/* <Grid item xs={12}>
+                <Title level={5}>Is Featured</Title>
+                <Checkbox
+                  checked={formik.values.isFeatured}
+                  onChange={(e) =>
+                    formik.setFieldValue("isFeatured", e.target.checked)
+                  }
+                >
+                  {formik.values.isFeatured ? "Featured" : "Not Featured"}
+                </Checkbox>
+              </Grid> */}
               <Grid item xs={12}>
                 <Title level={5}>Image</Title>
                 <div

@@ -1,4 +1,5 @@
 export const BASE_URL = "http://localhost:8000/";
+// export const BASE_URL = "http://13.59.245.234:8000/";
 
 // Endpoints
 export const ENDPOINTS = {
@@ -18,6 +19,7 @@ export const ENDPOINTS = {
   GET_PROPERTY_DETAIL: "property/get-property-detail",
   GET_CHAT_LIST: "singleChat/get-chatlist",
   GET_ALL_CHAT: "singleChat/all-chat",
+  GET_ALL_GROUP_CHAT: "group/all-group-chats",
   GET_TIMELINE_BY_ID: "timeline/get-timeline-byid",
   GET_ALL_PROPERTY_TAGS: "tag",
   POST_ALL_TAGS: "tag",

@@ -1,14 +1,16 @@
 import {
+  Avatar,
   Card,
   Carousel,
   Col,
   Row,
+  Space,
   Tabs,
   TabsProps,
   Tag,
   Typography,
 } from "antd";
-import {ArrowLeftOutlined} from '@ant-design/icons'
+import { ArrowLeftOutlined, UserOutlined } from "@ant-design/icons";
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
 import Description from "./Childrens/Description";
@@ -18,12 +20,11 @@ import PaymentPlan from "./Childrens/PaymentPlan";
 import Transaction from "./Childrens/Transaction";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getPropertyDetail } from "../../../Redux/PropertyListing/listingAction";
+import { getAllUsers } from "../../../Redux/User/userAction";
 
 const onChange = (key: string) => {
   console.log(key);
 };
-
-
 
 const sellers = [
   {
@@ -35,20 +36,20 @@ const sellers = [
 
 const PropertyDetails: React.FC = () => {
   const { propertiesDetail } = useAppSelector((state) => state.detailProperty);
+  const { users } = useAppSelector((state) => state.user);
 
-  
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const handleBack = () => { 
-    navigate("/propertyListing")
-  }
+  const handleBack = () => {
+    navigate("/propertyListing");
+  };
   useEffect(() => {
-    
     const params = new URLSearchParams(window.location.search);
     const id = params.get("propertyID");
-console.log(id)
+    dispatch(getAllUsers());
+
     dispatch(getPropertyDetail(id ?? location.state.propertyID));
   }, [location]);
 
@@ -66,12 +67,12 @@ console.log(id)
     {
       key: "3",
       label: "Document",
-      children: <Document docs={[]}/>,
+      children: <Document docs={[]} />,
     },
     {
       key: "4",
       label: "Payment Plan",
-      children: <PaymentPlan  paymentPlan ={propertiesDetail.paymentPlan} />,
+      children: <PaymentPlan paymentPlan={propertiesDetail.paymentPlan} />,
     },
     {
       key: "5",
@@ -80,23 +81,38 @@ console.log(id)
     },
   ];
 
-   // Format the price
-   const formattedPrice = propertiesDetail.price
-   ? parseFloat(propertiesDetail.price).toLocaleString('en-US', {
-       style: "currency",
-       currency: "USD",
-       currencyDisplay: "symbol",
-       minimumFractionDigits: 0
-     })
-   : "";
+  // Format the price
+  const formattedPrice = propertiesDetail.price
+    ? parseFloat(propertiesDetail.price).toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        currencyDisplay: "symbol",
+        minimumFractionDigits: 0,
+      })
+    : "";
 
+  const likedProperties =
+    propertiesDetail?.likedbyUsers?.map((id: any) =>
+      users.find((user) => id === user._id)
+    ) || [];
 
- 
   return (
     <>
       {/* <AppButton size="large" onClick={handleBack}>Back</AppButton> */}
-      <div style={{display:'flex', alignItems:'center', cursor:'pointer',padding:"10px"}} onClick={handleBack}>
-      <ArrowLeftOutlined style={{fontSize:"24px", marginRight:'5px' }} onClick={handleBack}  />Go Back
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          cursor: "pointer",
+          padding: "10px",
+        }}
+        onClick={handleBack}
+      >
+        <ArrowLeftOutlined
+          style={{ fontSize: "24px", marginRight: "5px" }}
+          onClick={handleBack}
+        />
+        Go Back
       </div>
       <Row>
         <Col span={16} style={{ padding: "10px" }}>
@@ -107,30 +123,32 @@ console.log(id)
               alignItems: "baseline",
             }}
           >
-            <Typography.Title style={{margin:0}} level={4}>
+            <Typography.Title style={{ margin: 0 }} level={4}>
               {propertiesDetail.name || " "}
             </Typography.Title>
             <Tag
               color={propertiesDetail.approved ? "green" : "red"}
               style={{ marginLeft: "5px", fontSize: "16px" }}
             >
-              {propertiesDetail.approved ? "Active" :"Inactive"}
+              {propertiesDetail.approved ? "Active" : "Inactive"}
             </Tag>
           </div>
           {/* Carousal Start...  */}
           <Carousel autoplay style={{ marginTop: "10px" }}>
-          
-            {propertiesDetail.image && propertiesDetail?.image.map((image)=>(
-            <div>
-              <img
-                src={image}
-                alt="Image"
-                style={{ width: "100%", height: "300px", objectFit: "cover" }}
-              />
-            </div>
-
-            ))}
-            
+            {propertiesDetail.image &&
+              propertiesDetail?.image.map((image) => (
+                <div>
+                  <img
+                    src={image}
+                    alt="Image"
+                    style={{
+                      width: "100%",
+                      height: "300px",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+              ))}
           </Carousel>
           {/* Carousal End ....  */}
 
@@ -146,33 +164,84 @@ console.log(id)
         <Col span={8} style={{ padding: "10px" }}>
           {/* Seller Details Card */}
           <div style={{ display: "flex", justifyContent: "end" }}>
-          <Typography.Title style={{margin:0}} level={4}>{formattedPrice}</Typography.Title>
+            <Typography.Title style={{ margin: 0 }} level={4}>
+              {formattedPrice}
+            </Typography.Title>
           </div>
 
           <Card
             title="Seller Details"
             bordered={true}
-            style={{ marginTop: "10px", height: "250px" }}
+            style={{ marginTop: "10px", height: "300px" }}
           >
             {/* {sellers.map((seller, index) => ( */}
-              <div>
-                <p>
-                  <strong>Name:</strong> {propertiesDetail?.user.name}
-                </p>
-                <p>
-                  <strong>Company:</strong> {propertiesDetail.user.company}
-                </p>
-                <p>
-                  <strong>Badge:</strong> {propertiesDetail.user.role}
-                </p>
-                <p>
-                  <strong>Property-type:</strong> {propertiesDetail.type}
-                </p>
-                {/* {index !== sellers.length - 1 && <hr />}{" "} */}
-                {/* Add horizontal line between sellers */}
-              </div>
+            <div>
+              <p>
+                <strong>Name:</strong> {propertiesDetail?.user.name}
+              </p>
+              <p>
+                <strong>Company:</strong> {propertiesDetail.user.company}
+              </p>
+              <p>
+                <strong>Badge:</strong> {propertiesDetail.user.role}
+              </p>
+              <p>
+                <strong>Property-type:</strong> {propertiesDetail.type}
+              </p>
+              {/* {index !== sellers.length - 1 && <hr />}{" "} */}
+              {/* Add horizontal line between sellers */}
+            </div>
             {/* ))} */}
           </Card>
+          <Space direction="vertical" size={16} style={{ marginTop: "30px" }}>
+            <Card
+              title="New likes"
+              extra={
+                <a href="">
+                  {(propertiesDetail &&
+                    propertiesDetail.likedbyUsers?.length) ||
+                    "0"}
+                </a>
+              }
+              style={{
+                width: 340,
+                height: "300px",
+                // overflowY: "scroll"
+              }}
+              bodyStyle={{ padding: "5px" }}
+              headStyle={{ padding: "5px" }}
+            >
+              {likedProperties &&
+                likedProperties.map((user: any) => (
+                  <>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div>
+                        <Avatar
+                          style={{ marginTop: "15px" }}
+                          size="large"
+                          icon={<UserOutlined />}
+                          // srcSet={propertiesDetail && propertiesDetail.image}
+                        />
+                      </div>
+                      <div>
+                        <Typography.Title
+                          style={{ marginLeft: "14px" }}
+                          level={5}
+                        >
+                          {user.name}
+                        </Typography.Title>
+                      </div>
+                    </div>
+                  </>
+                ))}
+            </Card>
+          </Space>
         </Col>
       </Row>
     </>

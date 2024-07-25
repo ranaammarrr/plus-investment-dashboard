@@ -1,9 +1,19 @@
 .ant-menu-submenu-title {
-  color: white !important;
+  color: #4a9687 !important;
   /* background-color: red !important; */
   /* border-right: 0 !important; */
 }
 
 .ant-menu.ant-menu-sub.ant-menu-inline {
   background-color: transparent !important; /* Change this to your desired color */
+}
+
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #4a9687;
+}
+.ant-tabs .ant-tabs-tab:hover {
+  color: #4a9687;
+}
+.ant-tabs-card .ant-tabs-nav .ant-tabs-tab {
+  margin: 0px 5px;
 }

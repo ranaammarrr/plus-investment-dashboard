@@ -1,18 +1,18 @@
-
-import { createSlice } from '@reduxjs/toolkit';
-import { getAllChats, getChatIdByUsers } from './chatAction';
-import { ChatState } from './types';
+import { createSlice } from "@reduxjs/toolkit";
+import { getAllChats, getAllGroupChats, getChatIdByUsers } from "./chatAction";
+import { ChatState } from "./types";
 
 const initialState: ChatState = {
-    chats: null,
-    chatByUserId:null,
-    isLoading: false,
-    error: null,
-    // chatLists: undefined
+  chats: null,
+  chatByUserId: null,
+  allGroupChats: null,
+  isLoading: false,
+  error: null,
+  // chatLists: undefined
 };
 
 const chatSlice = createSlice({
-  name: 'chat',
+  name: "chat",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -23,12 +23,11 @@ const chatSlice = createSlice({
       })
       .addCase(getAllChats.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log(action.payload,"paylodddddddd")
         state.chats = action.payload;
       })
       .addCase(getAllChats.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = 'An error occurred.';
+        state.error = "An error occurred.";
       })
       .addCase(getChatIdByUsers.pending, (state) => {
         state.isLoading = true;
@@ -36,12 +35,11 @@ const chatSlice = createSlice({
       })
       .addCase(getChatIdByUsers.fulfilled, (state, action) => {
         state.isLoading = false;
-        // console.log(action.payload,"chatByUserId")
         state.chatByUserId = action.payload;
       })
       .addCase(getChatIdByUsers.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = 'An error occurred.';
+        state.error = "An error occurred.";
       });
   },
 });

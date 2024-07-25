@@ -39,12 +39,12 @@ export interface Property {
       terms: string;
       startDate: string;
       _id: string;
-      status:string;
+      status: string;
     }
   ]; // Adjust data type according to your usage, here assuming any[]
   __v: number;
   user: {
-    id:string;
+    id: string;
     name: string;
     company: string;
   };
@@ -59,11 +59,12 @@ export interface PropertyDetail {
   detail: string; // Add the 'detail' field to reflect additional details
   address: string;
   postalCode: string;
-  type:string;
+  type: string;
   company: string;
   price?: string;
   image?: [string]; // Assuming multiple images can be present, so using an array
   approved: boolean;
+  isFeatured: boolean;
 
   user: {
     name: string;
