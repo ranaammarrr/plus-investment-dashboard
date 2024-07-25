@@ -42,7 +42,6 @@ const Tickets: React.FC = () => {
   const [dropdownVisible, setDropdownVisible] = useState<string | null>(null);
 
   const { tickets } = useAppSelector((state) => state.ticket);
-
   const handleCategoryChange = (value: string) => {
     setSelectedTickets(value);
   };

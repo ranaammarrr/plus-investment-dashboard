@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Space, Tag } from "antd";
+
 import {
   SearchOutlined,
   EyeOutlined,
   ArrowLeftOutlined,
   PaperClipOutlined,
 } from "@ant-design/icons";
+
 
 import { Link, useNavigate } from "react-router-dom";
 import { getAllInvoices } from "../../../Redux/Transaction/TransactionAction";
@@ -31,6 +33,7 @@ const CounterOffers: React.FC = () => {
   // const { transaction } = useAppSelector((state) => state.transaction);
   const { properties } = useAppSelector((state) => state.property);
 
+
   useEffect(() => {
     dispatch(getAllProperties());
   }, [dispatch]);
@@ -42,6 +45,7 @@ const CounterOffers: React.FC = () => {
     setPropertyId(id);
     setPropertyRows(false);
   };
+
   const PropertiesWithOfferscolumns = [
     {
       title: "Property Title",
@@ -70,6 +74,7 @@ const CounterOffers: React.FC = () => {
           >
             <span>{name}</span>
             {/* <Space size="small"> */}
+
             <img
               src={linkImg}
               alt=""
@@ -103,7 +108,7 @@ const CounterOffers: React.FC = () => {
     //       >
     //         <span>{name}</span>
     //         <Space size="small">
-    //         <PaperClipOutlined
+
     //           style={{ fontSize: 14, marginLeft:10}}
     //           onClick={() => handlePropertyDetail(record.id)}
     //         />
@@ -220,6 +225,7 @@ const CounterOffers: React.FC = () => {
       },
     },
   ];
+
 
   const sortedProperties = [...properties].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -349,7 +355,6 @@ const CounterOffers: React.FC = () => {
           Go Back
         </div>
       )}
-
       <div
         style={{
           display: "flex",

@@ -131,33 +131,6 @@ const AdminLayout: React.FC<{
       label: "Tickets",
       path: "/tickets",
     },
-    // {
-    //   key: "4",
-    //   icon: <SnippetsOutlined style={{ fontSize: 22 }} />,
-    //   label: "Pages",
-    //   path: "#",
-    //   // component:"Pages",
-    //   subMenu: [
-    //     {
-    //       key: "4-1",
-    //       label: "FAQ",
-    //       icon: <QuestionCircleOutlined />,
-    //       path: "/pages/faq",
-    //     },
-    //     {
-    //       key: "4-2",
-    //       label: "Privacy Policy",
-    //       icon: <QuestionCircleOutlined />,
-    //       path: "/pages/privacy",
-    //     },
-    //     {
-    //       key: "4-3",
-    //       label: "Terms And Conditions",
-    //       icon: <QuestionCircleOutlined />,
-    //       path: "/pages/terms",
-    //     },
-    //   ],
-    // },
   ];
 
   const handleLogout = () => {
@@ -307,6 +280,7 @@ const AdminLayout: React.FC<{
             width={100}
             height={100}
           />
+
           <Menu
             theme="light"
             defaultSelectedKeys={[defaultSelectedKey || "1"]}

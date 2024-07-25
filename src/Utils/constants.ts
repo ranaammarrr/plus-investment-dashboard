@@ -32,3 +32,4 @@ export const ENDPOINTS = {
   GET_ALL_TICKETS: "ticket",
   PUT_RESPONSE: "ticket",
 };
+
