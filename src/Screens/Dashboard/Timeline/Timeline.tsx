@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Dropdown, Select, Space, Switch, Typography } from "antd";
-import {
-  SearchOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
-import { getAllTimeline, isVisibleTimeline } from "../../../Redux/Timeline/timelineAction";
+import {
+  getAllTimeline,
+  isVisibleTimeline,
+} from "../../../Redux/Timeline/timelineAction";
 import { formattedDate, truncateText } from "../../../Utils/helperFunctions";
 import { useNavigate } from "react-router-dom";
 import FilterOption from "../../../Components/FilterOption/FilterOption";
@@ -22,24 +22,6 @@ const Timeline: React.FC = () => {
     string | undefined
   >(undefined);
 
-  // const types = [
-  //   { name: "All", icon: <FilterOutlined /> },
-  //   { name: "RealEstate", icon: <RadarChartOutlined /> },
-  //   { name: "Crypto", icon: <BoldOutlined /> },
-  //   { name: "Finance", icon: <RiseOutlined /> },
-  // ];
-
-  // const items = types.map((item, index) => ({
-  //   label: (
-  //     <Space>
-  //       {item.icon}
-  //       {item.name}
-  //     </Space>
-  //   ),
-  //   key: index.toString(),
-  //   onClick: () => handleCategoryChange(item.name),
-  // }));
-
   const handleCategoryChange = (value: string) => {
     setSelectedTimelines(value);
   };
@@ -48,8 +30,10 @@ const Timeline: React.FC = () => {
     dispatch(getAllTimeline());
   }, [dispatch]);
 
-  let uniqueCategories = Array.from(new Set(timelines.map((timeline) => timeline.category))); 
-   let filters = uniqueCategories.map((timeline) => ({ type:timeline}));
+  let uniqueCategories = Array.from(
+    new Set(timelines.map((timeline) => timeline.category))
+  );
+  let filters = uniqueCategories.map((timeline) => ({ type: timeline }));
 
   filters.unshift({ type: "All" });
 
@@ -86,11 +70,6 @@ const Timeline: React.FC = () => {
             }}
             onClick={() => handleNavigateToTimlineFeed(record.id)}
           >
-            {/* <img
-            src={timelineImg}
-            alt=""
-            style={{ width: 50, marginRight: 10 }}
-          /> */}
             <Avatar
               style={{ marginRight: "12px" }}
               size="large"
@@ -102,9 +81,15 @@ const Timeline: React.FC = () => {
       },
     },
 
-    { title: "Content", dataIndex: "content", key: "content", width: "15%" ,
+    {
+      title: "Content",
+      dataIndex: "content",
+      key: "content",
+      width: "15%",
       render: (content: string) => (
-        <Typography.Paragraph ellipsis={{ rows: 1, expandable: true, symbol: "more" }}>
+        <Typography.Paragraph
+          ellipsis={{ rows: 1, expandable: true, symbol: "more" }}
+        >
           {content}
         </Typography.Paragraph>
       ),
@@ -151,19 +136,16 @@ const Timeline: React.FC = () => {
     {
       title: "Action",
       key: "action",
-      width:"5%",
-      render: (_: any,record: DataType) => {
+      width: "5%",
+      render: (_: any, record: DataType) => {
         const onChange = async (checked: any) => {
-          console.log(record)
-           try {
-             await dispatch(
-              isVisibleTimeline({ _id: record.id })
-             );
-           } catch (error) {
-             console.error("Error updating user:", error);
-           }
-         };
- 
+          console.log(record);
+          try {
+            await dispatch(isVisibleTimeline({ _id: record.id }));
+          } catch (error) {
+            console.error("Error updating user:", error);
+          }
+        };
 
         return (
           <Space size="middle">
@@ -178,8 +160,9 @@ const Timeline: React.FC = () => {
     },
   ];
 
-
-  const sortedTimeline = [...filteredTimelines].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  const sortedTimeline = [...filteredTimelines].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   const data =
     searchValue !== ""
@@ -191,8 +174,8 @@ const Timeline: React.FC = () => {
             id: timeline?._id,
             name: timeline?.userData?.name,
             content: truncateText(timeline?.content),
-            action:timeline.isVisible,
-            
+            action: timeline.isVisible,
+
             like:
               timeline.likedbyUsers?.length < 1
                 ? 0
@@ -200,6 +183,7 @@ const Timeline: React.FC = () => {
             createdAt: formattedDate(timeline?.createdAt),
             updatedAt: formattedDate(timeline?.updatedAt),
             category: timeline.category,
+            image: timeline.image,
           }))
       : sortedTimeline.map((timeline) => ({
           id: timeline?._id,
@@ -212,22 +196,13 @@ const Timeline: React.FC = () => {
           createdAt: formattedDate(timeline?.createdAt),
           updatedAt: formattedDate(timeline?.updatedAt),
           category: timeline.category,
-          action:timeline.isVisible,
-          // action:timeline.isVisible,
-          // === ""
-          //   ? "Real Estate"
-          //   : timeline.category === "All"
-          //   ? "Crypto"
-          //   : timeline.category,
+          action: timeline.isVisible,
+          image: timeline.image,
         }));
-
-
 
   const handleChange = (val: string) => {
     setSearchValue(val);
   };
-
- 
 
   return (
     <>
@@ -254,9 +229,7 @@ const Timeline: React.FC = () => {
             onChangeFilter={handleCategoryChange}
             selectedCategory={selectedTimelines}
           />
-
         </div>
-  
       </div>
       <AppTable
         dataSource={data}

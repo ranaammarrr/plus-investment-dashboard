@@ -12,9 +12,11 @@ import {
   SlidersOutlined,
   FileDoneOutlined,
   WalletOutlined,
+  BellFilled,
 } from "@ant-design/icons";
 import {
   Avatar,
+  Badge,
   Button,
   Dropdown,
   Layout,
@@ -49,6 +51,8 @@ const AdminLayout: React.FC<{
   const user = getUserData();
 
   const [openKeys, setOpenKeys] = useState<string[]>([]);
+  const [notificationCount, setNotificationCount] = useState<number>(1);
+  const [collapsed, setCollapsed] = useState(false);
 
   const menuItems: MenuItem[] = [
     {
@@ -182,6 +186,47 @@ const AdminLayout: React.FC<{
       </Button>
     </Menu>
   );
+  const notificationMenu = (
+    <Menu style={{ padding: 8, width: 300, height: 200 }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          padding: 8,
+        }}
+      >
+        {/* <Avatar style={{ backgroundColor: "#001529" }} icon={<BellFilled />} /> */}
+        <Typography.Title
+          level={4}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginLeft: "10px",
+            margin: "0px 10px",
+          }}
+        >
+          Notification
+        </Typography.Title>
+      </div>
+      <Menu.Divider />
+      {/** Example notification item */}
+      <Menu.Item style={{ padding: "8px 16px" }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Avatar src="path_to_user_avatar" />
+          <div style={{ marginLeft: 5, flex: 1 }}>
+            <Typography.Text strong>Anderson</Typography.Text>
+            {/* <Typography.Text>Notification message goes here.</Typography.Text> */}
+          </div>
+          <Typography.Text type="secondary" style={{ fontSize: "12px" }}>
+            2 hours ago
+          </Typography.Text>
+        </div>
+      </Menu.Item>
+      <Menu.Divider />
+      {/** Add more notification items similarly */}
+    </Menu>
+  );
 
   const handleNavigate = (path: string) => {
     if (path) {
@@ -220,6 +265,8 @@ const AdminLayout: React.FC<{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            overflow: "hidden",
+            position: "fixed",
           }}
         >
           <img
@@ -234,7 +281,7 @@ const AdminLayout: React.FC<{
             height={100}
           />
           <Menu
-            theme="dark"
+            theme="light"
             defaultSelectedKeys={[defaultSelectedKey || "1"]}
             mode="inline"
             style={{
@@ -258,7 +305,7 @@ const AdminLayout: React.FC<{
                     }}
                     key={subMenuItem.key}
                   >
-                    <span style={{ fontSize: 14, color: "white" }}>
+                    <span style={{ fontSize: 14, color: "#4a9687" }}>
                       {subMenuItem.label}
                     </span>
                   </Menu.Item>
@@ -266,7 +313,7 @@ const AdminLayout: React.FC<{
 
                 return (
                   <Menu.SubMenu
-                    style={{ color: "white" }}
+                    style={{ color: "#4a9687", fontWeight: 600 }}
                     icon={item.icon}
                     title={item.label}
                     key={item.key}
@@ -278,7 +325,11 @@ const AdminLayout: React.FC<{
               } else {
                 return (
                   <Menu.Item
-                    style={{ marginBottom: "6px", color: "white" }}
+                    style={{
+                      marginBottom: "6px",
+                      color: "#4a9687",
+                      fontWeight: 600,
+                    }}
                     onClick={() => handleClickMenuItem(item)}
                     key={item.key}
                   >
@@ -294,11 +345,15 @@ const AdminLayout: React.FC<{
       <Layout>
         <Header
           style={{
-            padding: "10px 0px",
+            padding: "5px 0px",
             background: colorBgContainer,
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            position: "fixed",
+            zIndex: 1000,
+            width: collapsed ? "calc(100% - 80px)" : "calc(100% - 200px)",
+            transition: "width 0.2s",
           }}
         >
           <Typography.Title
@@ -306,16 +361,31 @@ const AdminLayout: React.FC<{
           >
             {screenName}
           </Typography.Title>
-          <Dropdown overlay={userMenu} trigger={["click"]}>
-            <div style={{ marginRight: "20px" }}>
-              <Avatar
-                style={{ backgroundColor: "#001529", cursor: "pointer" }}
-                icon={<UserOutlined />}
-              />
-            </div>
-          </Dropdown>
+          <div style={{ display: "flex" }}>
+            <Dropdown overlay={userMenu} trigger={["click"]}>
+              <div style={{ marginRight: "10px" }}>
+                <Avatar
+                  style={{ backgroundColor: "#001529", cursor: "pointer" }}
+                  icon={<UserOutlined />}
+                />
+              </div>
+            </Dropdown>
+            <Dropdown overlay={notificationMenu} trigger={["click"]}>
+              <div style={{ marginRight: "20px" }}>
+                <Badge
+                  style={{ backgroundColor: "#4a9687" }}
+                  count={notificationCount}
+                >
+                  <Avatar
+                    style={{ backgroundColor: "#001529", cursor: "pointer" }}
+                    icon={<BellFilled />}
+                  />
+                </Badge>
+              </div>
+            </Dropdown>
+          </div>
         </Header>
-        <Content style={{ margin: "30px 30px" }}>
+        <Content style={{ margin: "30px 30px", marginTop: "95px" }}>
           <div
             style={{
               padding: 8,

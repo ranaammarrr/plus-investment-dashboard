@@ -5,7 +5,7 @@ import {
   DeleteOutlined,
   SearchOutlined,
   EditOutlined,
-  ExclamationCircleOutlined
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
@@ -25,7 +25,6 @@ const Users: React.FC = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const { confirm } = Modal;
-
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -48,7 +47,7 @@ const Users: React.FC = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: "16%",
+      width: "20%",
       sorter: (a: DataType, b: DataType) => a.name.localeCompare(b.name),
       render: (text: string, record: DataType) => (
         <Link
@@ -65,7 +64,7 @@ const Users: React.FC = () => {
       title: "CreatedAt",
       dataIndex: "createdAt",
       key: "createdAt",
-      width: "20%",
+      width: "15%",
       sorter: (a: DataType, b: DataType) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     },
@@ -82,10 +81,12 @@ const Users: React.FC = () => {
               : role == "Social Lender"
               ? "#001d3d"
               : role == "Investor"
-              ? "#9f86c0"
+              ? "#F6C142"
               : role == "Social Investor"
               ? "#e09f3e"
-              : "blue"
+              : role == "OMNI®️ PRO"
+              ? "#786BBE"
+              : "#FC3441"
           }
           style={{
             width: "100%",
@@ -103,7 +104,7 @@ const Users: React.FC = () => {
       title: "Company",
       dataIndex: "company",
       key: "company",
-      width: "5%",
+      width: "15%",
       sorter: (a: DataType, b: DataType) => a.company.localeCompare(b.company),
     },
     {
@@ -113,7 +114,6 @@ const Users: React.FC = () => {
       width: "10%",
       render: (_: any, record: DataType) => {
         const onChange = async (checked: any) => {
-
           try {
             await dispatch(
               isVerifiedUser({
@@ -149,7 +149,6 @@ const Users: React.FC = () => {
       key: "action",
       render: (_: any, record: DataType) => {
         const handleDelete = async (record: DataType) => {
-
           confirm({
             title: "Delete this user?",
             icon: <ExclamationCircleOutlined />,
@@ -160,7 +159,7 @@ const Users: React.FC = () => {
             cancelText: "No",
             async onOk() {
               await dispatch(deleteUser(record.key));
-          dispatch(getAllUsers());
+              dispatch(getAllUsers());
             },
             onCancel() {},
           });
@@ -184,7 +183,9 @@ const Users: React.FC = () => {
     },
   ];
 
-  const sortedUsers = [...users].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  const sortedUsers = [...users].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   const userData =
     searchValue !== ""
@@ -192,7 +193,7 @@ const Users: React.FC = () => {
           .filter((user) =>
             user.name.toLowerCase().includes(searchValue.toLowerCase())
           )
-          .filter((user) => user.role !== "Admin")
+          .filter((user) => user.role !== "admin")
           .map((user) => ({
             key: user._id,
             name: user.name,
@@ -207,7 +208,7 @@ const Users: React.FC = () => {
             plan: user.status,
           }))
       : sortedUsers
-          .filter((user) => user.role !== "Admin")
+          .filter((user) => user.role !== "admin")
           .map((user) => ({
             key: user._id,
             name: user.name,
@@ -281,7 +282,7 @@ const Users: React.FC = () => {
         pagination={{ defaultPageSize: 10 }}
       />
       <Modal
-      style={{fontSize:"30px"}}
+        style={{ fontSize: "30px" }}
         title="User Details"
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}

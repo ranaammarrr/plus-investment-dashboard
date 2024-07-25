@@ -7,7 +7,6 @@ import "./index.css";
 
 function App() {
   const location = useLocation();
-  console.log(location.state?.from);
   const token = getToken();
 
   return (

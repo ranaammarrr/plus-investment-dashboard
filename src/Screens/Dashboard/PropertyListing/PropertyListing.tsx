@@ -55,7 +55,7 @@ const PropertyListing: React.FC = () => {
   useEffect(() => {
     dispatch(getAllPropertyTags());
   }, [dispatch]);
-  
+
   const filteredProperty = properties.filter((property) => {
     if (selectedCategory && selectedCategory !== "All") {
       return property.type === selectedCategory;
@@ -77,13 +77,15 @@ const PropertyListing: React.FC = () => {
         const imageB = b.name || "";
         return imageA.localeCompare(imageB);
       },
-      render: (name:string, record: DataType) => {
+      render: (name: string, record: DataType) => {
         const handleNavigate = (id: string) => {
           navigate("/propertyDetails", { state: { propertyID: id } });
 
-          <Typography.Paragraph ellipsis={{ rows: 1, expandable: true, symbol: "more" }}>
-          {name}
-        </Typography.Paragraph>
+          <Typography.Paragraph
+            ellipsis={{ rows: 1, expandable: true, symbol: "more" }}
+          >
+            {name}
+          </Typography.Paragraph>;
         };
         return (
           <div
@@ -116,13 +118,19 @@ const PropertyListing: React.FC = () => {
         a.userName.localeCompare(b.userName),
     },
 
-    { title: "Address", dataIndex: "address", key: "address", width: "20%",
+    {
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+      width: "20%",
       render: (address: string) => (
-        <Typography.Paragraph ellipsis={{ rows: 2, expandable: true, symbol: "more" }}>
+        <Typography.Paragraph
+          ellipsis={{ rows: 2, expandable: true, symbol: "more" }}
+        >
           {address}
         </Typography.Paragraph>
       ),
-     },
+    },
     {
       title: "Type",
       dataIndex: "role",
@@ -138,20 +146,20 @@ const PropertyListing: React.FC = () => {
     },
     {
       title: "Featured",
-      dataIndex: "featured",
-      key: "featured",
+      dataIndex: "isFeatured",
+      key: "isFeatured",
       width: "5%",
-      render: (featured: any, record: DataType) => {
+      render: (isFeatured: any, record: DataType) => {
         return (
           <Space size="middle">
             <CheckCircleOutlined
-              disabled
-              // defaultChecked={record.isFeatured}
+              // disabled
+              defaultChecked={record.isFeatured}
               // onChange={onChange}
               style={{
                 fontSize: 22,
                 marginLeft: 6,
-                color: featured ? "#06B640" : "grey",
+                color: isFeatured && isFeatured ? "#06B640" : "grey",
               }}
             />
           </Space>
@@ -241,11 +249,11 @@ const PropertyListing: React.FC = () => {
           .map((property) => ({
             key: property._id,
             name: truncateText(property.name),
-            price: parseFloat(property.price).toLocaleString('en-US', {
+            price: parseFloat(property.price).toLocaleString("en-US", {
               style: "currency",
               currency: "USD",
               currencyDisplay: "symbol",
-              minimumFractionDigits: 0
+              minimumFractionDigits: 0,
             }),
             postalCode: property.postalCode,
             address: truncateText(property.address),
@@ -256,39 +264,41 @@ const PropertyListing: React.FC = () => {
             image: property.image,
             roomNo: property.roomNo,
             type: property.type,
+            stringPrice: property.price,
             approved: property.approved,
             userName: property.user.name,
-            featured: property.isFeatured,
-            latitude:property.location.lat,
-            longitude:property.location.lng,
-
+            isFeatured: property.isFeatured,
+            // latitude: property?.location.lat,
+            // longitude: property?.location.lng,
           }))
           .reverse()
-      : filteredProperty.map((property) => ({
-          key: property._id,
-          name: property.name,
-          price: parseFloat(property.price).toLocaleString('en-US', {
-            style: "currency",
-            currency: "USD",
-            currencyDisplay: "symbol",
-            minimumFractionDigits: 0
-          }),
-          postalCode: property.postalCode,
-          address: property.address,
-          // createdAt:property.c,
-          role: property.type,
-          detail: property.detail,
-          bathNo: property.bathNo,
-          roomNo: property.roomNo,
-          image: property.image,
-          type: property.type,
-          approved: property.approved,
-          userName: property.user.name,
-          featured: property.isFeatured,
-          latitude:property.location.lat,
-            longitude:property.location.lng,
-        }))
-        .reverse();
+      : filteredProperty
+          .map((property) => ({
+            key: property._id,
+            name: property.name,
+            price: parseFloat(property.price).toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+              currencyDisplay: "symbol",
+              minimumFractionDigits: 0,
+            }),
+            stringPrice: property.price,
+            postalCode: property.postalCode,
+            address: property.address,
+            // createdAt:property.c,
+            role: property.type,
+            detail: property.detail,
+            bathNo: property.bathNo,
+            roomNo: property.roomNo,
+            image: property.image,
+            type: property.type,
+            approved: property.approved,
+            userName: property.user.name,
+            isFeatured: property.isFeatured,
+            // latitude: property?.location.lat,
+            // longitude: property?.location.lng,
+          }))
+          .reverse();
 
   const handleChange = (val: string) => {
     setSearchValue(val);

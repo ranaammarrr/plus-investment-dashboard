@@ -1,6 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { deleteProperty, getAllProperties, getPropertyDetail } from './listingAction';
-import { PropertiesDetailState, PropertiesState } from './types';
+import { createSlice } from "@reduxjs/toolkit";
+import {
+  deleteProperty,
+  getAllProperties,
+  getPropertyDetail,
+} from "./listingAction";
+import { PropertiesDetailState, PropertiesState } from "./types";
 
 const initialState: PropertiesState = {
   properties: [],
@@ -18,12 +22,13 @@ const initialDetailState: PropertiesDetailState = {
     detail: "", // Add the 'detail' field to reflect additional details
     address: "",
     postalCode: "",
-    type:"",
+    type: "",
     // roomNo: "",
     // bathNo: "",
     // price: "",
     // image: "",
     approved: true,
+    isFeatured: false,
     // location: {
     //   lat: "", // Adjust data type according to your usage, here assuming string
     //   lng: "",// Adjust data type according to your usage, here assuming string
@@ -35,15 +40,15 @@ const initialDetailState: PropertiesDetailState = {
       company: "",
       role: "",
     },
-    company: ''
+    company: "",
   },
-  detailedProperty:null,
+  detailedProperty: null,
   isLoading: false,
   error: null,
 };
 
 const propertySlice = createSlice({
-  name: 'property',
+  name: "property",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -58,7 +63,7 @@ const propertySlice = createSlice({
       })
       .addCase(getAllProperties.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = 'An error occurred.';
+        state.error = "An error occurred.";
       })
       .addCase(deleteProperty.pending, (state) => {
         state.isLoading = true;
@@ -69,14 +74,13 @@ const propertySlice = createSlice({
       })
       .addCase(deleteProperty.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = 'An error occurred while deleting the property.';
+        state.error = "An error occurred while deleting the property.";
       });
-     
   },
 });
 
 const propertyDetailSlice = createSlice({
-  name: 'propertyDetail',
+  name: "propertyDetail",
   initialState: initialDetailState,
   reducers: {
     addPropertyDetail: (state, action) => {
@@ -95,12 +99,11 @@ const propertyDetailSlice = createSlice({
       })
       .addCase(getPropertyDetail.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.propertiesDetail =action.payload;
-        
+        state.propertiesDetail = action.payload;
       })
       .addCase(getPropertyDetail.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = 'An error occurred while fetching the property detail.';
+        state.error = "An error occurred while fetching the property detail.";
       });
   },
 });

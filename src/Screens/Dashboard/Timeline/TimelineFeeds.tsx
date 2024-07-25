@@ -80,20 +80,32 @@ const TimelineFeeds: React.FC = () => {
             >
               {/* Carousal Start...  */}
               <Carousel autoplay style={{ marginTop: "20px" }}>
-                {/* {timeLineById.image && timeLineById?.image.map((image)=>( */}
                 <div>
-                  <img
-                    src={carousal4}
-                    alt="Image"
-                    style={{
-                      width: "100%",
-                      height: "200px",
-                      objectFit: "cover",
-                    }}
-                  />
+                  {timeLineById?.image.length > 0 ? (
+                    <img
+                      src={timeLineById.image}
+                      alt="Image"
+                      style={{
+                        width: "100%",
+                        height: "250px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "200px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "#f0f0f0",
+                      }}
+                    >
+                      No image is uploaded
+                    </div>
+                  )}
                 </div>
-
-                {/* ))} */}
               </Carousel>
 
               <Typography.Paragraph
@@ -121,7 +133,7 @@ const TimelineFeeds: React.FC = () => {
                       currentUserId: timeLineById && timeLineById?.user,
                     }}
                   >
-                    {userData && userData.name}
+                    {(userData && userData.name) || "Name"}
                   </Link>
                 }
                 description={formattedDate(timeLineById?.createdAt)}

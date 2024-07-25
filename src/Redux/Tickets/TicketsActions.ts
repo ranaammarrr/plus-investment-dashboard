@@ -29,7 +29,6 @@ export const getAllTickets = createAsyncThunk<
       return rejectWithValue({ message: errorMessage });
     }
     const apiResponse = await response.json();
-    console.log("t", apiResponse);
 
     if (!apiResponse.success) {
       toastMessage({
@@ -55,7 +54,6 @@ export const createResponse = createAsyncThunk<
   { rejectValue: ApiError }
 >("ticket/response", async ({ text, ticketId }, { rejectWithValue }) => {
   const body = { text: text, ticketId: ticketId };
-  console.log("Sending request:", text, ticketId);
   try {
     const response = await fetch(`${BASE_URL}${ENDPOINTS.PUT_RESPONSE}`, {
       method: "PUT",

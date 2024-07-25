@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import AppButton from "../../../Components/Button/AppButton";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Divider, Typography, Select, Input } from "antd";
+import {
+  Divider,
+  Typography,
+  Select,
+  Input,
+  Checkbox,
+  Upload,
+  Card,
+  Avatar,
+} from "antd";
 import { Grid } from "@mui/material";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import { DataType } from "../../../Components/Table/AppTable";
@@ -23,10 +32,10 @@ const PropertyForm: React.FC = () => {
   const { Title } = Typography;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const formatPrices = (value: any) => {
-    if (!value) return "";
-    return value.replace(/[$,]/g, "");
-  };
+  // const formatPrices = (value: any) => {
+  //   if (!value) return "1";
+  //   return value.replace(/[$,]/g, "1");
+  // };
   const formik = useFormik({
     initialValues: {
       id: property.key || "",
@@ -35,10 +44,12 @@ const PropertyForm: React.FC = () => {
       roomNo: property.roomNo || "",
       address: property.address || "",
       postalCode: property.postalCode || "",
-      price: property.price || 0,
+      price: property.stringPrice || "",
+
       type: property.type || "",
       image: property.image || "",
       detail: property.detail || "",
+      isFeatured: property.isFeatured || false,
     },
     validationSchema: addPropertyValidationSchema,
     onSubmit: async (values) => {
@@ -46,6 +57,7 @@ const PropertyForm: React.FC = () => {
         await addPropertyValidationSchema.validate(values, {
           abortEarly: false,
         });
+        console.log("image", values.image);
         dispatch(
           editProperty({
             property_id: property.key,
@@ -57,6 +69,8 @@ const PropertyForm: React.FC = () => {
             bathNo: values.bathNo,
             price: values.price,
             detail: values.detail,
+            isFeatured: values.isFeatured,
+            image: values.image,
           })
         ).then((res) => {
           if (res.type !== "editProperty/all/rejected") {
@@ -80,7 +94,6 @@ const PropertyForm: React.FC = () => {
       .map((file: { originFileObj: any }) => file.originFileObj)
       .filter(Boolean);
 
-    // Update Formik's state with the array of files
     formik.setFieldValue("image", files);
   };
 
@@ -94,22 +107,16 @@ const PropertyForm: React.FC = () => {
         console.error(
           "File is missing originFileObj, cannot generate preview."
         );
-        return; // Exit the function if there's no file to process
+        return;
       }
     }
 
     const previewWindow = window.open();
     if (previewWindow) {
       previewWindow.document.write(`<img src="${src}" width="100%">`);
-      previewWindow.document.close(); // Ensure the document stream is properly closed
+      previewWindow.document.close();
     }
   };
-
-  const formatPrice = (value:any) => {
-    if (!value) return "";
-    return `$${Number(value).toLocaleString()}`;
-  };
-  
 
   return (
     <>
@@ -227,8 +234,9 @@ const PropertyForm: React.FC = () => {
                 <InputField
                   placeholder="Price"
                   size="large"
-                  value={formatPrices(formik.values.price)}
-                  onChangeText={(value) => { // Remove non-digit characters
+                  value={formik.values.price}
+                  onChangeText={(value) => {
+                    // Remove non-digit characters
                     formik.setFieldValue("price", value);
                   }}
                   error={
@@ -272,6 +280,17 @@ const PropertyForm: React.FC = () => {
                 )}
               </Grid>
               <Grid item xs={12}>
+                <Title level={5}>Want to make this property featured?</Title>
+                <Checkbox
+                  checked={formik.values.isFeatured}
+                  onChange={(e) =>
+                    formik.setFieldValue("isFeatured", e.target.checked)
+                  }
+                >
+                  {formik.values.isFeatured ? "Featured" : "Not Featured"}
+                </Checkbox>
+              </Grid>
+              <Grid item xs={12}>
                 <Title level={5}>Image</Title>
                 <div
                   style={{
@@ -284,18 +303,36 @@ const PropertyForm: React.FC = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    flexDirection: "column",
+                    flexDirection: "row",
                   }}
                 >
+                  <Card style={{ marginRight: "10px" }}>
+                    <img
+                      style={{
+                        height: "50px",
+                        width: "50px",
+                      }}
+                      src={
+                        formik.values.image || (
+                          <UploadImage
+                            maxFiles={5}
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            onPreview={handleFilePreview}
+                          />
+                        )
+                      }
+                    />
+                  </Card>
                   <UploadImage
                     maxFiles={5}
                     accept="image/*"
                     onChange={handleFileChange}
                     onPreview={handleFilePreview}
                   />
-                  <div style={{ marginTop: 8, textAlign: "center" }}>
+                  {/* <div style={{ marginTop: 8, textAlign: "center" }}>
                     Accepted format .jpg .png only
-                  </div>
+                  </div> */}
                 </div>
               </Grid>
             </Grid>

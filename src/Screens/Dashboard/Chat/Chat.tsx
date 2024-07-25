@@ -14,12 +14,10 @@ import {
 } from "../../../Utils/helperFunctions";
 import SelectUserBar from "../PropertyForm/SelectUserBar";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
-import { getAllChats } from "../../../Redux/Chat/chatAction";
+import { getAllChats, getAllGroupChats } from "../../../Redux/Chat/chatAction";
 import { getAllUsers } from "../../../Redux/User/userAction";
 
 const Chat: React.FC = () => {
-  // const { users } = useAppSelector((state) => state.user);
-
   const dispatch = useAppDispatch();
   const user = getUserData();
 
@@ -29,76 +27,109 @@ const Chat: React.FC = () => {
   const chatContentRef = useRef<HTMLDivElement>(null);
   const [searchTxt, setSearchTxt] = useState("");
   const { chats } = useAppSelector((state) => state.chat);
+  const { allGroupChats } = useAppSelector((state) => state.group);
   const [position, setPosition] = useState<"single" | "group">("single");
 
   useEffect(() => {
     dispatch(getAllUsers());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getAllChats());
-  }, [dispatch]);
+    if (position === "single") {
+      dispatch(getAllChats());
+    } else {
+      dispatch(getAllGroupChats(""));
+    }
+  }, [dispatch, position]);
 
   useEffect(() => {
     if (chatContentRef.current) {
       chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
     }
-  }, []);
+  }, [selectedContact]);
 
   const handleAddChat = () => {
     dispatch(getAllUsers());
   };
 
   const handleUser = (addUser: any) => {
-    // const appendChat = {
-    //   id: 31,
-    //   sender: "Edmond",
-    //   lastMessage: "",
-    //   messages: [],
-    //   users: [{ name: "Edmond", lastMessage: "", text: "" }],
-    //   datetime: "2024-05-09T00:00:00.000Z",
-    // };
-
     setShowSelect(false);
   };
 
   const handleSelectUser = (item: any) => {
-    const getSingleChat =
-      chats && chats.filter((chat: any) => chat._id === item.chatId);
-    item = { ...item, messages: parseMessages(getSingleChat[0].messages) };
+    if (position === "single") {
+      const getSingleChat = chats?.filter(
+        (chat: any) => chat._id === item.chatId
+      );
+
+      if (getSingleChat && getSingleChat.length > 0) {
+        item = { ...item, messages: parseMessages(getSingleChat[0].messages) };
+      } else {
+        item = { ...item, messages: [] };
+      }
+    } else {
+      const getGroupChat = allGroupChats?.filter(
+        (groupChat: any) => groupChat._id === item.chatId
+      );
+
+      if (getGroupChat && getGroupChat.length > 0) {
+        item = { ...item, messages: parseMessages(getGroupChat[0].messages) };
+      } else {
+        item = { ...item, messages: [] };
+      }
+    }
 
     setSelectedContact(item);
   };
 
   const filteredChats =
-    (chats &&
-      chats
-        .map((chat: any) => {
-          const filteredUser = chat?.users?.find(
-            (item: any) => item?.senderId !== user._id
-          );
+    position === "single"
+      ? (chats &&
+          chats
+            .map((chat: any) => {
+              const filteredUser =
+                chat &&
+                chat.users.find((item: any) => item?.senderId !== user._id);
 
-          if (filteredUser) {
-            const updatedUser = {
-              ...filteredUser,
+              if (filteredUser) {
+                const updatedUser = {
+                  ...filteredUser,
+                  lastMessage: counterOfferMessage(
+                    chat?.messages[chat.messages.length - 1]
+                  ),
+                  chatId: chat?._id,
+                  createdAt: chat?.messages[chat.messages.length - 1].createdAt,
+                };
+
+                return updatedUser;
+              }
+
+              return null;
+            })
+            .filter((chat: any) => chat !== null)
+            .sort(
+              (a: any, b: any) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )) ||
+        []
+      : (allGroupChats &&
+          allGroupChats
+            .map((groupChat: any) => ({
+              ...groupChat,
               lastMessage: counterOfferMessage(
-                chat?.messages[chat.messages.length - 1]
+                groupChat?.messages[groupChat.messages.length - 1]
               ),
-              chatId: chat._id,
-              createdAt: chat?.messages[chat.messages.length - 1].createdAt,
-            };
-
-            return updatedUser;
-          }
-
-          return null;
-        })
-        .filter((chat: any) => chat !== null)
-        .sort(
-          (a: any, b: any) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        )) ||
-    [];
+              chatId: groupChat?._id,
+              createdAt:
+                groupChat?.messages[groupChat.messages.length - 1]?.createdAt,
+            }))
+            .sort(
+              (a: any, b: any) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )) ||
+        [];
 
   return (
     <Card>
@@ -109,7 +140,7 @@ const Chat: React.FC = () => {
           style={{
             overflowY: selectedContact ? "scroll" : "scroll",
             overflowX: "hidden",
-            height: "400px",
+            height: "450px",
           }}
         >
           {/* Contacts content */}
@@ -141,14 +172,21 @@ const Chat: React.FC = () => {
                 <Radio.Button
                   value="single"
                   style={{
-                    backgroundColor: "#4A9687",
+                    backgroundColor: "#0F172A",
                     color: "#FFFFEC",
                     borderColor: "transparent",
                   }}
                 >
                   single
                 </Radio.Button>
-                <Radio.Button value="group" style={{ borderColor: "#4A9687" }}>
+                <Radio.Button
+                  value="group"
+                  style={{
+                    backgroundColor: "grey",
+                    color: "#FFFFEC",
+                    borderColor: "transparent",
+                  }}
+                >
                   group
                 </Radio.Button>
               </Radio.Group>
@@ -287,7 +325,7 @@ const Chat: React.FC = () => {
                 padding: "30px",
               }}
             >
-              <img style={{ height: "30%", width: "30%" }} src={logo} alt="" />
+              <img style={{ height: "20%", width: "20%" }} src={logo} alt="" />
             </div>
           )}
           <div>
@@ -349,29 +387,13 @@ const Chat: React.FC = () => {
                   position: "sticky",
                   bottom: 0,
                   borderRadius: "5px",
-
                   textAlign: "center",
                   padding: "10px 20px",
                   zIndex: 1,
                   marginTop: "25px",
                 }}
               >
-                {/* <div
-                  style={{ display: "flex", justifyContent: "space-around" }}
-                >
-                  <Input
-                    placeholder="Type a message"
-                    value={inputValue}
-                    onChange={handleInputChange}
-                    onKeyPress={handleKeyPress}
-                    style={{ marginRight: "10px" }}
-                  />
-                  <AppButton
-                    size="middle"
-                  >
-                    Send
-                  </AppButton>
-                </div> */}
+                {/* Add your input and send button here */}
               </div>
             )}
           </div>
@@ -380,4 +402,5 @@ const Chat: React.FC = () => {
     </Card>
   );
 };
+
 export default Chat;

@@ -1,76 +1,80 @@
 import React, { useEffect, useState } from "react";
-import { Select, Space, Tag, Typography } from "antd";
-import {
-  DeleteOutlined,
-  SearchOutlined,
-  ExclamationCircleOutlined,
-} from "@ant-design/icons";
-import InputField from "../../../Components/InputFeild/InputFeild";
+import { Tabs, Input, Tag } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
-import { Button, Modal } from "antd";
-import {
-  getAllCategories,
-  createCategories,
-  deleteCategory,
-} from "../../../Redux/Category/categoryAction";
-import { getInvoicesById } from "../../../Redux/Invoices/invoicesActions";
-import { useLocation } from "react-router-dom";
-import { formattedDate, getUserData } from "../../../Utils/helperFunctions";
 import { getAllInvoices } from "../../../Redux/Transaction/TransactionAction";
+import { formattedDate, getUserData } from "../../../Utils/helperFunctions";
+import FilterOption from "../../../Components/FilterOption/FilterOption";
+import InputField from "../../../Components/InputFeild/InputFeild";
 
-const { confirm } = Modal;
+const { TabPane } = Tabs;
 
 const Invoices: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [labelValue, setLabelValue] = useState<string>("");
-  const [addCategorySearch, setAddCategorySearch] = useState<string>("");
+  const [selectedInvoices, setSelectedInvoices] = useState<string | undefined>(
+    undefined
+  );
+  const [activeTab, setActiveTab] = useState<string>("all");
 
   const dispatch = useAppDispatch();
-  const location = useLocation();
 
   const user = getUserData();
-
-  //   const { invoices } = useAppSelector((state) => state.invoice);
   const { transaction } = useAppSelector((state) => state.transaction);
   let invoices = transaction;
 
-  // Modal Handlers Ended ....
+  const handleStatusChange = (value: string) => {
+    setSelectedInvoices(value);
+  };
+
+  const handleTabChange = (key: string) => {
+    setActiveTab(key);
+  };
+
+  let uniqueStatus = Array.from(
+    new Set(invoices && invoices.map((item: any) => item.status))
+  );
+  let filters = uniqueStatus.map((status) => ({ type: status }));
+
+  filters.unshift({ type: "All" });
+
+  const filteredInvoices =
+    invoices &&
+    invoices.filter((item: any) => {
+      if (selectedInvoices && selectedInvoices !== "All") {
+        return item.status === selectedInvoices;
+      }
+      if (activeTab === "propertyInvoice") {
+        return item.propertyId;
+      } else if (activeTab === "serviceInvoice") {
+        return !item.propertyId;
+      }
+      return true;
+    });
 
   const handleChange = (val: string) => {
     setSearchValue(val);
   };
 
-  const handleAddSearch = (val: string) => {
-    setAddCategorySearch(val);
-  };
-
-  const handleLabelChange = (value: string) => {
-    setLabelValue(value);
-  };
-
   const columns = [
-    // {
-    //   title: "Item",
-    //   dataIndex: "item",
-    //   key: "item",
-    //   width: "10%",
-    // },
+    {
+      title: "Invoice ID",
+      dataIndex: "invoiceId",
+      key: "invoiceId",
+      width: "5%",
+    },
     {
       title: "Seller's Name",
       dataIndex: "sellerName",
       key: "sellerName",
-      width: "10%",
+      width: "12%",
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      width: "10%",
+      width: "5%",
     },
-
     {
       title: "Description",
       dataIndex: "description",
@@ -93,11 +97,11 @@ const Invoices: React.FC = () => {
       render: (status: string) => (
         <Tag
           color={
-            status == "completed"
+            status === "completed"
               ? "#386641"
-              : status == "pending"
+              : status === "pending"
               ? "#ccc"
-              : status == "rejected"
+              : status === "rejected"
               ? "#9d0208"
               : "#f4d35e"
           }
@@ -113,50 +117,17 @@ const Invoices: React.FC = () => {
         </Tag>
       ),
     },
-
-    // {
-    //   title: "Action",
-    //   key: "action",
-    //   width:"10%",
-    //   render: (_: any, record: DataType) => {
-    //     const handleDelete = async (id: string) => {
-    //       confirm({
-    //         title: "Delete this category?",
-    //         icon: <ExclamationCircleOutlined />,
-    //         okText: "Yes",
-    //         okType: "danger",
-    //         content:
-    //           "Deleting a category is irreversible, are you sure you want to proceed?",
-    //         cancelText: "No",
-    //         async onOk() {
-    //       await dispatch(deleteCategory(id));
-    //       dispatch(getAllCategories());
-    //     },
-    //     onCancel() {},
-    //   });
-    //     };
-
-    //     return (
-    //       <Space size="middle">
-    //         <DeleteOutlined
-    //           style={{ fontSize: 22, marginLeft: 6 }}
-    //           onClick={() => handleDelete(record._id)}
-    //         />
-    //       </Space>
-    //     );
-    //   },
-    // },
   ];
 
   useEffect(() => {
     dispatch(getAllInvoices());
   }, [dispatch]);
 
-  const sortedInvoices = [...invoices].sort(
+  const sortedInvoices = [...filteredInvoices].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
-  const inoicesData = invoices
+  const invoicesData = invoices
     ? searchValue !== ""
       ? sortedInvoices &&
         sortedInvoices
@@ -166,8 +137,7 @@ const Invoices: React.FC = () => {
               .includes(searchValue.toLowerCase())
           )
           .map((invoice: any) => ({
-            id: invoice._id,
-            // item: invoice.propertyId?.name,
+            invoiceId: invoice._id,
             invoiceDate: formattedDate(invoice.invoiceDate),
             price: parseFloat(invoice.price).toLocaleString("en-US", {
               style: "currency",
@@ -182,14 +152,14 @@ const Invoices: React.FC = () => {
           }))
       : sortedInvoices &&
         sortedInvoices.map((invoice: any) => ({
-          id: invoice._id,
-          // item: invoice.propertyId?.name,
+          invoiceId: invoice._id,
           invoiceDate: formattedDate(invoice.invoiceDate),
           price: parseFloat(invoice.price).toLocaleString("en-US", {
             style: "currency",
             currency: "USD",
             currencyDisplay: "symbol",
-            minimumFractionDigits: 0,
+            // minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           }),
           quantity: invoice.quantity,
           sellerName: invoice.senderId.name,
@@ -215,14 +185,34 @@ const Invoices: React.FC = () => {
           onChangeText={(val) => handleChange(val)}
           placeholder={"Search invoice"}
           size="large"
-          // inpuStyles={{ width: "20%", marginBottom: 20 }}
-          inpuStyles={{ width: "90%" }}
           suffix={<SearchOutlined />}
         />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ marginRight: "20px", padding: "0" }}>
+            <Tabs
+              activeKey={activeTab}
+              onChange={handleTabChange}
+              size="small"
+              type="card"
+              className="ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn"
+            >
+              <TabPane tab="All Invoices" key="all" />
+              <TabPane tab="Property Invoice" key="propertyInvoice" />
+              <TabPane tab="Service Invoice" key="serviceInvoice" />
+            </Tabs>
+          </div>
+          <div style={{ alignItems: "center" }}>
+            <FilterOption
+              options={filters}
+              onChangeFilter={handleStatusChange}
+              selected={selectedInvoices}
+            />
+          </div>
+        </div>
       </div>
       <div style={{ minWidth: "50%" }}>
         <AppTable
-          dataSource={inoicesData}
+          dataSource={invoicesData}
           columns={columns}
           pagination={{ defaultPageSize: 10 }}
         />

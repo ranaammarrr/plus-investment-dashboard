@@ -18,7 +18,7 @@ interface ButtonProps extends AntButtonProps {
 
 const AppButton: React.FC<ButtonProps> = ({
   textStyle: textStyleOverride,
-  preset = "primary",
+  preset = "secondary",
   text,
   children,
   disabled,
@@ -26,7 +26,7 @@ const AppButton: React.FC<ButtonProps> = ({
   onClick,
   loading,
   size = "middle",
-  bgColor = theme.palette.primary.main,
+  bgColor = theme.palette.secondary.main,
   borderColor = "none",
   ...rest
 }) => {
