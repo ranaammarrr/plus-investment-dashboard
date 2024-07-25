@@ -105,6 +105,7 @@ const PropertyForm: React.FC = () => {
     }
   };
 
+
   const formatPrice = (value:any) => {
     if (!value) return "";
     return `$${Number(value).toLocaleString()}`;
@@ -228,7 +229,7 @@ const PropertyForm: React.FC = () => {
                   placeholder="Price"
                   size="large"
                   value={formatPrices(formik.values.price)}
-                  onChangeText={(value) => { // Remove non-digit characters
+                  onChangeText={(value) => { // Remove non-digit charactersn
                     formik.setFieldValue("price", value);
                   }}
                   error={

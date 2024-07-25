@@ -233,6 +233,7 @@ const AdminLayout: React.FC<{
             width={100}
             height={100}
           />
+
           <Menu
             theme="dark"
             defaultSelectedKeys={[defaultSelectedKey || "1"]}
@@ -299,6 +300,10 @@ const AdminLayout: React.FC<{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            // overflow:"hidden",
+            // position:"fixed",
+            // zIndex:1000,
+            // width:"86%"
           }}
         >
           <Typography.Title

@@ -39,11 +39,13 @@ const DetailedCounterOffer: React.FC = () => {
     }
   }, []);
 
+
   let counterOfferId = null;
 
   const filteredChats =
     chatByUserId
       ?.map((chat: any) => {
+
         const updatedChat =
           chat.messages &&
           chat?.messages?.map((message: any) => {
@@ -62,6 +64,7 @@ const DetailedCounterOffer: React.FC = () => {
             }
           });
 
+
         return updatedChat;
       })
       .flat() || [];
@@ -69,6 +72,7 @@ const DetailedCounterOffer: React.FC = () => {
   const detailedProperty = useAppSelector(
     (state) => state.detailProperty.detailedProperty
   );
+
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -78,6 +82,7 @@ const DetailedCounterOffer: React.FC = () => {
   const handleBack = () => {
     navigate("/counter-offers");
   };
+
 
   let docs =
     filteredChats.length > 0
@@ -116,6 +121,7 @@ const DetailedCounterOffer: React.FC = () => {
       <Row>
         <Col style={{ width: "100%", height: 100 }}>
           {/* <Card> */}
+
           <Title
             level={3}
             style={{ textAlign: "center", margin: 0, marginBottom: "5px" }}

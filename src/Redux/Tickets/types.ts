@@ -1,3 +1,4 @@
+
 export interface TicketsState {
   tickets: Tickets | any;
   isLoading: boolean;
@@ -32,3 +33,4 @@ export interface Body {
 export interface ApiError {
   message: string | any;
 }
+

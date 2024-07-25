@@ -63,12 +63,15 @@ const Invoices: React.FC = () => {
       dataIndex: "sellerName",
       key: "sellerName",
       width: "10%",
+      sorter: (a: DataType, b: DataType) =>
+        a.sellerName.localeCompare(b.sellerName),
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
       width: "10%",
+      sorter: (a: DataType, b: DataType) => a.price.localeCompare(b.price),
     },
 
     {
@@ -109,7 +112,7 @@ const Invoices: React.FC = () => {
             padding: "2px 4px",
           }}
         >
-          {status && status}
+          {(status && status) || "pending"}
         </Tag>
       ),
     },
@@ -201,13 +204,11 @@ const Invoices: React.FC = () => {
   return (
     <>
       {/* End Modal COde.....  */}
-
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           marginBottom: "8px",
-          // marginTop: "20px",
         }}
       >
         <InputField
@@ -215,7 +216,6 @@ const Invoices: React.FC = () => {
           onChangeText={(val) => handleChange(val)}
           placeholder={"Search invoice"}
           size="large"
-          // inpuStyles={{ width: "20%", marginBottom: 20 }}
           inpuStyles={{ width: "90%" }}
           suffix={<SearchOutlined />}
         />

@@ -12,6 +12,7 @@ import { tagsReducer } from './Tags/tagSlice';
 import { invoicesReducer } from './Invoices/invoicesSlice';
 import { ticketsReducer } from './Tickets/TicketsSlice';
 
+
 const store = configureStore({
   reducer: {
     auth: authReducer,

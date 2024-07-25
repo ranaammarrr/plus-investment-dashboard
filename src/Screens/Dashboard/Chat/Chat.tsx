@@ -70,6 +70,7 @@ const Chat: React.FC = () => {
     setSelectedContact(item);
   };
 
+
   const filteredChats =
     (chats &&
       chats
@@ -98,6 +99,7 @@ const Chat: React.FC = () => {
           (a: any, b: any) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         )) ||
+
     [];
 
   return (
