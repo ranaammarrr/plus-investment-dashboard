@@ -68,13 +68,17 @@ const Invoices: React.FC = () => {
       dataIndex: "sellerName",
       key: "sellerName",
       width: "12%",
+      sorter: (a: DataType, b: DataType) =>
+        a.sellerName.localeCompare(b.sellerName),
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
       width: "5%",
+      sorter: (a: DataType, b: DataType) => a.price.localeCompare(b.price),
     },
+
     {
       title: "Description",
       dataIndex: "description",
@@ -177,7 +181,6 @@ const Invoices: React.FC = () => {
           display: "flex",
           justifyContent: "space-between",
           marginBottom: "8px",
-          // marginTop: "20px",
         }}
       >
         <InputField
