@@ -57,7 +57,6 @@ const PropertyForm: React.FC = () => {
         await addPropertyValidationSchema.validate(values, {
           abortEarly: false,
         });
-        console.log("image", values.image);
         dispatch(
           editProperty({
             property_id: property.key,

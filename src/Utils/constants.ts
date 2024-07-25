@@ -34,4 +34,3 @@ export const ENDPOINTS = {
   GET_ALL_VERIFICATION_REQUESTS:"verifications",
   APPROVE_VERIFICATION_REQUESTS:"verifications",
 };
-

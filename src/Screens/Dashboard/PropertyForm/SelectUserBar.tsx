@@ -5,9 +5,7 @@ import { useAppSelector } from "../../../Hooks/reduxHook";
 interface SelectUserBarProps {
   onSelectUser: (user: any) => void; // Define the callback function type
 }
-const onSearch = (value: string) => {
-  console.log("search:", value);
-};
+const onSearch = (value: string) => {};
 
 // Filter `option.label` match the user type `input`
 const filterOption = (

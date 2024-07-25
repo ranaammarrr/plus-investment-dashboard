@@ -83,8 +83,6 @@
 //         }))
 //       : [];
 
-//   //   console.log("propertyMarkers....",propertyMarkers)
-
 //   return (
 //     <>
 //       <Card
@@ -106,7 +104,7 @@
 //                 load={load}
 //                 zoomSettings={{ enable: false }}
 //                 legendSettings={{ visible: true }}
-                
+
 //               >
 //                 <Inject services={[Marker, Legend, MapsTooltip]} />
 //                 <LayersDirective>
@@ -150,12 +148,10 @@
 // };
 
 // export default PropertyMap;
-import React from 'react'
+import React from "react";
 
 function PropertyMap() {
-  return (
-    <div>PropertyMap</div>
-  )
+  return <div>PropertyMap</div>;
 }
 
-export default PropertyMap
+export default PropertyMap;

@@ -3,6 +3,7 @@ import { BASE_URL, ENDPOINTS } from "../../Utils/constants";
 import { getToken, toastMessage } from "../../Utils/helperFunctions";
 import { ApiError, User } from "./types";
 const token = getToken();
+
 export const getAllUsers = createAsyncThunk<
   User[],
   void,

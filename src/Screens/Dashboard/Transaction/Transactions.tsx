@@ -19,7 +19,6 @@ const Transactions: React.FC = () => {
   // const { users, isLoading } = useAppSelector((state) => state.user);
   const { transaction } = useAppSelector((state) => state.transaction);
 
-
   const columns = [
     {
       title: "Property Title",
@@ -75,7 +74,6 @@ const Transactions: React.FC = () => {
       width: "25%",
       render: (_: any, record: DataType) => {
         // const handleDelete = async (id: string) => {
-        //   console.log("deletee iddd");
         //   await dispatch(deleteProperty(id));
         //   dispatch(getAllProperties());
         // };
@@ -134,7 +132,7 @@ const Transactions: React.FC = () => {
           display: "flex",
           justifyContent: "space-between",
           margin: "8px",
-          // marginTop: "20px", 
+          // marginTop: "20px",
         }}
       >
         <InputField

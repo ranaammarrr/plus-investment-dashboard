@@ -177,7 +177,6 @@ export const getAllGroupChats = createAsyncThunk<
       return rejectWithValue({ message: errorMessage });
     }
     const apiResponse = await response.json();
-    console.log("apiRessss", apiResponse);
     if (!apiResponse.succcess) {
       // Ensure `apiResponse` has a `success` field if applicable
       toastMessage({

@@ -108,7 +108,6 @@ const Verifications: React.FC = () => {
   const handleChange = (pagination: any, filters: any, sorter: any) => {
     setFilteredInfo(filters);
   };
-  console.log("filteredInfo", filteredInfo);
   const handleSearch = (val: string) => {
     setSearchValue(val);
   };

@@ -8,7 +8,6 @@ import {
   PaperClipOutlined,
 } from "@ant-design/icons";
 
-
 import { Link, useNavigate } from "react-router-dom";
 import { getAllInvoices } from "../../../Redux/Transaction/TransactionAction";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
@@ -33,11 +32,9 @@ const CounterOffers: React.FC = () => {
   // const { transaction } = useAppSelector((state) => state.transaction);
   const { properties } = useAppSelector((state) => state.property);
 
-
   useEffect(() => {
     dispatch(getAllProperties());
   }, [dispatch]);
-  console.log(window.location.origin);
   // let propertyId
 
   const handlePropertyAction = (id: any) => {
@@ -225,7 +222,6 @@ const CounterOffers: React.FC = () => {
       },
     },
   ];
-
 
   const sortedProperties = [...properties].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()

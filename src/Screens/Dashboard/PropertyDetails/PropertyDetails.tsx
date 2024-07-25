@@ -22,9 +22,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getPropertyDetail } from "../../../Redux/PropertyListing/listingAction";
 import { getAllUsers } from "../../../Redux/User/userAction";
 
-const onChange = (key: string) => {
-  console.log(key);
-};
+const onChange = (key: string) => {};
 
 const sellers = [
   {

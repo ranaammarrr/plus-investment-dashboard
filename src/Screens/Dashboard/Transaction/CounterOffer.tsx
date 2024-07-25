@@ -33,7 +33,6 @@ const CounterOffer: React.FC = () => {
   const { transaction } = useAppSelector((state) => state.transaction);
   const property: any = location.state?.propertyId || {};
 
-
   const columns = [
     {
       title: "Offer Title",
@@ -100,7 +99,7 @@ const CounterOffer: React.FC = () => {
       width: "10%",
       render: (_: any, record: DataType) => {
         const handleView = (record: DataType) => {
-          dispatch(addPropertyDetail(record))
+          dispatch(addPropertyDetail(record));
           navigate("/viewTransactions", { state: { property: record } });
         };
         return (
@@ -119,7 +118,6 @@ const CounterOffer: React.FC = () => {
     dispatch(getAllInvoices());
   }, [dispatch]);
 
-  // console.log("aaa==>", property)
   const transactionsData =
     searchValue !== ""
       ? transaction

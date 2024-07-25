@@ -15,39 +15,44 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <BrowserRouter>
-  <Suspense
-              fallback={
-                <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Spin size="large" />
-                </div>
-              }
-            >
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <ConfigProvider
-          theme={{
-            token: {
-              fontFamily: "Poppins",
-            },
-            components: {
-              Menu: {
-                darkItemSelectedBg: "#000000e0",
-              },
-            },
+    <Suspense
+      fallback={
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <App />
-        </ConfigProvider>
-      </ThemeProvider>
-    </Provider>
+          <Spin size="large" />
+        </div>
+      }
+    >
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <ConfigProvider
+            theme={{
+              token: {
+                fontFamily: "Poppins",
+              },
+              components: {
+                Menu: {
+                  darkItemSelectedBg: "#7FB77E",
+                  darkItemSelectedColor: "#ffff",
+                  darkItemColor: "#0A1931",
+                  darkItemHoverBg: "#7FB77E",
+                  darkItemHoverColor: "#ffff",
+                  itemSelectedColor: "#ffff",
+                },
+              },
+            }}
+          >
+            <App />
+          </ConfigProvider>
+        </ThemeProvider>
+      </Provider>
     </Suspense>
   </BrowserRouter>
 );
