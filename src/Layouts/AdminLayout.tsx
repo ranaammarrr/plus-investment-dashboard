@@ -14,6 +14,7 @@ import {
   WalletOutlined,
   SafetyCertificateOutlined,
   BellFilled,
+  SettingOutlined,
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -138,6 +139,20 @@ const AdminLayout: React.FC<{
       label: "Verifications",
       path: "/verifications",
     },
+    {
+      key: "14",
+      icon: <SettingOutlined style={{ fontSize: 22 }} />,
+      label: "Settings",
+      path: "/settings",
+      subMenu: [
+        {
+          key: "14-1",
+          icon: <SettingOutlined style={{ fontSize: 22 }} />,
+          label: "Edit Profile",
+          path: "/profile",
+        },
+      ],
+    },
   ];
 
   const handleLogout = () => {
@@ -203,7 +218,6 @@ const AdminLayout: React.FC<{
           padding: 8,
         }}
       >
-        {/* <Avatar style={{ backgroundColor: "#001529" }} icon={<BellFilled />} /> */}
         <Typography.Title
           level={4}
           style={{
@@ -217,13 +231,11 @@ const AdminLayout: React.FC<{
         </Typography.Title>
       </div>
       <Menu.Divider />
-      {/** Example notification item */}
       <Menu.Item style={{ padding: "8px 16px" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <Avatar src="path_to_user_avatar" />
           <div style={{ marginLeft: 5, flex: 1 }}>
             <Typography.Text strong>Anderson</Typography.Text>
-            {/* <Typography.Text>Notification message goes here.</Typography.Text> */}
           </div>
           <Typography.Text type="secondary" style={{ fontSize: "12px" }}>
             2 hours ago
@@ -231,7 +243,6 @@ const AdminLayout: React.FC<{
         </div>
       </Menu.Item>
       <Menu.Divider />
-      {/** Add more notification items similarly */}
     </Menu>
   );
 
@@ -263,7 +274,7 @@ const AdminLayout: React.FC<{
         style={{
           backgroundColor: customTheme.palette.primary.main,
         }}
-        width={200}
+        width={205}
         collapsedWidth={100}
         collapsed={false}
       >
@@ -282,7 +293,7 @@ const AdminLayout: React.FC<{
             style={{
               objectFit: "contain",
               marginTop: 12,
-              marginBottom: 42,
+              marginBottom: 20,
             }}
             width={100}
             height={100}
@@ -294,7 +305,7 @@ const AdminLayout: React.FC<{
             mode="inline"
             style={{
               backgroundColor: customTheme.palette.primary.main,
-              width: 200,
+              width: 205,
             }}
             openKeys={openKeys}
             onOpenChange={(keys) => setOpenKeys(keys as string[])}
@@ -377,7 +388,7 @@ const AdminLayout: React.FC<{
               </div>
             </Dropdown>
             <Dropdown overlay={notificationMenu} trigger={["click"]}>
-              <div style={{ marginRight: "20px" }}>
+              <div style={{ marginRight: "25px" }}>
                 <Badge
                   style={{ backgroundColor: "#4a9687" }}
                   count={notificationCount}

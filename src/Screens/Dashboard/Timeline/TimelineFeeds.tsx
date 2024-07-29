@@ -75,7 +75,7 @@ const TimelineFeeds: React.FC = () => {
 
           <div>
             <Card
-              style={{ height: "350px", width: "700px" }}
+              style={{ height: "400px", width: "700px" }}
               bodyStyle={{ padding: "5px" }}
             >
               {/* Carousal Start...  */}
@@ -121,7 +121,12 @@ const TimelineFeeds: React.FC = () => {
             <Card style={{ width: 250 }} bodyStyle={{ padding: "5px" }}>
               <Meta
                 avatar={
-                  <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
+                  <Avatar
+                    src={
+                      (userData && userData.profileImg) ||
+                      "https://api.dicebear.com/7.x/miniavs/svg?seed=1"
+                    }
+                  />
                 }
                 title={
                   <Link
@@ -178,8 +183,7 @@ const TimelineFeeds: React.FC = () => {
                             <Avatar
                               style={{ marginTop: "15px" }}
                               size="large"
-                              icon={<UserOutlined />}
-                              srcSet={timeLineById && timeLineById.image}
+                              src={user.profileImg || "UserOutlined"}
                             />
                           </div>
                           <div>

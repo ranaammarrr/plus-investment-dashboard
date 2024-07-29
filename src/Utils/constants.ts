@@ -5,6 +5,7 @@ export const BASE_URL = "http://localhost:8000/";
 export const ENDPOINTS = {
   LOGIN: "user/login",
   ALL_USERS: "user/all",
+  CHANGE_PASSWORD: "user/change-password",
   DELETE_USER: "user/delete/",
   ADD_PROPERTY: "property/upload",
   ALL_PROPERTIES: "property",
@@ -31,6 +32,6 @@ export const ENDPOINTS = {
   TOGGLE_FOLLOW: "follow",
   GET_ALL_TICKETS: "ticket",
   PUT_RESPONSE: "ticket",
-  GET_ALL_VERIFICATION_REQUESTS:"verifications",
-  APPROVE_VERIFICATION_REQUESTS:"verifications",
+  APPROVE_VERIFICATION_REQUESTS: "verifications",
+  GET_ALL_VERIFICATION_REQUESTS: "verifications",
 };

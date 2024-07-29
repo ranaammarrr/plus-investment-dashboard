@@ -151,6 +151,14 @@ const Verifications: React.FC = () => {
       width: "20%",
       render: (item: string, record: DataType) => {
         const isLink = item.startsWith("http");
+        const isImage = item.toLowerCase().endsWith(".jpg"); // Check for .jpg extension
+        const fileNameWithPrefix = item.split("/").pop(); // Extract the file name with prefix
+
+        // Ensure fileNameWithPrefix is not undefined
+        const fileName = fileNameWithPrefix
+          ? decodeURIComponent(fileNameWithPrefix).split("-").slice(1).join("-") // Remove the prefix and decode URI component
+          : "";
+
         return (
           <div
             style={{
@@ -158,12 +166,25 @@ const Verifications: React.FC = () => {
               alignItems: "center",
               borderRadius: "5px",
               padding: "5px",
-              cursor: isLink ? "pointer" : "default",
+              cursor: isLink && isImage ? "pointer" : "default",
             }}
-            onClick={() => isLink && showModal(item)}
+            onClick={() => isLink && isImage && showModal(item)}
           >
-            {isLink ? (
-              <Tooltip title="Click to view the image">Image</Tooltip>
+            {isLink && isImage ? (
+              <>
+                <Tooltip title="Click to view the image">
+                  <img
+                    src={item}
+                    alt="item"
+                    style={{
+                      height: "30px",
+                      width: "30px",
+                      marginRight: "10px",
+                    }}
+                  />
+                </Tooltip>
+                <span>{fileName}</span>
+              </>
             ) : (
               <span>{item}</span>
             )}
