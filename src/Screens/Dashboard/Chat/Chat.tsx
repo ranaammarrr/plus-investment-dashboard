@@ -161,33 +161,37 @@ const Chat: React.FC = () => {
               style={{ fontSize: 20, marginLeft: 5 }}
             />
           </div>
-          <div style={{ marginLeft: "25px" }}>
+          <div style={{ marginLeft: "40px" }}>
             <Space>
               <Radio.Group
                 size="middle"
                 value={position}
                 onChange={(e) => setPosition(e.target.value)}
-                style={{ marginBottom: "10px" }}
+                style={{
+                  marginBottom: "10px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
               >
                 <Radio.Button
                   value="single"
                   style={{
-                    backgroundColor: "#0F172A",
+                    backgroundColor: position === "single" ? "#7FB77E" : "grey",
                     color: "#FFFFEC",
                     borderColor: "transparent",
                   }}
                 >
-                  single
+                  Single
                 </Radio.Button>
                 <Radio.Button
                   value="group"
                   style={{
-                    backgroundColor: "grey",
+                    backgroundColor: position === "group" ? "#7FB77E" : "grey",
                     color: "#FFFFEC",
                     borderColor: "transparent",
                   }}
                 >
-                  group
+                  Group
                 </Radio.Button>
               </Radio.Group>
             </Space>
@@ -242,8 +246,8 @@ const Chat: React.FC = () => {
                             >
                               <Typography.Text
                                 style={{
-                                  fontWeight: "600",
-                                  fontSize: "13px",
+                                  fontWeight: "450",
+                                  fontSize: "14px",
                                   width: 80,
                                 }}
                               >
@@ -254,7 +258,7 @@ const Chat: React.FC = () => {
                                 style={{
                                   fontSize: 10,
                                   color: "#94A4BA",
-                                  marginLeft: "20px",
+                                  marginLeft: "50px",
                                 }}
                               >
                                 {item.createdAt
@@ -265,6 +269,7 @@ const Chat: React.FC = () => {
                             <Typography.Text
                               style={{
                                 fontWeight: "450",
+                                fontSize: "12px",
                               }}
                             >
                               {item.lastMessage.message}
@@ -286,7 +291,7 @@ const Chat: React.FC = () => {
           style={{
             padding: "0px",
             maxHeight: "400px",
-            minHeight: "400px",
+            minHeight: "449px",
             overflowY: selectedContact ? "scroll" : "hidden",
             overflowX: "hidden",
             position: "relative",
@@ -325,7 +330,7 @@ const Chat: React.FC = () => {
                 padding: "30px",
               }}
             >
-              <img style={{ height: "20%", width: "20%" }} src={logo} alt="" />
+              <img style={{ height: "25%", width: "25%" }} src={logo} alt="" />
             </div>
           )}
           <div>

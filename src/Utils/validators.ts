@@ -31,3 +31,16 @@ export const addPropertyValidationSchema = Yup.object({
   type: Yup.string().required("Type is required"),
   detail: Yup.string().required("Detail is required"),
 });
+
+export const changePasswordSchema = Yup.object({
+  oldPassword: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+  newPassword: Yup.string()
+    .min(6, "New Password must be at least 6 characters")
+    .required("New Password is required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("newPassword")], "Passwords must match")
+    .min(6, "Confirm Password must be at least 6 characters")
+    .required("Confirm Password is required"),
+});

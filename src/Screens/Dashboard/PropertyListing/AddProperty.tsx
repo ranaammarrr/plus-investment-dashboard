@@ -317,17 +317,6 @@ const AddProperty: React.FC = () => {
                   <div style={{ color: "red" }}>{formik.errors.detail}</div>
                 )}
               </Grid>
-              {/* <Grid item xs={12}>
-                <Title level={5}>Is Featured</Title>
-                <Checkbox
-                  checked={formik.values.isFeatured}
-                  onChange={(e) =>
-                    formik.setFieldValue("isFeatured", e.target.checked)
-                  }
-                >
-                  {formik.values.isFeatured ? "Featured" : "Not Featured"}
-                </Checkbox>
-              </Grid> */}
               <Grid item xs={12}>
                 <Title level={5}>Image</Title>
                 <div

@@ -185,6 +185,12 @@ const routes: CustomRoute[] = [
     isPrivate: true,
     name: "Verifications",
   },
+  {
+    path: "/profile",
+    element: lazy(() => import("../Screens/Dashboard/Settings/ProfileSetting")),
+    isPrivate: true,
+    name: "Profile Setting",
+  },
 ];
 
 export default routes;

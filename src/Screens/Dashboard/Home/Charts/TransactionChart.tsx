@@ -15,7 +15,7 @@ import { Card, Col, Row } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../../Hooks/reduxHook";
 import { getAllInvoices } from "../../../../Redux/Transaction/TransactionAction";
 import { getAllProperties } from "../../../../Redux/PropertyListing/propertyActions";
-import { formattedDate, getMonthYear  } from "../../../../Utils/helperFunctions";
+import { formattedDate, getMonthYear } from "../../../../Utils/helperFunctions";
 
 // Register required components with ChartJS
 ChartJS.register(
@@ -41,62 +41,58 @@ const TransactionLineChart = () => {
     dispatch(getAllInvoices());
   }, [dispatch]);
 
+  // For Propertiesss...
 
+  // Initialize counts for all 12 months
+  const monthCounts: any = {};
+  for (let month = 1; month <= 12; month++) {
+    const monthYear = `2024-${month.toString().padStart(2, "0")}`;
+    monthCounts[monthYear] = 0;
+  }
 
-
-
-
-// For Propertiesss... 
-
-// Initialize counts for all 12 months
-const monthCounts: any = {};
-for (let month = 1; month <= 12; month++) {
-  const monthYear = `2024-${month.toString().padStart(2, '0')}`; 
-  monthCounts[monthYear] = 0;
-}
-
- properties.forEach((obj:any) => {
+  properties.forEach((obj: any) => {
     const monthYear = getMonthYear(obj.createdAt);
     monthCounts[monthYear]++;
   });
 
+  // For Transactions ...
+  const initializeMonthCounts = (year: any) => {
+    const monthCounts: any = {};
+    for (let month = 1; month <= 12; month++) {
+      const monthYear = `${year}-${month.toString().padStart(2, "0")}`;
+      monthCounts[monthYear] = 0;
+    }
+    return monthCounts;
+  };
 
-  
-// For Transactions ... 
-const initializeMonthCounts = (year:any) => {
-  const monthCounts:any = {};
-  for (let month = 1; month <= 12; month++) {
-    const monthYear = `${year}-${month.toString().padStart(2, '0')}`;
-    monthCounts[monthYear] = 0;
-  }
-  return monthCounts;
-};
+  const transactionMonthCounts = initializeMonthCounts(2024);
 
-const transactionMonthCounts = initializeMonthCounts(2024);
+  transaction.forEach((obj: any) => {
+    const monthYear = getMonthYear(obj.createdAt);
+    transactionMonthCounts[monthYear]++;
+  });
 
-  transaction.forEach((obj:any) => {
-  const monthYear = getMonthYear(obj.createdAt);
-  transactionMonthCounts[monthYear]++;
-});
+  const transactionData = Object.keys(transactionMonthCounts).map(
+    (key) => transactionMonthCounts[key]
+  );
+  const monthsss = Object.keys(transactionMonthCounts);
+  const propertyData = properties
+    ? Object.keys(monthCounts).map((key: any) => monthCounts[key])
+    : [];
 
-
-
-const transactionData = Object.keys(transactionMonthCounts).map((key) => transactionMonthCounts[key]);
-const monthsss = Object.keys(transactionMonthCounts);
-  const propertyData = properties ?  Object.keys(monthCounts).map((key: any) => (monthCounts[key])) : [];
-
-  const months = properties ?  Object.keys(monthCounts).map((key: any) => (key)) : [];
+  const months = properties
+    ? Object.keys(monthCounts).map((key: any) => key)
+    : [];
   const propertyChartValues = propertyData;
   const transactionChartValues = transactionData;
 
-
-  const newDate:any = Date.now()
-// transaction LineChart Data.. 
+  const newDate: any = Date.now();
+  // transaction LineChart Data..
   const transactionLineChartData = {
     labels: monthsss,
     datasets: [
       {
-        label: `Invoice created till ${ formattedDate(newDate)}`,
+        label: `Invoice created till ${formattedDate(newDate)}`,
         data: transactionChartValues,
         fill: false,
         backgroundColor: "rgba(75, 192, 192, 0.6)",
@@ -105,7 +101,7 @@ const monthsss = Object.keys(transactionMonthCounts);
       },
     ],
   };
-// bar Chart Data ...  
+  // bar Chart Data ...
   const propertyBarChartData = {
     labels: months,
     datasets: [
@@ -119,10 +115,9 @@ const monthsss = Object.keys(transactionMonthCounts);
     ],
   };
 
- 
-  // bar Chart Options .... 
+  // bar Chart Options ....
 
-  const barChartOptions:any = {
+  const barChartOptions: any = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -141,9 +136,8 @@ const monthsss = Object.keys(transactionMonthCounts);
     },
   };
 
-
-  // LineChart Options... 
-  const lineChartOptions:any = {
+  // LineChart Options...
+  const lineChartOptions: any = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -177,10 +171,9 @@ const monthsss = Object.keys(transactionMonthCounts);
           <Bar data={propertyBarChartData} options={barChartOptions} />
         </Col>
         <Col span={12}>
-        <div style={{height:"300px"}}>
-          <Line data={transactionLineChartData} options={lineChartOptions} />
-
-        </div>
+          <div style={{ height: "300px" }}>
+            <Line data={transactionLineChartData} options={lineChartOptions} />
+          </div>
         </Col>
       </Row>
     </Card>

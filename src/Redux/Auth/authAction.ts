@@ -1,8 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { User, LoginCredentials, ApiError } from "./types";
+import {
+  User,
+  LoginCredentials,
+  ApiError,
+  changePasswordCredentials,
+  ApiErrors,
+} from "./types";
 import { BASE_URL, ENDPOINTS } from "../../Utils/constants";
-import { toastMessage } from "../../Utils/helperFunctions";
+import { getToken, toastMessage } from "../../Utils/helperFunctions";
 
+const token = getToken();
 export const loginUser = createAsyncThunk<
   User,
   LoginCredentials,
@@ -70,5 +77,61 @@ export const loginUser = createAsyncThunk<
       message: "An error occurred during login",
       role: "",
     });
+  }
+});
+
+// change password ....
+
+export const changePassword = createAsyncThunk<
+  void,
+  string,
+  { rejectValue: ApiErrors }
+>("user/changePassword", async (body: any, { rejectWithValue }) => {
+  try {
+    const data = {
+      oldPassword: body.oldPassword.toString(),
+      newPassword: body.newPassword.toString(),
+      confirmPassword: body.confirmPassword.toString(),
+    };
+
+    const response = await fetch(`${BASE_URL}${ENDPOINTS.CHANGE_PASSWORD}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      // toastMessage({
+      //   type: "error",
+      //   content: `Cannot change password`,
+      //   duration: 5,
+      // });
+      return rejectWithValue({ message: errorMessage });
+    }
+
+    const apiResponse = await response.json();
+
+    if (!apiResponse.success) {
+      toastMessage({
+        type: "error",
+        content: `Cannot change password`,
+        duration: 5,
+      });
+      return rejectWithValue({ message: `Cannot change password ` });
+    }
+
+    toastMessage({
+      type: "success",
+      content: `Password changes successfully`,
+      duration: 5,
+    });
+
+    return;
+  } catch (error) {
+    return rejectWithValue({ message: "An error occurred" });
   }
 });
