@@ -11,11 +11,11 @@ import {
   Tag,
   Typography,
 } from "antd";
-import { SearchOutlined, EditOutlined, DownOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
-import { formattedDate, truncateText } from "../../../Utils/helperFunctions";
+import { formattedDate } from "../../../Utils/helperFunctions";
 import { useNavigate } from "react-router-dom";
 import FilterOption from "../../../Components/FilterOption/FilterOption";
 import AppButton from "../../../Components/Button/AppButton";
@@ -24,18 +24,14 @@ import {
   getAllTickets,
 } from "../../../Redux/Tickets/TicketsActions";
 
-const { confirm } = Modal;
-
 const Tickets: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [responseText, setResponseText] = useState<string>("");
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [selectedTickets, setSelectedTickets] = useState<string | undefined>(
     undefined
   );
-  const [inputValue, setInputValue] = useState("");
   const [textValue, setTextValue] = useState<string>("");
   const [recordId, setRecordId] = useState<string>("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -45,13 +41,6 @@ const Tickets: React.FC = () => {
   const handleCategoryChange = (value: string) => {
     setSelectedTickets(value);
   };
-
-  const handleInputChange = (e: any) => {
-    setInputValue(e.target.value);
-  };
-
-  // const handleInputChange = (e:any) => {
-  //   setInputValue(e.target.value);
 
   useEffect(() => {
     dispatch(getAllTickets());
@@ -88,11 +77,6 @@ const Tickets: React.FC = () => {
   const handleLocalInputChange = (e: any) => {
     setTextValue(e.target.value);
   };
-
-  const handleMenuClick = (recordId: string) => {
-    setDropdownVisible(dropdownVisible === recordId ? null : recordId);
-  };
-
   const columns = [
     {
       title: "Ticket ID",
@@ -253,13 +237,11 @@ const Tickets: React.FC = () => {
         />
       </Modal>
       <Modal
-        // style={{ marginTop: "100px" }}
         title="Response from Support"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        {/* <Typography.Title level={5}>Response</Typography.Title> */}
         <Typography.Text>{responseText}</Typography.Text>
       </Modal>
       <div

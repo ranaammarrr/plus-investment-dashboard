@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Row, Col, Typography } from "antd";
 import { ArrowUpOutlined } from "@ant-design/icons";
-import { Bar, Bubble, Doughnut, Line, Pie } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,12 +16,7 @@ import {
 } from "chart.js";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
 import { getAllUsers } from "../../../Redux/User/userAction";
-import {
-  formattedDate,
-  formattedDateGraph,
-  getMonthYear,
-  getWeekYear,
-} from "../../../Utils/helperFunctions";
+import { getMonthYear, getWeekYear } from "../../../Utils/helperFunctions";
 import { useLocation } from "react-router-dom";
 
 ChartJS.register(
@@ -56,7 +51,7 @@ const TimelineInsights: React.FC = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const { currentUserId } = location.state;
-  const { users, isLoading } = useAppSelector((state) => state.user);
+  const { users } = useAppSelector((state) => state.user);
   const currentUser = users.find((user) => user._id === currentUserId);
   const personalInformation = currentUser;
   const followers = currentUser?.followers ?? [];
@@ -65,11 +60,6 @@ const TimelineInsights: React.FC = () => {
     dispatch(getAllUsers());
   }, [dispatch]);
 
-  // personalInformation.forEach((obj: any) => {
-  //   const monthYear = (obj.createdAt);
-  // });
-
-  // Initialize counts for all 12 months
   const monthCounts: any = {};
   for (let month = 1; month <= 12; month++) {
     const monthYear = `2024-${month.toString().padStart(2, "0")}`;
@@ -247,26 +237,6 @@ const TimelineInsights: React.FC = () => {
               </Text>
             </div>
           </Col>
-          {/* <Col span={8}>
-            <Title level={5} style={{ color: "grey", margin: 2 }}>
-              Engagements
-            </Title>
-            <div style={{ display: "flex", alignItems: "center", margin: 2 }}>
-              <Text style={{ marginRight: 8 }}>12,579</Text>
-              <Text
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  color: "#57D797",
-                }}
-              >
-                <ArrowUpOutlined
-                  style={{ marginLeft: 4, transform: "rotate(45deg)" }}
-                />
-                87%
-              </Text>
-            </div>
-          </Col> */}
           <Col span={12}>
             <Title level={5} style={{ color: "grey", margin: 2 }}>
               New Followers
@@ -319,30 +289,6 @@ const TimelineInsights: React.FC = () => {
               </Text>
             </div>
           </Col>
-          {/* <Col span={8}>
-            <div style={{ height: "230px" }}>
-              <Line data={data2} options={options} />
-            </div>
-            <Title level={5} style={{ color: "grey" }}>
-              Engagements Growth
-            </Title>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Text style={{ marginRight: 8 }}>2,895</Text>
-              <Text
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  color: "#57D797",
-                  margin: 0,
-                }}
-              >
-                <ArrowUpOutlined
-                  style={{ marginLeft: 4, transform: "rotate(45deg)" }}
-                />
-                87%
-              </Text>
-            </div>
-          </Col> */}
           <Col span={12}>
             <div style={{ height: "230px" }}>
               <Bar data={data3} options={options} />

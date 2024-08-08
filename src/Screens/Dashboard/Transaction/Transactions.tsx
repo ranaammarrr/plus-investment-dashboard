@@ -4,7 +4,7 @@ import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getAllInvoices } from "../../../Redux/Transaction/TransactionAction";
 import { formattedDate } from "../../../Utils/helperFunctions";
 
@@ -13,11 +13,18 @@ const Transactions: React.FC = () => {
   const [selectedProperty, setSelectedProperty] = useState<DataType | null>(
     null
   );
+  const { transaction } = useAppSelector((state) => state.transaction);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  // const { users, isLoading } = useAppSelector((state) => state.user);
-  const { transaction } = useAppSelector((state) => state.transaction);
+
+  useEffect(() => {
+    dispatch(getAllInvoices());
+  }, [dispatch]);
+
+  const handleChange = (val: string) => {
+    setSearchValue(val);
+  };
 
   const columns = [
     {
@@ -57,26 +64,11 @@ const Transactions: React.FC = () => {
       key: "published",
       width: "25%",
     },
-    // {
-    //     title: "Status",
-    //     dataIndex: "status",
-    //     key: "status",
-    //     width: "10%",
-    //     render: (status: string) => (
-    //       <Tag style={{width:"100%", textAlign:"center"}} color={status === "active" ? "green" : status === "canceled" ? "red" : status === "rejected" ? "blue" : "orange"}>
-    //         {status.toUpperCase()}
-    //       </Tag>
-    //     ),
-    //   },
     {
       title: "Action",
       key: "action",
       width: "25%",
       render: (_: any, record: DataType) => {
-        // const handleDelete = async (id: string) => {
-        //   await dispatch(deleteProperty(id));
-        //   dispatch(getAllProperties());
-        // };
         const handleView = (record: DataType) => {
           setSelectedProperty(record);
           navigate("/counterOffer", { state: { propertyId: record.id } });
@@ -93,14 +85,10 @@ const Transactions: React.FC = () => {
     },
   ];
 
-  useEffect(() => {
-    dispatch(getAllInvoices());
-  }, [dispatch]);
-
   const transactionsData =
     searchValue !== ""
       ? transaction
-          .filter((invoice) => invoice?.propertyId.counterOffers) // Filter properties with counterOffers
+          .filter((invoice) => invoice?.propertyId.counterOffers)
           .filter((invoice) =>
             invoice?.propertyId?.name
               .toLowerCase()
@@ -120,10 +108,6 @@ const Transactions: React.FC = () => {
             published: formattedDate(invoice.propertyId.createdAt),
             id: invoice.propertyId._id,
           }));
-
-  const handleChange = (val: string) => {
-    setSearchValue(val);
-  };
 
   return (
     <>

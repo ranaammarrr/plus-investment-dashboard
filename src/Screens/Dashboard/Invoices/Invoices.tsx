@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Select, Space, Tabs, Tag, Typography } from "antd";
-import {
-  DeleteOutlined,
-  SearchOutlined,
-  ExclamationCircleOutlined,
-} from "@ant-design/icons";
+import { Tabs, Tag, Typography } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
 import { getAllInvoices } from "../../../Redux/Transaction/TransactionAction";
-import { formattedDate, getUserData } from "../../../Utils/helperFunctions";
+import {
+  formattedDate,
+  getUserData,
+  truncateText,
+} from "../../../Utils/helperFunctions";
 import FilterOption from "../../../Components/FilterOption/FilterOption";
 import { useLocation } from "react-router-dom";
 
@@ -74,8 +74,11 @@ const Invoices: React.FC = () => {
       dataIndex: "sellerName",
       key: "sellerName",
       width: "12%",
-      sorter: (a: DataType, b: DataType) =>
-        a.sellerName.localeCompare(b.sellerName),
+      sorter: (a: DataType, b: DataType) => {
+        const nameA = a.sellerName || "";
+        const nameB = b.sellerName || "";
+        return nameA.localeCompare(nameB);
+      },
     },
     {
       title: "Price",
@@ -142,7 +145,7 @@ const Invoices: React.FC = () => {
       ? sortedInvoices &&
         sortedInvoices
           .filter((invoice: any) =>
-            invoice.senderId.name
+            invoice?.senderId?.name
               .toLowerCase()
               .includes(searchValue.toLowerCase())
           )
@@ -155,10 +158,10 @@ const Invoices: React.FC = () => {
               currencyDisplay: "symbol",
               minimumFractionDigits: 0,
             }),
-            quantity: invoice.quantity,
-            sellerName: invoice.senderId.name,
-            description: invoice.description,
-            status: invoice.status,
+            quantity: invoice?.quantity,
+            sellerName: invoice?.senderId?.name,
+            description: invoice?.description,
+            status: invoice?.status,
           }))
       : sortedInvoices &&
         sortedInvoices.map((invoice: any) => ({
@@ -168,13 +171,12 @@ const Invoices: React.FC = () => {
             style: "currency",
             currency: "USD",
             currencyDisplay: "symbol",
-            // minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           }),
-          quantity: invoice.quantity,
-          sellerName: invoice.senderId.name,
-          description: invoice.description,
-          status: invoice.status,
+          quantity: invoice?.quantity,
+          sellerName: invoice?.senderId?.name,
+          description: invoice?.description,
+          status: invoice?.status,
         }))
     : [];
 

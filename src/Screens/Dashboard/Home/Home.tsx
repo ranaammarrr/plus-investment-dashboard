@@ -12,7 +12,6 @@ import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
 import { getAllUsers } from "../../../Redux/User/userAction";
 import { getAllProperties } from "../../../Redux/PropertyListing/listingAction";
 import { getAllInvoices } from "../../../Redux/Transaction/TransactionAction";
-// import PropertyMap from "./Charts/PropertyMap";
 const Home: React.FC = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -90,9 +89,6 @@ const Home: React.FC = () => {
       <Row>
         <TransactionLineChart />
       </Row>
-      {/* <Row>
-        <PropertyMap/>
-      </Row> */}
     </>
   );
 };

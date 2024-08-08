@@ -1,24 +1,38 @@
-import { Avatar, Card, Col, Divider, Row, Typography, Select } from "antd";
+import { Avatar, Col, Divider, Row, Typography } from "antd";
 import React, { useEffect } from "react";
 import Document from "../PropertyDetails/Childrens/Document";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  getAllChatList,
-  getChatIdByUsers,
-} from "../../../Redux/Chat/chatAction";
+import { getChatIdByUsers } from "../../../Redux/Chat/chatAction";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
 import { formatDateTime, getUserData } from "../../../Utils/helperFunctions";
 import { getAllUsers } from "../../../Redux/User/userAction";
 
 const { Title, Text } = Typography;
-const { Option } = Select;
 
 const ViewTransactions: React.FC = () => {
-  const location = useLocation();
-  const { users } = useAppSelector((state) => state.user);
   const { chatByUserId } = useAppSelector((state) => state.chat);
-  const { transaction } = useAppSelector((state) => state.transaction);
+  const { detailedProperty } = useAppSelector((state) => state.detailProperty);
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, []);
+
+  useEffect(() => {
+    dispatch(
+      getChatIdByUsers({
+        _id: detailedProperty.buyerId,
+        senderId: detailedProperty.sellerId,
+      })
+    );
+  }, []);
+
+  const handleBack = () => {
+    navigate("/counterOffer");
+  };
 
   const filteredChats =
     chatByUserId
@@ -42,36 +56,6 @@ const ViewTransactions: React.FC = () => {
       })
       .flat() || [];
 
-  // const { propertiesDetail } = useAppSelector((state) => state.detailProperty);
-  // const property: any = location.state?.property || {};
-  const { detailedProperty } = useAppSelector((state) => state.detailProperty);
-
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-
-  const user = getUserData();
-
-  const handleBack = () => {
-    navigate("/counterOffer");
-  };
-
-  useEffect(() => {
-    dispatch(getAllUsers());
-  }, []);
-
-  useEffect(() => {
-    dispatch(
-      getChatIdByUsers({
-        // _id:"66211c3ae7dc1b1126984393",
-        // senderId: "66211f2ae7dc1b11269843a1"
-        _id: detailedProperty.buyerId,
-        senderId: detailedProperty.sellerId,
-      })
-    );
-  }, []);
-
-  // const newFilterChat = (chatByUserId && chatByUserId.messages.map(chat)=> ())
-
   return (
     <>
       <div
@@ -80,7 +64,6 @@ const ViewTransactions: React.FC = () => {
           alignItems: "center",
           cursor: "pointer",
           padding: "10px",
-          // marginBottom:"10px"
         }}
         onClick={handleBack}
       >
@@ -94,7 +77,6 @@ const ViewTransactions: React.FC = () => {
         <Col span={16} style={{ padding: "5px" }}>
           <div
             style={{
-              //   border: "1px solid grey",
               height: 100,
               width: "100%",
               borderRadius: "15px",
@@ -181,7 +163,6 @@ const ViewTransactions: React.FC = () => {
         <Col span={16}>
           <div
             style={{
-              //   height: 250,
               width: "100%",
               padding: "0px 10px",
             }}

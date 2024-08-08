@@ -86,19 +86,19 @@ export const getChatIdByUsers = createAsyncThunk<
     const apiResponse = await response.json();
     if (!apiResponse.success) {
       // Ensure `apiResponse` has a `success` field if applicable
-      toastMessage({
-        type: "error",
-        content: `Cannot fetch chat list`,
-        duration: 5,
-      });
+      // toastMessage({
+      //   type: "error",
+      //   content: `Cannot fetch chat list`,
+      //   duration: 5,
+      // });
       return rejectWithValue({ message: `Cannot fetch chat list` });
     }
 
-    toastMessage({
-      type: "success",
-      content: `Chat list fetched successfully`,
-      duration: 5,
-    });
+    // toastMessage({
+    //   type: "success",
+    //   content: `Chat list fetched successfully`,
+    //   duration: 5,
+    // });
 
     return apiResponse.data;
   } catch (error) {

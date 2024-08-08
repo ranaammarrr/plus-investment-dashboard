@@ -1,6 +1,10 @@
 import { message } from "antd";
 import { NoticeType } from "antd/es/message/interface";
 import { AnyARecord } from "dns";
+import { S3 } from "aws-sdk";
+import fs from "fs";
+
+// import OneSignal from "react-onesignal";
 
 interface ToastMessageParams {
   type?: NoticeType;
@@ -155,7 +159,7 @@ export const getWeekYear = (dateString: any) => {
 
 export const counterOfferMessage = (messageObj: any) => {
   if (!messageObj) {
-    return { message: "No Message" }; // or handle it in another way
+    return { message: "No Message" };
   }
 
   if (messageObj.isWithCounterOffer) {
@@ -182,4 +186,41 @@ export const formatPrice = (price: any) => {
         currency: "USD",
         currencyDisplay: "symbol",
       })}`;
+};
+
+// for upload editImage...
+
+export const s3bucket = new S3({
+  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+
+  // Bucket: "plus-investment-assets",
+});
+console.log("accessKeyId", process.env.REACT_APP_AWS_SECRET_ACCESS_KEY);
+
+export const uploadMedia = async (files: any[], path = "timeline/posts/") => {
+  return Promise.all(
+    files.map(async (file) => {
+      return new Promise(async (resolve, reject) => {
+        let contentType = file.mime;
+        let contentDeposition =
+          'inline;filename="' + Date.now() + "-" + file.filename + '"';
+
+        const params = {
+          Bucket: "plus-investment-assets",
+          Key: path + Date.now() + "-" + Math.random() * 50 + file.filename,
+          Body: file,
+          ContentDisposition: contentDeposition,
+          ContentType: contentType,
+        };
+
+        s3bucket.upload(params, (err: any, data: any) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(data?.Location);
+        });
+      });
+    })
+  );
 };

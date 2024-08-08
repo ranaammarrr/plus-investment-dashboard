@@ -1,41 +1,29 @@
 import React, { useEffect, useState } from "react";
 import AppButton from "../../../Components/Button/AppButton";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  Divider,
-  Typography,
-  Select,
-  Input,
-  Checkbox,
-  Upload,
-  Card,
-  Avatar,
-} from "antd";
+import { Typography, Select, Input, Checkbox, Card, Avatar } from "antd";
 import { Grid } from "@mui/material";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import { DataType } from "../../../Components/Table/AppTable";
-import { useAppDispatch } from "../../../Hooks/reduxHook";
-import {
-  addProperty,
-  editProperty,
-} from "../../../Redux/EditProperty/EditPropertyAction";
+import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
+import { editProperty } from "../../../Redux/EditProperty/EditPropertyAction";
 import { getAllUsers } from "../../../Redux/User/userAction";
 import { useFormik } from "formik";
-import SelectUserBar from "../PropertyForm/SelectUserBar";
 import { addPropertyValidationSchema } from "../../../Utils/validators";
 import { UploadFile } from "antd/lib";
 import UploadImage from "../PropertyListing/UploadImage";
+import { uploadMedia } from "../../../Utils/helperFunctions";
 
 const PropertyForm: React.FC = () => {
   const location = useLocation();
   const property: DataType = location.state?.property || {};
   const { Title } = Typography;
+  const { tag } = useAppSelector((state) => state.tag);
+  const [isUploading, setIsUploading] = useState(false);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  // const formatPrices = (value: any) => {
-  //   if (!value) return "1";
-  //   return value.replace(/[$,]/g, "1");
-  // };
+
   const formik = useFormik({
     initialValues: {
       id: property.key || "",
@@ -45,7 +33,6 @@ const PropertyForm: React.FC = () => {
       address: property.address || "",
       postalCode: property.postalCode || "",
       price: property.stringPrice || "",
-
       type: property.type || "",
       image: property.image || "",
       detail: property.detail || "",
@@ -57,6 +44,13 @@ const PropertyForm: React.FC = () => {
         await addPropertyValidationSchema.validate(values, {
           abortEarly: false,
         });
+        if (values.image && values.image.length > 0) {
+          setIsUploading(true);
+          const uploadedImages = await uploadMedia(values.image);
+          values.image = uploadedImages;
+          setIsUploading(false);
+          console.log("uploadedImages", uploadedImages);
+        }
         dispatch(
           editProperty({
             property_id: property.key,
@@ -78,9 +72,6 @@ const PropertyForm: React.FC = () => {
         });
       } catch (error: any) {
         console.error("Validation Error:", error.errors);
-        // error.errors.forEach((errorMessage: any) => {
-        //   message.error(errorMessage);
-        // });
       }
     },
   });
@@ -99,7 +90,6 @@ const PropertyForm: React.FC = () => {
   const handleFilePreview = async (file: UploadFile) => {
     let src = file.url;
     if (!src) {
-      // Check that file.originFileObj is not undefined before using it
       if (file.originFileObj) {
         src = URL.createObjectURL(file.originFileObj);
       } else {
@@ -257,9 +247,12 @@ const PropertyForm: React.FC = () => {
                   defaultValue={formik.values.type || undefined}
                   onChange={(value) => formik.setFieldValue("type", value)}
                 >
-                  <Select.Option value="commercial">Commercial</Select.Option>
-                  <Select.Option value="residential">Residential</Select.Option>
-                  <Select.Option value="plot">Plot</Select.Option>
+                  {tag &&
+                    tag.map((item, index) => (
+                      <Select.Option key={index} value={item.tagName}>
+                        {item.tagName}
+                      </Select.Option>
+                    ))}
                 </Select>
               </Grid>
 
@@ -305,33 +298,20 @@ const PropertyForm: React.FC = () => {
                     flexDirection: "row",
                   }}
                 >
-                  <Card style={{ marginRight: "10px" }}>
-                    <img
-                      style={{
-                        height: "50px",
-                        width: "50px",
-                      }}
-                      src={
-                        formik.values.image || (
-                          <UploadImage
-                            maxFiles={5}
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            onPreview={handleFilePreview}
-                          />
-                        )
-                      }
-                    />
-                  </Card>
+                  {formik.values.image.map((img: string, index: number) => (
+                    <Card key={index} style={{ marginRight: "10px" }}>
+                      <img
+                        style={{ height: "50px", width: "50px" }}
+                        src={img}
+                      />
+                    </Card>
+                  ))}
                   <UploadImage
                     maxFiles={5}
                     accept="image/*"
                     onChange={handleFileChange}
                     onPreview={handleFilePreview}
                   />
-                  {/* <div style={{ marginTop: 8, textAlign: "center" }}>
-                    Accepted format .jpg .png only
-                  </div> */}
                 </div>
               </Grid>
             </Grid>

@@ -11,11 +11,6 @@ import {
 import InputField from "../../../Components/InputFeild/InputFeild";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
-import {
-  deleteProperty,
-  getAllProperties,
-} from "../../../Redux/PropertyListing/propertyActions";
-import { Link, useNavigate } from "react-router-dom";
 import AppButton from "../../../Components/Button/AppButton";
 import { Button, Modal } from "antd";
 import {
@@ -232,7 +227,6 @@ const Category: React.FC = () => {
           display: "flex",
           justifyContent: "space-between",
           marginBottom: "8px",
-          // marginTop: "20px",
         }}
       >
         <InputField
@@ -240,7 +234,6 @@ const Category: React.FC = () => {
           onChangeText={(val) => handleChange(val)}
           placeholder={"Search category"}
           size="large"
-          // inpuStyles={{ width: "20%", marginBottom: 20 }}
           inpuStyles={{ width: "90%" }}
           suffix={<SearchOutlined />}
         />

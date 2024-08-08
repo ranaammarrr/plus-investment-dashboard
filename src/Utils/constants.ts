@@ -34,4 +34,5 @@ export const ENDPOINTS = {
   PUT_RESPONSE: "ticket",
   APPROVE_VERIFICATION_REQUESTS: "verifications",
   GET_ALL_VERIFICATION_REQUESTS: "verifications",
+  GET_ALL_USERS_NOTIFICATIONS: "notification/allNotification",
 };

@@ -28,6 +28,7 @@ const Chat: React.FC = () => {
   const [searchTxt, setSearchTxt] = useState("");
   const { chats } = useAppSelector((state) => state.chat);
   const { allGroupChats } = useAppSelector((state) => state.group);
+  const { users } = useAppSelector((state) => state.user);
   const [position, setPosition] = useState<"single" | "group">("single");
 
   useEffect(() => {
@@ -131,6 +132,16 @@ const Chat: React.FC = () => {
             )) ||
         [];
 
+  const getUserNameFromMessage = (item: any) => {
+    const filteredUser = users.find((user: any) => item.senderId === user._id);
+    return filteredUser?.name || "";
+  };
+
+  const getUserProfileImage = (item: any) => {
+    const filteredImage = users.find((user: any) => item._id === user._id);
+    return filteredImage?.profileImg || "";
+  };
+
   return (
     <Card>
       <Row gutter={{ xs: 8, sm: 24, md: 24, lg: 32 }}>
@@ -228,7 +239,7 @@ const Chat: React.FC = () => {
                           <Avatar
                             size="small"
                             shape="circle"
-                            src={carousal1}
+                            src={getUserProfileImage(item)}
                             style={{
                               width: 45,
                               height: 35,
@@ -309,7 +320,7 @@ const Chat: React.FC = () => {
                 zIndex: 1,
               }}
             >
-              <Avatar size="large" src={property} />
+              <Avatar size="large" src={getUserProfileImage(selectedContact)} />
               <Typography.Text
                 style={{
                   marginLeft: "10px",
@@ -343,11 +354,11 @@ const Chat: React.FC = () => {
                   <List.Item
                     style={{
                       textAlign:
-                        item.senderId !== selectedContact._id
+                        item.senderId !== selectedContact?.user?._id
                           ? "right"
                           : "left",
                       color:
-                        item.senderId !== selectedContact._id
+                        item.senderId !== selectedContact?.user?._id
                           ? "blue"
                           : "white",
                     }}
@@ -365,9 +376,9 @@ const Chat: React.FC = () => {
                         item.senderId !== selectedContact._id ? "right" : "left"
                       }
                       text={counterOfferMessage(item.message)}
-                      title={selectedContact.name}
+                      title={getUserNameFromMessage(item)}
                       focus={false}
-                      date={new Date(item.datetime)}
+                      date={new Date(item.createdAt)}
                       titleColor={
                         item.senderId !== selectedContact._id
                           ? "black"

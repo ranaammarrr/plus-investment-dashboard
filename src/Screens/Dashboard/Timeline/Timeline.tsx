@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Dropdown, Select, Space, Switch, Typography } from "antd";
+import { Avatar, Space, Switch, Typography } from "antd";
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 import InputField from "../../../Components/InputFeild/InputFeild";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
@@ -115,7 +115,6 @@ const Timeline: React.FC = () => {
       sorter: (a: DataType, b: DataType) =>
         a.category.localeCompare(b.category),
     },
-    // { title: "Dislikes", dataIndex: "dislike", key: "dislike", width: "10%" },
     {
       title: "Published",
       dataIndex: "createdAt",
@@ -209,7 +208,6 @@ const Timeline: React.FC = () => {
           justifyContent: "space-between",
           alignItems: "center",
           marginBottom: "8px",
-          // marginTop: "20px",
         }}
       >
         <InputField

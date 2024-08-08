@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Space, Switch, Tag, Typography } from "antd";
+import { Space, Tag } from "antd";
 import {
-  DeleteOutlined,
   SearchOutlined,
   EyeOutlined,
   ArrowLeftOutlined,
@@ -9,29 +8,33 @@ import {
 import InputField from "../../../Components/InputFeild/InputFeild";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
-import {
-  deleteProperty,
-  getAllProperties,
-} from "../../../Redux/PropertyListing/propertyActions";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import { useLocation, useNavigate } from "react-router-dom";
 import { getAllInvoices } from "../../../Redux/Transaction/TransactionAction";
-import AppButton from "../../../Components/Button/AppButton";
 import { formattedDate } from "../../../Utils/helperFunctions";
 import { addPropertyDetail } from "../../../Redux/PropertyListing/listingSlice";
 
 const CounterOffer: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [selectedProperty, setSelectedProperty] = useState<DataType | null>(
-    null
-  );
 
   const location = useLocation();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  // const { users, isLoading } = useAppSelector((state) => state.user);
   const { transaction } = useAppSelector((state) => state.transaction);
   const property: any = location.state?.propertyId || {};
+
+  useEffect(() => {
+    dispatch(getAllInvoices());
+  }, [dispatch]);
+
+  const handleChange = (val: string) => {
+    setSearchValue(val);
+  };
+
+  const handleBack = () => {
+    navigate("/transactions");
+  };
 
   const columns = [
     {
@@ -53,17 +56,6 @@ const CounterOffer: React.FC = () => {
       key: "startDate",
       width: "20%",
     },
-    // {
-    //     title: "Status",
-    //     dataIndex: "status",
-    //     key: "status",
-    //     width: "10%",
-    //     render: (status: string) => (
-    //       <Tag style={{width:"100%", textAlign:"center"}} color={status === "active" ? "green" : status === "canceled" ? "red" : status === "rejected" ? "blue" : "orange"}>
-    //         {status.toUpperCase()}
-    //       </Tag>
-    //     ),
-    //   },
 
     {
       title: "Status",
@@ -113,10 +105,6 @@ const CounterOffer: React.FC = () => {
       },
     },
   ];
-
-  useEffect(() => {
-    dispatch(getAllInvoices());
-  }, [dispatch]);
 
   const transactionsData =
     searchValue !== ""
@@ -168,14 +156,6 @@ const CounterOffer: React.FC = () => {
             }))
           );
 
-  const handleChange = (val: string) => {
-    setSearchValue(val);
-  };
-
-  const handleBack = () => {
-    navigate("/transactions");
-  };
-
   return (
     <>
       <div
@@ -198,7 +178,6 @@ const CounterOffer: React.FC = () => {
           display: "flex",
           justifyContent: "space-between",
           marginBottom: "8px",
-          // marginTop: "20px",
         }}
       >
         <InputField
@@ -209,16 +188,6 @@ const CounterOffer: React.FC = () => {
           inpuStyles={{ width: "100%" }}
           suffix={<SearchOutlined />}
         />
-        {/* <AppButton
-          text="Create Invoice"
-          textStyle={
-            {
-              // width: 130,
-            }
-          }
-          size="large"
-          onClick={() => handleInvoice()}
-        /> */}
       </div>
       <AppTable
         dataSource={transactionsData}

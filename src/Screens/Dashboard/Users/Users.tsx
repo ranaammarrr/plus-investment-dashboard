@@ -221,6 +221,7 @@ const Users: React.FC = () => {
             ssn: user.personalInformation.ssn,
             gender: user.personalInformation.gender,
             plan: user.status,
+            image: user.profileImg,
           }));
 
   const handleChange = (val: string) => {

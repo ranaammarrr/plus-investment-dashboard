@@ -12,6 +12,7 @@ export interface User {
   password: string;
   role: string;
   company: string;
+  profileImg: string;
   personalInformation: {
     name: string;
     gender: string;
@@ -25,12 +26,14 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   __v: number;
-  followers:[{
-    _id: string
-    followerId:string;
-    createdAt:string;
-  }]
-  following:[string]
+  followers: [
+    {
+      _id: string;
+      followerId: string;
+      createdAt: string;
+    }
+  ];
+  following: [string];
 }
 export interface ApiError {
   message: string | any;

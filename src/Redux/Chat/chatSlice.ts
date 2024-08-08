@@ -8,7 +8,6 @@ const initialState: ChatState = {
   allGroupChats: null,
   isLoading: false,
   error: null,
-  // chatLists: undefined
 };
 
 const chatSlice = createSlice({

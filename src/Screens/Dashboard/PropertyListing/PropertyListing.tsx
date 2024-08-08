@@ -135,7 +135,7 @@ const PropertyListing: React.FC = () => {
       title: "Type",
       dataIndex: "role",
       key: "role",
-      width: "10%",
+      width: "15%",
       sorter: (a: DataType, b: DataType) => a.role.localeCompare(b.role),
     },
     {
@@ -148,7 +148,7 @@ const PropertyListing: React.FC = () => {
       title: "Featured",
       dataIndex: "isFeatured",
       key: "isFeatured",
-      width: "5%",
+      width: "6%",
       render: (isFeatured: any, record: DataType) => {
         return (
           <Space size="middle">
@@ -223,11 +223,11 @@ const PropertyListing: React.FC = () => {
         return (
           <Space size="middle">
             <EditOutlined
-              style={{ fontSize: 22, marginLeft: 6 }}
+              style={{ fontSize: 22 }}
               onClick={() => handleEdit(record)}
             />
             <DeleteOutlined
-              style={{ fontSize: 22, marginLeft: 6 }}
+              style={{ fontSize: 22, marginLeft: 2 }}
               onClick={() => handleDelete(record.key)}
             />
           </Space>

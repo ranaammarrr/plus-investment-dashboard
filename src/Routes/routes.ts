@@ -139,7 +139,7 @@ const routes: CustomRoute[] = [
       () => import("../Screens/Dashboard/CounterOffers/DetailedCounterOffer")
     ),
     isPrivate: true,
-    name: "",
+    name: "View property details",
   },
   {
     path: "/viewTransactions",

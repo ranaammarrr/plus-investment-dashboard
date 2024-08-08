@@ -5,11 +5,9 @@ import {
   SearchOutlined,
   EyeOutlined,
   ArrowLeftOutlined,
-  PaperClipOutlined,
 } from "@ant-design/icons";
 
-import { Link, useNavigate } from "react-router-dom";
-import { getAllInvoices } from "../../../Redux/Transaction/TransactionAction";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
 import AppTable, { DataType } from "../../../Components/Table/AppTable";
 import InputField from "../../../Components/InputFeild/InputFeild";
@@ -20,25 +18,19 @@ import { link, linkImg } from "../../../Assets/assets";
 
 const CounterOffers: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [selectedProperty, setSelectedProperty] = useState<DataType | null>(
-    null
-  );
+
   const [propertyRows, setPropertyRows] = useState<boolean>(true);
   const [propertyId, setPropertyId] = useState(null);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  // const { users, isLoading } = useAppSelector((state) => state.user);
-  // const { transaction } = useAppSelector((state) => state.transaction);
   const { properties } = useAppSelector((state) => state.property);
 
   useEffect(() => {
     dispatch(getAllProperties());
   }, [dispatch]);
-  // let propertyId
 
   const handlePropertyAction = (id: any) => {
-    // propertyId = id;
     setPropertyId(id);
     setPropertyRows(false);
   };
@@ -53,7 +45,6 @@ const CounterOffers: React.FC = () => {
         const handlePropertyDetail = (propertyID: string) => {
           navigate("/counter-offers", { state: { propertyID } });
 
-          // Open a new tab with the propertyDetails route and pass propertyID as query parameter
           const url = new URL(`${window.location.origin}/propertyDetails`);
           url.searchParams.set("propertyID", propertyID);
           window.open(url.toString(), "_blank");
@@ -65,12 +56,9 @@ const CounterOffers: React.FC = () => {
               alignItems: "center",
               borderRadius: "5px",
               padding: "5px",
-              // cursor: "pointer",
             }}
-            // onClick={() => handleNavigateToTimlineFeed()}
           >
             <span>{name}</span>
-            {/* <Space size="small"> */}
 
             <img
               src={linkImg}
@@ -82,40 +70,6 @@ const CounterOffers: React.FC = () => {
         );
       },
     },
-
-    // {
-    //   title: "",
-    //   dataIndex: "1",
-    //   key: "1",
-    //   // width: "5%",
-    //   render: (name: string, record: DataType) => {
-    //     const handlePropertyDetail = (propertyID: string) => {
-    //       navigate("/propertyDetails", { state: { propertyID } });
-    //     };
-    //     return (
-    //       <div
-    //         style={{
-    //           display: "flex",
-    //           alignItems: "center",
-    //           borderRadius: "5px",
-    //           padding: "5px",
-    //           // cursor: "pointer",
-    //         }}
-    //         // onClick={() => handleNavigateToTimlineFeed()}
-    //       >
-    //         <span>{name}</span>
-    //         <Space size="small">
-
-    //           style={{ fontSize: 14, marginLeft:10}}
-    //           onClick={() => handlePropertyDetail(record.id)}
-    //         />
-    //       </Space>
-
-    //       </div>
-    //     );
-    //   },
-
-    // },
     {
       title: "Seller",
       dataIndex: "seller",
@@ -130,13 +84,6 @@ const CounterOffers: React.FC = () => {
       sorter: (a: DataType, b: DataType) =>
         new Date(a.published).getTime() - new Date(b.published).getTime(),
     },
-    // {
-    //   title: "Status",
-    //   dataIndex: "status",
-    //   key: "status",
-    //   width: "25%",
-    // },
-
     {
       title: "Action",
       key: "action",
@@ -234,7 +181,7 @@ const CounterOffers: React.FC = () => {
     searchValue !== ""
       ? sortedProperties &&
         sortedProperties
-          .filter((property) => property.counterOffers.length > 0) // Filter properties with counterOffers
+          .filter((property) => property.counterOffers.length > 0)
           .filter((property) =>
             property.name.toLowerCase().includes(searchValue.toLowerCase())
           )
@@ -246,7 +193,7 @@ const CounterOffers: React.FC = () => {
           }))
       : sortedProperties &&
         sortedProperties
-          .filter((property) => property && property.counterOffers?.length > 0) // Filter properties with counterOffers
+          .filter((property) => property && property.counterOffers?.length > 0)
           .map((property) => ({
             propertyTitle: property.name,
             seller: property.user.name,
@@ -258,7 +205,7 @@ const CounterOffers: React.FC = () => {
     searchValue !== ""
       ? propertyId
         ? properties
-            .filter((property) => property._id === propertyId) // Filter properties with counterOffers
+            .filter((property) => property._id === propertyId)
             .filter((property) =>
               property.name.toLowerCase().includes(searchValue.toLowerCase())
             )
@@ -284,7 +231,6 @@ const CounterOffers: React.FC = () => {
                 buyer: property.name,
                 buyerId: offer.buyerId,
                 sellerId: property.user.id,
-                // status: property.status,
                 note: offer.note,
                 paymentOption: offer.paymentOption,
                 terms: offer.terms,
@@ -318,7 +264,6 @@ const CounterOffers: React.FC = () => {
               buyer: offer.buyerId,
               buyerId: offer.buyerId,
               sellerId: property.user.id,
-              // status: property.status,
               note: offer.note,
               paymentOption: offer.paymentOption,
               terms: offer.terms,
@@ -356,7 +301,6 @@ const CounterOffers: React.FC = () => {
           display: "flex",
           justifyContent: "space-between",
           margin: "8px",
-          // marginTop: "20px",
         }}
       >
         <InputField

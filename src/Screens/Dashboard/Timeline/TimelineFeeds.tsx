@@ -12,8 +12,7 @@ import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../Hooks/reduxHook";
 import { getTimelineById } from "../../../Redux/Timeline/timelineAction";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeftOutlined, UserOutlined } from "@ant-design/icons";
-import { carousal2, carousal4, property } from "../../../Assets/assets";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 import { formattedDate } from "../../../Utils/helperFunctions";
 import { getAllUsers } from "../../../Redux/User/userAction";
 
@@ -110,7 +109,7 @@ const TimelineFeeds: React.FC = () => {
               <Typography.Title level={5}>Description</Typography.Title>
               <Typography.Paragraph
                 //   level={5}
-                style={{ textAlign: "left", margin: "10px" }}
+                style={{ textAlign: "left" }}
               >
                 {timeLineById?.content}
               </Typography.Paragraph>
@@ -158,7 +157,6 @@ const TimelineFeeds: React.FC = () => {
               </Space>
             </Col>
             <Col span={12} style={{}}>
-              {/* <div style={{display: "flex", justifyContent:"end"}}> */}
               <Space direction="vertical" size={16}>
                 <Card
                   title="Likes"

@@ -18,23 +18,13 @@ const initialDetailState: PropertiesDetailState = {
     details: "",
     _id: "",
     name: "",
-    title: "", // Add the 'type' field to reflect the type of property
-    detail: "", // Add the 'detail' field to reflect additional details
+    title: "",
+    detail: "",
     address: "",
     postalCode: "",
     type: "",
-    // roomNo: "",
-    // bathNo: "",
-    // price: "",
-    // image: "",
     approved: true,
     isFeatured: false,
-    // location: {
-    //   lat: "", // Adjust data type according to your usage, here assuming string
-    //   lng: "",// Adjust data type according to your usage, here assuming string
-    // };
-    // counterOffers: any[]; // Adjust data type according to your usage, here assuming any[]
-    // __v: "",
     user: {
       name: "",
       company: "",

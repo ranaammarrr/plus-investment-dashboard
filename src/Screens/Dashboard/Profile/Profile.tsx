@@ -104,15 +104,6 @@ const Profile: React.FC = () => {
               }}
               size="large"
             />
-            {/* <Button
-              type="primary"
-              style={{ width: "80px", marginRight: "10px" }}
-            >
-              Save
-            </Button> */}
-            {/* <Button type="primary" style={{ width: "80px" }}>
-              Cancel
-            </Button> */}
             <AppButton
               text="Cancel"
               textStyle={{

@@ -29,8 +29,6 @@ const DetailedCounterOffer: React.FC = () => {
     } else {
       dispatch(
         getChatIdByUsers({
-          // _id:"66211c3ae7dc1b1126984393",
-          // senderId: "66211f2ae7dc1b11269843a1"
           _id: detailedProperty.buyerId,
           senderId: detailedProperty.sellerId,
         })
@@ -145,7 +143,6 @@ const DetailedCounterOffer: React.FC = () => {
         <Col span={16} style={{ padding: "5px" }}>
           <div
             style={{
-              //   border: "1px solid grey",
               height: 100,
               width: "100%",
               borderRadius: "15px",
@@ -161,14 +158,18 @@ const DetailedCounterOffer: React.FC = () => {
               </Typography.Title>
             </div>
             <div>
-              <Document docs={docs} />
+              {docs.length > 0 ? (
+                <Document docs={docs} />
+              ) : (
+                <Text>No documents have been added yet.</Text>
+              )}
             </div>
           </div>
         </Col>
         <Col span={8}>
           <div
             style={{
-              height: 300, // Adjust height as needed
+              height: 300,
               width: "100%",
               borderRadius: "15px",
               padding: "10px",
@@ -181,93 +182,93 @@ const DetailedCounterOffer: React.FC = () => {
               <Title level={5}>Chats</Title>
             </div>
             <div>
-              {filteredChats.map((chat: any) => (
-                <div
-                  key={chat?._id}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    marginBottom: "10px",
-                  }}
-                >
-                  <Avatar src={chat?.image} />
-                  <div style={{ marginLeft: "10px", flex: 1 }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        width: "100%",
-                      }}
-                    >
-                      <strong>{chat?.senderName}</strong>
+              {filteredChats.length > 0 ? (
+                filteredChats.map((chat: any) => (
+                  <div
+                    key={chat?._id}
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <Avatar src={chat?.image} />
+                    <div style={{ marginLeft: "10px", flex: 1 }}>
                       <div
                         style={{
-                          fontSize: 10,
-                          color: "grey",
-                          marginLeft: "20px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          width: "100%",
                         }}
                       >
-                        {chat?.senderDate}
-                      </div>
-                    </div>
-                    <p style={{ margin: 0 }}>
-                      {chat?.isWithCounterOffer ? (
-                        <AppCard
+                        <strong>{chat?.senderName}</strong>
+                        <div
                           style={{
-                            height: "40%",
-                            width: "100%",
-                            backgroundColor: "#e9ecef",
+                            fontSize: 10,
+                            color: "grey",
+                            marginLeft: "20px",
                           }}
-                          title={
-                            <Link
-                              to={"/propertyDetails"}
-                              state={{ propertyID: detailedProperty._id }}
-                              // to={`/propertyDetails/${detailedProperty._id}`}
-                              style={{
-                                textDecoration: "none",
-                                color: "inherit",
-                              }}
-                            >
-                              {detailedProperty.name}
-                            </Link>
-                          }
-                          content={
-                            <>
-                              <div style={{ fontSize: "14px" }}>
-                                {/* <div>{detailedProperty.name}</div> */}
-                                {/* <div>Price{detailedProperty.price}</div> */}
-                                <div style={{ fontSize: "18px" }}>
-                                  Counter Offer:{detailedProperty.offerAmount}
-                                </div>
-                              </div>
-                            </>
-                          }
-                        />
-                      ) : (
-                        chat?.message
-                      )}
-                    </p>
-                    {chat?.isWithAttachment && (
-                      //   <p style={{ margin: 0, width:"20%", }}>
-                      <div style={{}}>
-                        <a
-                          style={{ display: "flex", color: "#DE2429" }}
-                          href={chat?.fileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
                         >
-                          {renderDocumentName(chat.fileUrl)}
-                        </a>
+                          {chat?.senderDate}
+                        </div>
                       </div>
-                      //   </p>
-                    )}
+                      <p style={{ margin: 0 }}>
+                        {chat?.isWithCounterOffer ? (
+                          <AppCard
+                            style={{
+                              height: "40%",
+                              width: "100%",
+                              backgroundColor: "#e9ecef",
+                            }}
+                            title={
+                              <Link
+                                to={"/propertyDetails"}
+                                state={{ propertyID: detailedProperty._id }}
+                                style={{
+                                  textDecoration: "none",
+                                  color: "inherit",
+                                }}
+                              >
+                                {detailedProperty.name}
+                              </Link>
+                            }
+                            content={
+                              <>
+                                <div style={{ fontSize: "14px" }}>
+                                  <div style={{ fontSize: "18px" }}>
+                                    Counter Offer:{detailedProperty.offerAmount}
+                                  </div>
+                                </div>
+                              </>
+                            }
+                          />
+                        ) : (
+                          chat?.message
+                        )}
+                      </p>
+                      {chat?.isWithAttachment && (
+                        <div style={{}}>
+                          <a
+                            style={{ display: "flex", color: "#DE2429" }}
+                            href={chat?.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {renderDocumentName(chat.fileUrl)}
+                          </a>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <Typography.Text>There is no chat created.</Typography.Text>
+              )}
             </div>
           </div>
         </Col>
+
         <Divider />
 
         {/* Row 1 ended.....  */}
@@ -276,17 +277,16 @@ const DetailedCounterOffer: React.FC = () => {
         <Col span={16}>
           <div
             style={{
-              //   height: 250,
               width: "100%",
               padding: "0px 10px",
             }}
           >
             <div>
-              <Title style={{ margin: 0 }} level={3}>
+              <Title style={{ margin: 0 }} level={2}>
                 Property Information
               </Title>
               <div>
-                <Typography.Title style={{ margin: 0 }} level={5}>
+                <Typography.Title style={{ marginTop: "10px" }} level={5}>
                   Property Image
                 </Typography.Title>
               </div>
@@ -335,7 +335,7 @@ const DetailedCounterOffer: React.FC = () => {
                 <Text>${detailedProperty?.price}</Text>
               </div>
             </div>
-            <div style={{ height: 200 }}>
+            <div style={{ height: 300 }}>
               <Title level={5}>Description</Title>
               <Text>{detailedProperty?.detail}</Text>
             </div>

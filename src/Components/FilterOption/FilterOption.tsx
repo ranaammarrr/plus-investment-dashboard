@@ -33,11 +33,6 @@ const FilterOption: React.FC<any> = ({
       onClick: () => onChangeFilter(filter.type),
     })
   );
-
-  //   const handleCategoryChange = (value: string) => {
-  //     setSelectedCategory(value);
-  //     onChangeFilter()
-  //   };
   return (
     <div
       style={{

@@ -3,11 +3,10 @@ import { Select } from "antd";
 import { useAppSelector } from "../../../Hooks/reduxHook";
 
 interface SelectUserBarProps {
-  onSelectUser: (user: any) => void; // Define the callback function type
+  onSelectUser: (user: any) => void;
 }
 const onSearch = (value: string) => {};
 
-// Filter `option.label` match the user type `input`
 const filterOption = (
   input: string,
   option?: { label: string; value: string }
@@ -22,7 +21,7 @@ const SelectUserBar: React.FC<SelectUserBarProps> = ({ onSelectUser }) => {
   }));
 
   const handleChange = (value: string, option: any) => {
-    onSelectUser(option.user); // Pass the entire user object to the parent component
+    onSelectUser(option.user);
   };
   return (
     <Select

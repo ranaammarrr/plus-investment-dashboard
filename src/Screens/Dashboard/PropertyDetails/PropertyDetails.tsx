@@ -24,14 +24,6 @@ import { getAllUsers } from "../../../Redux/User/userAction";
 
 const onChange = (key: string) => {};
 
-const sellers = [
-  {
-    name: "John Doe",
-    email: "johndoe@example.com",
-    address: "123 Main Street, City, Country",
-  },
-];
-
 const PropertyDetails: React.FC = () => {
   const { propertiesDetail } = useAppSelector((state) => state.detailProperty);
   const { users } = useAppSelector((state) => state.user);
@@ -91,7 +83,7 @@ const PropertyDetails: React.FC = () => {
 
   const likedProperties =
     propertiesDetail?.likedbyUsers?.map((id: any) =>
-      users.find((user) => id === user._id)
+      users.find((user: any) => id === user._id)
     ) || [];
 
   return (
@@ -172,7 +164,6 @@ const PropertyDetails: React.FC = () => {
             bordered={true}
             style={{ marginTop: "10px", height: "300px" }}
           >
-            {/* {sellers.map((seller, index) => ( */}
             <div>
               <p>
                 <strong>Name:</strong> {propertiesDetail?.user.name}
@@ -186,10 +177,7 @@ const PropertyDetails: React.FC = () => {
               <p>
                 <strong>Property-type:</strong> {propertiesDetail.type}
               </p>
-              {/* {index !== sellers.length - 1 && <hr />}{" "} */}
-              {/* Add horizontal line between sellers */}
             </div>
-            {/* ))} */}
           </Card>
           <Space direction="vertical" size={16} style={{ marginTop: "30px" }}>
             <Card
@@ -202,9 +190,8 @@ const PropertyDetails: React.FC = () => {
                 </a>
               }
               style={{
-                width: 340,
-                height: "300px",
-                // overflowY: "scroll"
+                width: 384,
+                height: "400px",
               }}
               bodyStyle={{ padding: "5px" }}
               headStyle={{ padding: "5px" }}
@@ -224,7 +211,6 @@ const PropertyDetails: React.FC = () => {
                           style={{ marginTop: "15px" }}
                           size="large"
                           icon={<UserOutlined />}
-                          // srcSet={propertiesDetail && propertiesDetail.image}
                         />
                       </div>
                       <div>
